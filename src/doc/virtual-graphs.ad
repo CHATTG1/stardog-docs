@@ -206,7 +206,7 @@ used to specify a mappings file and an input CSV file:
 
 [source,bash]
 ----
-$ stardog-admin virtual import cars.ttl cars.csv
+$ stardog-admin virtual import myDB cars.ttl cars.csv
 ----
 
 If the input file is using different kind of separators, e.g. tab character, a
@@ -214,7 +214,7 @@ configuration file can be provided
 
 [source,bash]
 ----
-$ stardog-admin virtual import cars.properties cars.ttl cars.tsv
+$ stardog-admin virtual import myDB cars.properties cars.ttl cars.tsv
 ----
 
 The configuration file for CSV files can specify values for the following
