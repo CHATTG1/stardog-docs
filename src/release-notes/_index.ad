@@ -26,6 +26,7 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 *MOD: Handle URI templates in language tags of literals (#2747)
 *MOD: Query command missing option to specify a default graph (#2740)
 *MOD: Support SPARQL dateTime functions for date and time datatypes (#2694)
+*FIX: Sum aggregate uses 0 as the base value (#2756)
 *FIX: Context iterator should not produce results when there are no contexts (#2750)
 *FIX: CLI query command prints datatype for language literals in table output (#2745)
 *FIX: URI templates used for rdf:type in virtual mappings are handled incorrectly (#2743)
