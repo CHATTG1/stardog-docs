@@ -23,8 +23,8 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 == 4.0.3 Release
 [none]
 *MOD: Include ICV explanations in guard mode (#2749)
-*MOD: Handle URI templates in language tags of literals (#2747)
-*MOD: Query command missing option to specify a default graph (#2740)
+*MOD: Handle URI templates in language tags of literals for virtual mappings (#2747)
+*MOD: Query command option to specify a default graph (#2740)
 *MOD: Support SPARQL dateTime functions for date and time datatypes (#2694)
 *FIX: Sum aggregate uses 0 as the base value (#2756)
 *FIX: Context iterator should not produce results when there are no contexts (#2750)
