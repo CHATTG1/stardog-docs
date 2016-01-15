@@ -42,7 +42,8 @@ the link:/release-notes/[RELEASE NOTES] and
 
 |===
 | Stardog Version | HTML             | PDF
-| 4.0.2           | link:/#[✓]        | link:/stardog-manual-{version}.pdf[✓]
+| 4.0.3           | link:/#[✓]        | link:/stardog-manual-{version}.pdf[✓]
+| 4.0.2           | link:/4.0.2#[✓]    | link:/stardog-manual-4.0.2.pdf[✓]
 | 4.0.1           | link:/4.0.1#[✓]    | link:/stardog-manual-4.0.1.pdf[✓]
 | 4.0             | link:/4.0#[✓]      | link:/stardog-manual-4.0.pdf[✓]
 | 3.1.4           | link:/3.1.4#[✓]    | link:/stardog-manual-3.1.4.pdf[✓]
