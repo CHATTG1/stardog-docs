@@ -35,6 +35,12 @@ default, unnamed graph**. In Stardog, **the default graph is not the union of al
 the named graphs and the default graph**. This behavior is configurable via
 the `query.all.graphs` configuration parameter.
 
+=== Why is Stardog Cluster acting weird or running slowly?
+
+Question:: Should I put Stardog HA and Zookeeper on the same hard drives?
+
+Answer:: Never never never do this. Zookeeper is a very disk-chatty system and displays bad IO contention with Stardog query evaluation. Running both Zk and Stardog on the same disks will result in bad performance and, in some cases, intermittent failures.
+
 === SPARQL 1.1
 
 Question:: Does Stardog support SPARQL 1.1?
