@@ -419,6 +419,8 @@ So there's a namespace--`tag:stardog:api:rule:`--that has a predicate,
 
 That's pretty easy. Third, what are the gotchas?
 
+===== Rule Limitations & Gotchas
+
 . The RDF serialization of rules in, say, a Turtle file has to use the
 `tag:stardog:api:rule:` namespace URI and then whatever prefix, if any,
 mechanism that's valid for that serialization. In the examples here, we
