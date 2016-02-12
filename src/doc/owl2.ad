@@ -433,10 +433,10 @@ work; if there are conflicts, the "closest definition wins", that is, if
 database, the definition in the rule content is the one that Stardog
 will use.
 
-Having the same predicate both in the rule body (IF) and the the rule 
-head (THEN) are supported in a limited way. Cycles are allowed only 
+. Having the same predicate both in the rule body (`IF`) and the rule 
+head (`THEN`) are supported in a limited way. Cycles are allowed only 
 if the rule body does not contain type triples or filters and the triples 
-in the rule body are linear (i.e. no cycles in the rule body either)
+in the rule body are linear (i.e. no cycles in the rule body either).
 
 ==== Stardog Rules Examples
 
