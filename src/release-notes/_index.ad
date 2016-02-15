@@ -20,6 +20,38 @@
 
 image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbsp; &nbsp; image:f.png[] Fixed bug
 
+== 4.0.5 Release
+[none]
+*MOD: Allow users to configure max URL length in HTTP server (#2809)
+*MOD: Misleading security exceptions in admin CLI when exception not related to security (#2795)
+*MOD: Introduce heuristic-based join order optimization (#2791)
+*MOD: Confusing error message using LOAD with a bad location (#2766)
+*MOD: Print a message to the log file when Stardog shuts down (#2763)
+*MOD: Make type and property reasoning operators lazy to reduce memory usage (#2755)
+*MOD: Load JDBC driver explicitly without relying on the service loader (#2753)
+*MOD: Minimize memory overhead in MemoryPoolImpl (#2707)
+*MOD: Display more detailed memory info in server status (#2575)
+*MOD: Reduced memory footprint of intermediate query results (#1884)
+*FIX: HTTP server is not returning a 415 status when URL is too long (#2808)
+*FIX: Using deprecated text/plain content type for N-Triples triggers NPE (#2807)
+*FIX: LOAD queries don't support compressed files (#2805)
+*FIX: Incorrect sort type for complex property paths with unbound ends (#2803)
+*FIX: Query dataset rendering is incorrect in update sequence plans (#2796)
+*FIX: Checks for Authorization http header is not case-insensitive (#2793)
+*FIX: Classes and properties used only in rules return as null values in query results (#2788)
+*FIX: Temporary files created for INSERT/DELETE/WHERE queries are not deleted (#2795)
+*FIX: Cardinality estimations for full-text nodes (#2791)
+*FIX: Variable rendering for Waldo nodes in the plan incorrect (#2780)
+*FIX: Optimizing queries for rdf:type using reasoning (#2774)
+*FIX: Group and minus clauses trigger exceptions with virtual graphs (#2772)
+*FIX: Files created by Guava's FileBackedOutputStream are not deleted eagerly (#2771)
+*FIX: Aggregates min/max does not work with IRIs (#2770)
+*FIX: New memory indexes can canonicalize literals, existing ones cannot (#2769)
+*FIX: NPE when trying to extract non-existing TBox (#2768)
+*FIX: Loading many files at the same time causes client to run out of memory (#2761)
+*FIX: Query parameters are not assigned IDs and can be cached incorrectly (#2760)
+*FIX: Inconsistent use of DISTINCT in reasoning queries (#2436)
+
 == 4.0.3 Release
 [none]
 *MOD: Include ICV explanations in guard mode (#2749)
