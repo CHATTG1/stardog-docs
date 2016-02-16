@@ -34,6 +34,7 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 *MOD: Display more detailed memory info in server status (#2575)
 *MOD: Reduced memory footprint of intermediate query results (#1884)
 *FIX: CSV imports don't support language literals (#2814)
+*FIX: Inlining constants into Waldo nodes breaks queries (#2813)
 *FIX: ArrayIndexOutOfBoundsException during database creation (#2811)
 *FIX: Faulty nodes in cluster should not cause a transaction to fail (#2810)
 *FIX: HTTP server is not returning a 415 status when URL is too long (#2808)
