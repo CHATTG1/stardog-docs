@@ -42,6 +42,7 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 *FIX: LOAD queries don't support compressed files (#2805)
 *FIX: Incorrect sort type for complex property paths with unbound ends (#2803)
 *FIX: Invalid geospatial data causing cluster nodes to be disabled (#2798)
+*FIX: IllegalArgumentException thrown from off-heap memory pool for some JDKs (#2797)
 *FIX: Query dataset rendering is incorrect in update sequence plans (#2796)
 *FIX: Checks for Authorization http header is not case-insensitive (#2793)
 *FIX: Classes and properties used only in rules return as null values in query results (#2788)
