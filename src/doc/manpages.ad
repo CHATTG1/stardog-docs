@@ -1,6 +1,6 @@
 :man-base-url: link:/
 
-== Man Pages
+== CLI Online Help (aka "Man Pages")
 
 Stardog command-line interface is comprehensively documented in `man` pages that
 ship with Stardog. Those `man` pages are reproduced here in HTML as a
