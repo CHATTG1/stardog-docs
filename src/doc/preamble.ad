@@ -1,8 +1,6 @@
 include::header-logo.ad[]
 
-Stardog is a fast, semantic graph database for the enterprise. Check
-out the <<Quick Start Guide>> to get Stardog installed and running in
-five easy steps.
+Stardog is a data unification platform based on semantic graphs.
 
 .What's New in Stardog 4
 ****
@@ -10,17 +8,18 @@ five easy steps.
 - [x] <<Property Graphs, TinkerPop3, Gremlin, & Property Graphs>>
 - [x] <<Geospatial Query>>
 - [x] <<Namespacing, RDF Namespaces optional>>
-- [x] <<Requirements, Java 8>>
+- [x] <<Requirements, requires Java 8>>
 - [x] <<Stardog 4, Stardog 4 API Changes>>
 - [x] <<RDF 1.1>>
 - [x] Remove Cluster proxy dependency
 
-**** 
+****
+
+Check out the <<Quick Start Guide>> to get Stardog installed and running in five easy steps.
 
 = Introduction
 
-Stardog is a semantic graph database, available in client-server, middleware,
-and embedded modes. Stardog **{version}** (**{release-date}**) supports the
+Stardog **{version}** (**{release-date}**) supports the
 http://www.w3.org/RDF/[RDF graph data model];
 http://www.w3.org/TR/sparql11-overview/[SPARQL] query language;
 https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model[property graph
