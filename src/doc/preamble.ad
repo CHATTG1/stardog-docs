@@ -71,14 +71,13 @@ Dreghiciu, Rob Vesse, Stephane Fallah, John Goodwin, José Devezas, Chris
 Halaschek-Wiener, Gavin Carothers, Brian Panulla, Ryan Kohl, Morton Swimmer,
 Quentin Reul, Paul Dlug, James Leigh, Alex Tucker, Ron Zettlemoyer, Jim Rhyne,
 Andrea Westerinen, Huy Phan, Zach Whitley, Maurice Rabb, Grant Pax, Conrad
-Leonard, the crew at XSB, and the nice people at El Rinconcito Cafe in DC.] You
+Leonard, and the crew at XSB.] You
 can also help by
 https://github.com/Complexible/stardog-docs/tree/master/src/doc[editing these
 docs on Github] if you spot a problem.
 
 == Roadmap
 [horizontal]
-Stardog 4.1:: Pelorus--a faceted graph browser--integrated with Stardog Web Console
-Stardog 4.x:: SAML, OAuth, etc external authorization/authentication services
-Stardog 4.x:: Native HDFS disk indexes
-Stardog 4.x:: Generalizing R2RML virtual graph support
+Stardog 4.1:: Multi-master in Cluster. Pelorus--a faceted graph browser--integrated with Stardog Web Console
+Stardog 4.2:: Native HDFS backend
+Stardog 4.3:: Generalizing R2RML virtual graph support
