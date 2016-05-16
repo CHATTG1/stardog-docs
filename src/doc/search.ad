@@ -1,6 +1,6 @@
-= Graph Search
+= Full-Text Search
 
-Stardog's builtin graph search system indexes graph data stored in Stardog for
+Stardog's builtin full-text search system indexes data stored in Stardog for
 information retrieval queries.
 
 == Indexing Strategy
