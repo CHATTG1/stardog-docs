@@ -49,14 +49,14 @@ the client can retry the transaction and it should succeed with the new cluster
 coordinator.
 
 Since `failed` nodes are not used for any subsequent `read` or `write` requests,
-**if a commit is acknowledged then Stardog Cluster
+**if a commit is acknowledged, then Stardog Cluster
 guarantees that the data has been accordingly modified at *every* available node in
 the cluster**.
 
 While this approach is less performant with respect to write
 operations than eventual consistency used by other distributed databases,
 typically those databases offer a much less expressive data model than Stardog,
-which makes an eventually consistency model more appropriate for those systems.
+which makes an eventually consistency model more appropriate for those systems (and less so for Stardog).
 But since Stardog's data model is not only richly expressive but rests in part
 on provably correct semantics, we think that a strong consistency model is worth
 the cost.footnote:[Based on customer feedback we may relax these consistency
