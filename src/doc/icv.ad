@@ -215,15 +215,16 @@ Database both `Manager` and `Employee`; therefore, B is valid.
 
 === Domain-Range Constraints
 
-These constraints control the types of domain and range instances of
-properties.
+These constraints control the types of subjects and objects used
+with a property.
 
 ==== Only project leaders can be responsible for projects.
 
 ===== Constraint
 [source,sparql]
 ----
-:is_responsible_for rdfs:domain :Project_Leader
+:is_responsible_for rdfs:domain :Project_Leader ;
+                    rdfs:range :Project . 
 ----
 ===== Database A (invalid)
 [source,sparql]
@@ -248,8 +249,8 @@ properties.
 ----
 
 This constraint says that if two RDF instances are related to each other via the
-property `is_responsible_for`, then the range instance must be an instance of
-`Project_Leader` and the domain instance must be an instance of `Project`. In
+property `is_responsible_for`, then the subject must be an instance of
+`Project_Leader` and the object must be an instance of `Project`. In
 Database A, there is only one pair of individuals related via
 `is_responsible_for`, namely `(Alice, MyProject)`, and `MyProject` is an
 instance of `Project`; but `Alice` is not an instance of `Project_Leader`.
