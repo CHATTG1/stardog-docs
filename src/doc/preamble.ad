@@ -1,8 +1,6 @@
 include::header-logo.ad[]
 
-Stardog is a fast, semantic graph database for the enterprise. Check
-out the <<Quick Start Guide>> to get Stardog installed and running in
-five easy steps.
+Stardog is a data unification platform based on semantic graphs.
 
 .What's New in Stardog 4
 ****
@@ -10,17 +8,18 @@ five easy steps.
 - [x] <<Property Graphs, TinkerPop3, Gremlin, & Property Graphs>>
 - [x] <<Geospatial Query>>
 - [x] <<Namespacing, RDF Namespaces optional>>
-- [x] <<Requirements, Java 8>>
+- [x] <<Requirements, requires Java 8>>
 - [x] <<Stardog 4, Stardog 4 API Changes>>
 - [x] <<RDF 1.1>>
 - [x] Remove Cluster proxy dependency
 
-**** 
+****
+
+Check out the <<Quick Start Guide>> to get Stardog installed and running in five easy steps.
 
 = Introduction
 
-Stardog is a semantic graph database, available in client-server, middleware,
-and embedded modes. Stardog **{version}** (**{release-date}**) supports the
+Stardog **{version}** (**{release-date}**) supports the
 http://www.w3.org/RDF/[RDF graph data model];
 http://www.w3.org/TR/sparql11-overview/[SPARQL] query language;
 https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model[property graph
@@ -72,14 +71,13 @@ Dreghiciu, Rob Vesse, Stephane Fallah, John Goodwin, José Devezas, Chris
 Halaschek-Wiener, Gavin Carothers, Brian Panulla, Ryan Kohl, Morton Swimmer,
 Quentin Reul, Paul Dlug, James Leigh, Alex Tucker, Ron Zettlemoyer, Jim Rhyne,
 Andrea Westerinen, Huy Phan, Zach Whitley, Maurice Rabb, Grant Pax, Conrad
-Leonard, the crew at XSB, and the nice people at El Rinconcito Cafe in DC.] You
+Leonard, and the crew at XSB.] You
 can also help by
 https://github.com/Complexible/stardog-docs/tree/master/src/doc[editing these
 docs on Github] if you spot a problem.
 
 == Roadmap
 [horizontal]
-Stardog 4.1:: Pelorus--a faceted graph browser--integrated with Stardog Web Console
-Stardog 4.x:: SAML, OAuth, etc external authorization/authentication services
-Stardog 4.x:: Native HDFS disk indexes
-Stardog 4.x:: Generalizing R2RML virtual graph support
+Stardog 4.1:: Multi-master in Cluster. Pelorus--a faceted graph browser--integrated with Stardog Web Console
+Stardog 4.2:: Native HDFS backend
+Stardog 4.3:: Generalizing R2RML virtual graph support
