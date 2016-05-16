@@ -37,8 +37,7 @@ Participants.
 In case the Coordinator fails at any point, a new Coordinator will be elected
 out of the remaining available Participants. Stardog Cluster supports both
 `read` (e.g., querying) and `write` (e.g., adding data) requests. All read and
-write requests can be handled by any of the nodes in the Stardog cluster, however
-the Coordinator serves an administrative purpose for synchronizing nodes. 
+write requests can be handled by any of the nodes in the cluster. 
 When a client commits a transaction (containing a list of `write` requests), it
 will be acknowledged by the receiving node only
 **after every non-failing peer nodes has committed the transaction**. If a peer node
