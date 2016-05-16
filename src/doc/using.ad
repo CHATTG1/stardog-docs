@@ -427,23 +427,25 @@ $ stardog query search -q "html" -l 10 catalog
 
 The results?
 
-[source]
+[source,bash]
 ----
-Index    Score    Hit
-====================
-0    6.422    urn:x-domain:oreilly.com:product:9780596527402.IP
-1    6.422    urn:x-domain:oreilly.com:product:9780596003166.IP
-2    6.422    urn:x-domain:oreilly.com:product:9781565924949.IP
-3    6.422    urn:x-domain:oreilly.com:product:9780596002251.IP
-4    6.422    urn:x-domain:oreilly.com:product:9780596101978.IP
-5    6.422    urn:x-domain:oreilly.com:product:9780596154066.IP
-6    6.422    urn:x-domain:oreilly.com:product:9780596157616.IP
-7    6.422    urn:x-domain:oreilly.com:product:9780596805876.IP
-8    6.422    urn:x-domain:oreilly.com:product:9780596527273.IP
-9    6.422    urn:x-domain:oreilly.com:product:9780596002961.IP
++-------+-------+---------------------------------------------------+
+| Index | Score |                        Hit                        |
++-------+-------+---------------------------------------------------+
+| 1     | 6.422 | urn:x-domain:oreilly.com:product:9780596002251.IP |
+| 2     | 6.422 | urn:x-domain:oreilly.com:product:9780596002961.IP |
+| 3     | 6.422 | urn:x-domain:oreilly.com:product:9780596003166.IP |
+| 4     | 6.422 | urn:x-domain:oreilly.com:product:9780596101978.IP |
+| 5     | 6.422 | urn:x-domain:oreilly.com:product:9780596154066.IP |
+| 6     | 6.422 | urn:x-domain:oreilly.com:product:9780596157616.IP |
+| 7     | 6.422 | urn:x-domain:oreilly.com:product:9780596527273.IP |
+| 8     | 6.422 | urn:x-domain:oreilly.com:product:9780596527402.IP |
+| 9     | 6.422 | urn:x-domain:oreilly.com:product:9780596805876.IP |
+| 10    | 6.422 | urn:x-domain:oreilly.com:product:9781565924949.IP |
++-------+-------+---------------------------------------------------+
 ----
 
-See <<Graph Search>> for more details.
+See <<Full-Text Search>> for more details.
 
 == Obfuscating
 
