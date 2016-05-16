@@ -21,13 +21,7 @@ We use the predicate `tag:stardog:api:property:textMatch` (or
 a SPARQL query.
 
 The `textMatch` function has one required argument, the search query in Lucene
-syntax. It also has two optional arguments. The first is the score threshold;
-results whose score is *below* this number are not included in the results. The
-second is the maximum number of results to return from Lucene. When not
-specified, the default limit is `50`. When a `LIMIT` is specified in the SPARQL
-query, it does not affect the full-text search, that only restricts the size of
-the final result set.
-
+syntax and it returns, by default top 50, literals matching the query string.
 For example,
 
 [source,SPARQL]
@@ -35,24 +29,57 @@ For example,
 SELECT DISTINCT ?s ?score
 WHERE {
 ?s ?p ?l.
-( ?l ?score ) <tag:stardog:api:property:textMatch> ( 'mac' 0.5 50 ).
+?l <tag:stardog:api:property:textMatch> 'mac'.
 }
 ----
 
-This query selects the top 50 literals, and their scores, which match
-'mac' and whose scores are above a threshold of 0.5. These literals are
-then joined with the generic BGP `?s ?p ?l` to get the resources (?s)
+This query selects the top 50 literals which match 'mac'. These literals are
+then joined with the generic BGP `?s ?p ?l` to get the resources (`?s`)
 that have those literals. Alternatively, you could use
 `?s rdf:type ex:Book` if you only wanted to select the books which
 reference the search criteria; you can include as many other BGPs as
 you like to enhance your initial search results.
+
+You can change the number of results `textMatch` returns by providing an 
+optional second argument with the limit:
+
+[source,SPARQL]
+----
+SELECT DISTINCT ?s ?score
+WHERE {
+?s ?p ?l.
+?l <tag:stardog:api:property:textMatch> ('mac' 100).
+}
+----
+
+Note that, limit in `textMatch` only limits the number of literals returned and
+different than the number of total results the query will return. When a `LIMIT` 
+is specified in the SPARQL query, it does not affect the full-text search, that 
+only restricts the size of the final result set.
+
+Lucene returns a https://lucene.apache.org/core/5_3_0/core/org/apache/lucene/search/package-summary.html#scoring[score]
+with each match. It is possible to return these scores and define filters based on the score:
+
+[source,SPARQL]
+----
+SELECT DISTINCT ?s ?score
+WHERE {
+?s ?p ?l.
+(?l ?score) <tag:stardog:api:property:textMatch> ('mac' 0.5 10).
+}
+----
+
+This query returns 10 matching literals where the score is *greater than*
+0.5. Note that, as explained in the https://lucene.apache.org/core/5_3_0/core/org/apache/lucene/search/package-summary.html#scoring[Lucene documentation] 
+scoring is very much dependent on the way documents are indexed and the 
+range of scores might change significantly between different databases.
 
 === Escaping Characters in Search
 
 The "/" character must be escaped because Lucene says so. In fact,
 there are several characters that are part of Lucene's query syntax
 that must be
-http://lucene.apache.org/core/4_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters[escaped].
+http://lucene.apache.org/core/5_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters[escaped].
 
 == Search Syntax
 
@@ -67,5 +94,5 @@ that Lucene supports, with the exception of fields.
 - booleans: `OR`, `AND`, `NOT`, +`, and `-`.
 - grouping
 
-For a more detailed discussion, see the http://lucene.apache.org/core/4_2_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description[Lucene docs].
+For a more detailed discussion, see the http://lucene.apache.org/core/5_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description[Lucene docs].
 
