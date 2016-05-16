@@ -406,7 +406,7 @@ To specify parameters:
 
 [source,bash]
 -----
-$ stardog-admin server start --logfile mystardog.log --port=8080
+$ stardog-admin server start --require-ssl --port=8080
 -----
 
 The port can be specified using the property `--port`.
@@ -505,19 +505,18 @@ See <<Man Pages>> for the details.
 |===
 |Option |Mutable | Default | API
 
-|`*preserve.bnode.ids*`
-| Yes
-| `true`
-| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#PRESERVE_BNODE_IDS[DatabaseOptions.PRESERVE_BNODE_IDS]
-
-4+|Determines how the Stardog parser handles bnode identifiers that may be present in RDF input. If this property is enabled (i.e., `TRUE`), parsing and data loading performance are improved; but the other effect is that if distinct input files use (randomly or intentionally) the same bnode identifier, that bnode will point to one and the same node in the database. If you have input files that use explicit bnode identifiers, and multiple files may use the same bnode identifiers, and you don't want those bnodes to be smushed into a single node in the database, then this configuration option should be disabled (set to `FALSE`).
-
 |`*database.archetypes*`
 |Yes
 |
 |link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ARCHETYPES[DatabaseOptions.ARCHETYPES]
 
 4+|The name of one or more database archetypes.
+|`*database.connection.timeout*`
+| Yes
+| `1h`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#CONNECTION_TIMEOUT[DatabaseOptions.CONNECTION_TIMEOUT]
+
+4+|Same as `database.connection.timeout` described in <<Stardog Configuration>> but applies only to one database.
 
 |`*database.name*`
 |No
@@ -568,21 +567,12 @@ identifiers.
 | link:/java/snarl/com/complexible/stardog/icv/ICVOptions.html#ICV_REASONING_ENABLED[ICVOptions.ICV_REASONING_ENABLED]
 
 4+|Determines if reasoning is used during IC validation.
-
-|`*index.connection.timeout*`
-| Yes
-| `3,600,000`
-| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#INDEX_CONNECTION_TIMEOUT_MS[IndexOptions.INDEX_CONNECTION_TIMEOUT_MS]
-
-4+|Determines timeout value for open connections.
-
 |`*index.differential.enable.limit*`
 | Yes
 | `500,000`
 | link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#DIFF_INDEX_MIN_LIMIT[IndexOptions.DIFF_INDEX_MIN_LIMIT]
 
 4+|Sets the minimum size of the Stardog database before differential indexes are used. The legal value is an integer.
-
 
 |`*index.differential.merge.limit*`
 | Yes
@@ -610,7 +600,8 @@ identifiers.
 | `false`
 | link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#PERSIST[IndexOptions.PERSIST]
 
-4+|Enables persistent indexes.
+4+|Enables persistence for memory index. Without this option memory index data will be lost after a restart. This option has no effect for 
+a disk index as they are always persisted.
 
 |`*index.persist.sync*`
 | Yes
@@ -632,6 +623,27 @@ identifiers.
 | link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#INDEX_TYPE[IndexOptions.INDEX_TYPE]
 
 4+|The legal value of `index.type` is the string "disk" or "memory" (case-insensitive).
+
+|`*preserve.bnode.ids*`
+| Yes
+| `true`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#PRESERVE_BNODE_IDS[DatabaseOptions.PRESERVE_BNODE_IDS]
+
+4+|Determines how the Stardog parser handles bnode identifiers that may be present in RDF input. If this property is enabled (i.e., `TRUE`), parsing and data loading performance are improved; but the other effect is that if distinct input files use (randomly or intentionally) the same bnode identifier, that bnode will point to one and the same node in the database. If you have input files that use explicit bnode identifiers, and multiple files may use the same bnode identifiers, and you don't want those bnodes to be smushed into a single node in the database, then this configuration option should be disabled (set to `FALSE`).
+
+|`*query.all.graphs*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#QUERY_ALL_GRAPHS[DatabaseOptions.QUERY_ALL_GRAPHS]
+
+4+|Determines what data the database evaluates queries against; if `true`, it will query over the default graph and the union of all named graphs; if `false` (the default), it will query only over the default graph.  This database option overrides any global server settings.
+
+|`*query.plan.reuse*`
+| Yes
+| Always
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#QUERY_PLAN_REUSE[DatabaseOptions.QUERY_PLAN_REUSE]
+
+4+|Option for configuring how Stardog will reuse query plans. Stardog answers queries by first generating an execution plan. Generating an optimal query plan is hard and time-consuming so these plans are cached and reused for structurally equivalent queries; i.e. queries such that one can be transformed into another by replacing constants. This option determines the conditions under which a cached plan will be reused. See link:/java/snarl/com/complexible/stardog/QueryPlanReuse.html[QueryPlanReuse] for the available values.
 
 |`*query.timeout*`
 | Yes
@@ -684,13 +696,6 @@ the default graph, respectively. In the context of database configurations only,
 
 4+|Enables semantic search for the database.
 
-|`*strict.parsing*`
-| No
-| `true`
-| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#STRICT_PARSING[DatabaseOptions.STRICT_PARSING]
-
-4+|Controls whether Stardog parses RDF strictly (`true`, the default) or loosely (`false`)
-
 |`*search.reindex.mode*`
 | Yes
 | `async`
@@ -713,6 +718,28 @@ cron expression].
 | link:/java/snarl/com/complexible/stardog/search/SearchOptions.html#SEARCH_DEFAULT_LIMIT[SearchOptions.SEARCH_DEFAULT_LIMIT]
 
 4+|Specify the default limit on the number of results returned from a full-text search
+
+4+|When `transaction.logging` is `true`, it determines whether the rotated log will be deleted or kept in disk.
+|`*spatial.enabled*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/spatial/GeospatialOptions.html#SPATIAL_ENABLED[GeospatialOptions.SPATIAL_ENABLED]
+
+4+|Enables geospatial search for the database.
+
+|`*spatial.precision*`
+| No
+| `11`
+| link:/java/snarl/com/complexible/stardog/spatial/GeospatialOptions.html#SPATIAL_PRECISION[GeospatialOptions.SPATIAL_PRECISION]
+
+4+|Specifies the precision used for the indexing of geospatial data.  The smaller the value, the less precision.
+
+|`*strict.parsing*`
+| No
+| `true`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#STRICT_PARSING[DatabaseOptions.STRICT_PARSING]
+
+4+|Controls whether Stardog parses RDF strictly (`true`, the default) or loosely (`false`)
 
 |`*transaction.isolation*`
 | Yes
@@ -739,29 +766,6 @@ cron expression].
 | Yes
 | `true`
 | link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#TRANSACTION_LOGGING[DatabaseOptions.TRANSACTION_LOGGING_ROTATION_REMOVE]
-
-4+|When `transaction.logging` is `true`, it determines whether the rotated log will be deleted or kept in disk.
-
-|`*query.all.graphs*`
-| Yes
-| `false`
-| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#QUERY_ALL_GRAPHS[DatabaseOptions.QUERY_ALL_GRAPHS]
-
-4+|Determines what data the database evaluates queries against; if `true`, it will query over the default graph and the union of all named graphs; if `false` (the default), it will query only over the default graph.  This database option overrides any global server settings.
-
-|`*spatial.enabled*`
-| Yes
-| `false`
-| link:/java/snarl/com/complexible/stardog/spatial/GeospatialOptions.html#SPATIAL_ENABLED[GeospatialOptions.SPATIAL_ENABLED]
-
-4+|Enables geospatial search for the database.
-
-|`*spatial.precision*`
-| No
-| `11`
-| link:/java/snarl/com/complexible/stardog/spatial/GeospatialOptions.html#SPATIAL_PRECISION[GeospatialOptions.SPATIAL_PRECISION]
-
-4+|Specifies the precision used for the indexing of geospatial data.  The smaller the value, the less precision.
 
 |===
 
