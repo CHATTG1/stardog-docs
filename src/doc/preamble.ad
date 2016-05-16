@@ -1,6 +1,14 @@
 include::header-logo.ad[]
 
-Stardog is a data unification platform based on semantic graphs.
+Stardog is an enterprise data unification platform based on semantic graphs, schema alignment, data modeling, 
+and deep reasoning.
+
+.What's New in Stardog 4.1
+****
+- [x] <<Multi-master Cluster>>
+- [x] <<Other stuff...>>
+
+****
 
 .What's New in Stardog 4
 ****
@@ -41,12 +49,13 @@ the link:/release-notes/[RELEASE NOTES] and
 
 |===
 | Stardog Version | HTML             | PDF
-| 4.0.5           | link:/#[✓]        | link:/stardog-manual-{version}.pdf[✓]
-| 4.0.3           | link:/4.0.3#[✓]    | link:/stardog-manual-4.0.3.pdf[✓]
-| 4.0.2           | link:/4.0.2#[✓]    | link:/stardog-manual-4.0.2.pdf[✓]
-| 4.0.1           | link:/4.0.1#[✓]    | link:/stardog-manual-4.0.1.pdf[✓]
-| 4.0             | link:/4.0#[✓]      | link:/stardog-manual-4.0.pdf[✓]
-| 3.1.4           | link:/3.1.4#[✓]    | link:/stardog-manual-3.1.4.pdf[✓]
+| 4.1             | link:/[✓]        | link:/stardog-manual-{version}.pdf[✓]
+| 4.0.5           | link:/4.0.5#[✓]  | link:/stardog-manual-4.0.5.pdf[✓]
+| 4.0.3           | link:/4.0.3#[✓]  | link:/stardog-manual-4.0.3.pdf[✓]
+| 4.0.2           | link:/4.0.2#[✓]  | link:/stardog-manual-4.0.2.pdf[✓]
+| 4.0.1           | link:/4.0.1#[✓]  | link:/stardog-manual-4.0.1.pdf[✓]
+| 4.0             | link:/4.0#[✓]    | link:/stardog-manual-4.0.pdf[✓]
+// | 3.1.4           | link:/3.1.4#[✓]  | link:/stardog-manual-3.1.4.pdf[✓]
 |===
 
 == Downloading & Support
@@ -71,13 +80,13 @@ Dreghiciu, Rob Vesse, Stephane Fallah, John Goodwin, José Devezas, Chris
 Halaschek-Wiener, Gavin Carothers, Brian Panulla, Ryan Kohl, Morton Swimmer,
 Quentin Reul, Paul Dlug, James Leigh, Alex Tucker, Ron Zettlemoyer, Jim Rhyne,
 Andrea Westerinen, Huy Phan, Zach Whitley, Maurice Rabb, Grant Pax, Conrad
-Leonard, and the crew at XSB.] You
+Leonard, John Shearer, Ryan Hohimer, and the crew at XSB.] You
 can also help by
 https://github.com/Complexible/stardog-docs/tree/master/src/doc[editing these
 docs on Github] if you spot a problem.
 
 == Roadmap
 [horizontal]
-Stardog 4.1:: Multi-master in Cluster. Pelorus--a faceted graph browser--integrated with Stardog Web Console
-Stardog 4.2:: Native HDFS backend
+Stardog 4.2:: Native HDFS backend. Pelorus--a faceted graph browser--integrated with Stardog Web Console
 Stardog 4.3:: Generalizing R2RML virtual graph support
+Stardog 5  :: Big clusters
