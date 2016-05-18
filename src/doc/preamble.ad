@@ -6,7 +6,9 @@ and deep reasoning.
 .What's New in Stardog 4.1
 ****
 - [x] <<Guarantees, Multi-coordinator Cluster>>
+- [x] Cluster stability & performance improvements
 - [x] <<Querying the Revision History, Query graph & revision history simultaneously>>
+- [x] New, faster SPARQL parser
 ****
 
 Check out the <<Quick Start Guide>> to get Stardog installed and running in five easy steps.
