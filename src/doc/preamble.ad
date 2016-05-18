@@ -5,8 +5,9 @@ and deep reasoning.
 
 .What's New in Stardog 4.1
 ****
-- [x] <<Multi-master Cluster>>
-- [x] <<Other stuff...>>
+- [x] <<Multi-coordinator Cluster>>
+- [x] Lean in-memory solutions
+- [x] <<Querying the Revision History, Query graph and revision history simultaneously>>
 
 ****
 

@@ -75,6 +75,9 @@ used without an explicit namespace.
 |`cosh`
 |`stardog:cosh`
 
+|`gmean`
+|`stardog:gmean`
+
 |`date`
 |`swrlb:date`
 

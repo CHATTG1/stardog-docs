@@ -315,14 +315,67 @@ $ stardog vcs tag --list myDb
 
 === Querying the Revision History
 
-The revision history of the database is represented as RDF using the W3C PROV
-vocabulary and can be queried using SPARQL:footnote:[Find another database that can
-do that!]
+The revision history of the database is represented as RDF using an extended version 
+of the W3C PROV vocabulary and can be queried using SPARQL.footnote:[Find another 
+database that can do that!] The following query retrieves all the versions:
+
+[source,SPARQL]
+----
+SELECT ?author ?msg ?date {   
+  ?v a vcs:Version ;      
+     rdfs:comment ?msg ;      
+     prov:wasAttributedTo / rdfs:label ?author ; 
+     prov:generatedAtTime ?date
+}
+----
+
+You can execute versioning queries using the `vcs query` command:
 
 [source,bash]
 ----
-$ stardog vcs query myDb 'SELECT...'
+$ stardog vcs query myDb versioning-query.sparql
 ----
+
+Queries executed by `vcs query` only query the versioning history and automatically
+recognizes the `vcs` and `prov` namespaces. If you would like to query the current 
+state of the database along with the version history then you can run a regular 
+query using a special versioning `SERVICE`. The following query finds the 
+instances of `foaf:Person` class that has been modified in the last 24 hours:
+[source,SPARQL]
+----
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX vcs: <tag:stardog:api:versioning:>
+
+SELECT DISTINCT ?x ?date { 
+  ?x a foaf:Person
+     
+  SERVICE vcs:service {    
+    ?v a vcs:Version;
+       prov:generatedAtTime ?date;
+       vcs:updates/(vcs:additions|vcs:removals) ?update
+    GRAPH ?update { 
+      ?x ?p ?o 
+    }
+    FILTER (NOW() - ?date < 'PT24H'^^xsd:dayTimeDuration)
+  }
+}
+ORDER BY DESC(?date)
+----
+
+You can run this query using the regular query command:
+
+[source,bash]
+----
+$ stardog query myDb versioning-mixed-query.sparql
+----
+
+Note that, in this query the namespaces `vcs` and `prov` have been declared explicitly in
+the query. If you <<register these namespaces,Namespacing>> to your database then you can 
+omit these declarations. 
+
+For more details about the Stardog versioning representation, see
+https://github.com/Complexible/stardog-examples/blob/master/examples/cli/versioning/README.md[the stardog-examples repo].
+
 
 == Exporting
 
@@ -374,23 +427,25 @@ $ stardog query search -q "html" -l 10 catalog
 
 The results?
 
-[source]
+[source,bash]
 ----
-Index    Score    Hit
-====================
-0    6.422    urn:x-domain:oreilly.com:product:9780596527402.IP
-1    6.422    urn:x-domain:oreilly.com:product:9780596003166.IP
-2    6.422    urn:x-domain:oreilly.com:product:9781565924949.IP
-3    6.422    urn:x-domain:oreilly.com:product:9780596002251.IP
-4    6.422    urn:x-domain:oreilly.com:product:9780596101978.IP
-5    6.422    urn:x-domain:oreilly.com:product:9780596154066.IP
-6    6.422    urn:x-domain:oreilly.com:product:9780596157616.IP
-7    6.422    urn:x-domain:oreilly.com:product:9780596805876.IP
-8    6.422    urn:x-domain:oreilly.com:product:9780596527273.IP
-9    6.422    urn:x-domain:oreilly.com:product:9780596002961.IP
++-------+-------+---------------------------------------------------+
+| Index | Score |                        Hit                        |
++-------+-------+---------------------------------------------------+
+| 1     | 6.422 | urn:x-domain:oreilly.com:product:9780596002251.IP |
+| 2     | 6.422 | urn:x-domain:oreilly.com:product:9780596002961.IP |
+| 3     | 6.422 | urn:x-domain:oreilly.com:product:9780596003166.IP |
+| 4     | 6.422 | urn:x-domain:oreilly.com:product:9780596101978.IP |
+| 5     | 6.422 | urn:x-domain:oreilly.com:product:9780596154066.IP |
+| 6     | 6.422 | urn:x-domain:oreilly.com:product:9780596157616.IP |
+| 7     | 6.422 | urn:x-domain:oreilly.com:product:9780596527273.IP |
+| 8     | 6.422 | urn:x-domain:oreilly.com:product:9780596527402.IP |
+| 9     | 6.422 | urn:x-domain:oreilly.com:product:9780596805876.IP |
+| 10    | 6.422 | urn:x-domain:oreilly.com:product:9781565924949.IP |
++-------+-------+---------------------------------------------------+
 ----
 
-See <<Graph Search>> for more details.
+See <<Full-Text Search>> for more details.
 
 == Obfuscating
 

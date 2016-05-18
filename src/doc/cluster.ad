@@ -36,29 +36,26 @@ Participants.
 
 In case the Coordinator fails at any point, a new Coordinator will be elected
 out of the remaining available Participants. Stardog Cluster supports both
-`read` (e.g., querying) and `write` (e.g., adding data) requests. Read requests
-are served by the Stardog node receiving it, whereas write requests are
-transparently forwarded to and handled by the Coordinator. In some future
-release we may change the protocol implemented by the Cluster and thus change
-some of the allowable topologies, including multiple-writers and
-multiple-readers.
-
+`read` (e.g., querying) and `write` (e.g., adding data) requests. All read and
+write requests can be handled by any of the nodes in the cluster. 
 When a client commits a transaction (containing a list of `write` requests), it
-will be acknowledged by the Coordinator only **after every non-failing Participant
-has committed the transaction**. If a Participant fails during the process of
-committing a transaction, it will be expelled from the cluster by the
-Coordinator and put in a temporary `failed` state.
+will be acknowledged by the receiving node only
+**after every non-failing peer nodes has committed the transaction**. If a peer node
+fails during the process of committing a transaction, it will be expelled from the
+cluster by the Coordinator and put in a temporary `failed` state. If the
+Coordinator fails during the process, the transaction will be aborted. At that point 
+the client can retry the transaction and it should succeed with the new cluster
+coordinator.
 
-If the Coordinator fails during the process, the transaction will be aborted,
-and a new Coordinator will be elected automatically. Since `failed` nodes are
-not used for any subsequent `read` or `write` requests, **if a commit is
-acknowledged by the Coordinator, then Stardog Cluster guarantees that the data
-has been accordingly modified at *every* available node in the cluster**.
+Since `failed` nodes are not used for any subsequent `read` or `write` requests,
+**if a commit is acknowledged, then Stardog Cluster
+guarantees that the data has been accordingly modified at *every* available node in
+the cluster**.
 
 While this approach is less performant with respect to write
 operations than eventual consistency used by other distributed databases,
 typically those databases offer a much less expressive data model than Stardog,
-which makes an eventually consistency model more appropriate for those systems.
+which makes an eventually consistency model more appropriate for those systems (and less so for Stardog).
 But since Stardog's data model is not only richly expressive but rests in part
 on provably correct semantics, we think that a strong consistency model is worth
 the cost.footnote:[Based on customer feedback we may relax these consistency
@@ -123,16 +120,10 @@ pack.enabled=true
 pack.node.address=196.69.68.1
 # the connection string for ZooKeeper where cluster state is stored
 pack.zookeeper.address=196.69.68.1:2180,196.69.68.2:2180,196.69.68.3:2180
-# credentials used for securing ZooKeeper state
-pack.cluster.username=pack
-pack.cluster.password=admin
 ----
 +
 `pack.zookeeper.address` is a ZooKeeper connection string where cluster stores its
-state. `pack.cluster.username` and `pack.cluster.password` are user and password
-tokens for ZooKeeper cluster communications and may be different from actual Stardog users
-and passwords; however, **all nodes must use the same user and password
-combination.** `pack.node.address` is not a required property.  The local address of the node, by default,
+state. `pack.node.address` is not a required property.  The local address of the node, by default,
 is `InetAddress.getLocalhost().getAddress()`, which should work for many deployments.  However if you're
 using an atypical network topology and the default value is not correct, you can provide a value for this
 property.
@@ -283,6 +274,8 @@ global
     maxconn 256
 
 defaults
+    # you should update these values to something that makes
+    # sense for your use case
     timeout connect 5s
     timeout client 1h
     timeout server 1h
@@ -293,53 +286,24 @@ frontend stardog-in
     bind *:5820
     default_backend stardogs
 
-# the Stardog servers - we use sticky sessions
+# the Stardog servers
 backend stardogs
     option tcpka # keep-alive
-    # sticks the client to a given server for the duration of the connection
-    #   using the destination IP address
-    stick-table type integer size 200k expire 30m
-    stick on dst
-    # these three lines perform a health check
-    # they will check that the node accepts connections and
-    # that it's operational within the cluster
-    option tcp-check
-    tcp-check send-binary 50494e47 # PING
-    tcp-check expect binary 504F4e47 # PONG
-    # replace these IP addresses with the corresponding node address
-    server stardog1 196.69.68.1:5821 maxconn 32 check
-    server stardog2 196.69.68.2:5821 maxconn 32 check
-    server stardog3 196.69.68.3:5821 maxconn 32 check
-----
-+
-Conversely, if you wish to operate the cluster in HTTP-only mode, you can
-use the following HAProxy configuration:
-+
-[source,text]
-----
-global
-    daemon
-    maxconn 256
-
-defaults
-    timeout connect 5s
-    timeout client 1h
-    timeout server 1h
-
-frontend stardog-in
-    option tcpka # keep-alive
-    bind *:5820
-    default_backend stardogs
-
-backend stardogs
-    mode http
-    # this line serves the same purpose as PING/PONG in tcp mode
+    # the following line performs a health check
+    # HAProxy will check that each node accepts connections and
+    # that it's operational within the cluster. Health check 
+    # requires that Stardog nodes do not use --no-http option
     option httpchk GET /admin/healthcheck
     # replace these IP addresses with the corresponding node address
-    server stardog1 196.69.68.1:5821 maxconn 32 check
-    server stardog2 196.69.68.2:5821 maxconn 32 check
-    server stardog3 196.69.68.3:5821 maxconn 32 check
+    # maxconn value can be upgraded if you expect more concurrent
+    # connections
+    server stardog1 196.69.68.1:5821 maxconn 64 check
+    server stardog2 196.69.68.2:5821 maxconn 64 check
+    server stardog3 196.69.68.3:5821 maxconn 64 check
 ----
++
+If you wish to operate the cluster in HTTP-only mode, you can add the
+`mode http` to backend settings.
 +
 Finally,
 +
@@ -362,15 +326,31 @@ $ ./stardog-admin db create -n myDb
 $ ./stardog data add myDb /path/to/my/data
 $ ./stardog query myDb "select * { ?s ?p ?o } limit 5"
 ----
-+
+
+== Shutdown
+
 In order to shut down the cluster you only need to execute the following command once:
-+
+
 [source,bash]
 ----
-$ ./stardog-admin server stop
+$ ./stardog-admin cluster stop
 ----
-+
-You still need to shut down ZooKeeper independently.
+
+The `cluster stop` request will cause all available nodes in the cluster to shutdown. If a node
+was expelled from the cluster due to a failure it would not receive this command and might need 
+to be shutdown manually. In order to shutdown a single node in the cluster use the regular
+`server stop` command and be sure to specify the server address:
+
+[source,bash]
+----
+$ ./stardog-admin --server snarl://localhost:5821 server stop
+----
+
+If you send the `server stop` command to the load balancer then **a random node selected by the
+load balancer will shutdown.** 
+
+In addition to the Stardog cluster you still need to shut down ZooKeeper independently. Refer to
+ZooKeeper documentation for details.
 
 .Running Stardog Cluster on a Single Machine
 ****
