@@ -36,7 +36,7 @@ include::using.ad[]
 
 include::admin.ad[]
 
-include::security.ad[]
+//include::security.ad[]
 
 include::cluster.ad[]
 
@@ -55,6 +55,8 @@ include::virtual-graphs.ad[]
 include::property-graph.ad[]
 
 include::geospatial.ad[]
+
+include::security.ad[]
 
 include::programming.ad[]
 
