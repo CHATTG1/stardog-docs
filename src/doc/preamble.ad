@@ -5,23 +5,8 @@ and deep reasoning.
 
 .What's New in Stardog 4.1
 ****
-- [x] <<Multi-coordinator Cluster>>
-- [x] Lean in-memory solutions
-- [x] <<Querying the Revision History, Query graph and revision history simultaneously>>
-
-****
-
-.What's New in Stardog 4
-****
-- [x] <<Virtual Graphs>>
-- [x] <<Property Graphs, TinkerPop3, Gremlin, & Property Graphs>>
-- [x] <<Geospatial Query>>
-- [x] <<Namespacing, RDF Namespaces optional>>
-- [x] <<Requirements, requires Java 8>>
-- [x] <<Stardog 4, Stardog 4 API Changes>>
-- [x] <<RDF 1.1>>
-- [x] Remove Cluster proxy dependency
-
+- [x] <<Guarantees, Multi-coordinator Cluster>>
+- [x] <<Querying the Revision History, Query graph & revision history simultaneously>>
 ****
 
 Check out the <<Quick Start Guide>> to get Stardog installed and running in five easy steps.
@@ -90,4 +75,4 @@ docs on Github] if you spot a problem.
 [horizontal]
 Stardog 4.2:: Native HDFS backend. Pelorus--a faceted graph browser--integrated with Stardog Web Console
 Stardog 4.3:: Generalizing R2RML virtual graph support
-Stardog 5  :: Big clusters
+Stardog 5  :: Horizontally scalable, DCOS, graph analytics 

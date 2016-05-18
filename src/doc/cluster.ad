@@ -40,7 +40,7 @@ out of the remaining available Participants. Stardog Cluster supports both
 write requests can be handled by any of the nodes in the cluster. 
 When a client commits a transaction (containing a list of `write` requests), it
 will be acknowledged by the receiving node only
-**after every non-failing peer nodes has committed the transaction**. If a peer node
+**after every non-failing peer node has committed the transaction**. If a peer node
 fails during the process of committing a transaction, it will be expelled from the
 cluster by the Coordinator and put in a temporary `failed` state. If the
 Coordinator fails during the process, the transaction will be aborted. At that point 

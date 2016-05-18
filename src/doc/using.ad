@@ -370,7 +370,7 @@ $ stardog query myDb versioning-mixed-query.sparql
 ----
 
 Note that, in this query the namespaces `vcs` and `prov` have been declared explicitly in
-the query. If you <<register these namespaces,Namespacing>> to your database then you can 
+the query. If you <<Namespacing, register these namespaces>> to your database then you can 
 omit these declarations. 
 
 For more details about the Stardog versioning representation, see

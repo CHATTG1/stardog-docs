@@ -465,7 +465,8 @@ pass a different value to `--home`.
 
 === Access & Audit Logging
 
-See [`stardog.properties`]https://github.com/Complexible/stardog-examples/blob/master/config/stardog.properties file for a complete discussion of how access and
+See the exemplar https://github.com/Complexible/stardog-examples/blob/master/config/stardog.properties[`stardog.properties`] 
+file for a complete discussion of how access and
 audit logging work in Stardog Server. Basically, audit logging is a superset of
 the events in access logging. Access logging covers the most often required
 logging events; you should consider enabling audit logging if you really need to
