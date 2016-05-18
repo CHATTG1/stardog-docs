@@ -214,7 +214,12 @@ NOTE: As mentioned earlier, we recommend to have Stardog and ZooKeeper nodes in
 different machines, but for the purpose of this example we'll colocate them in
 the same machines.
 
-. *Start ZooKeeper with the `stardog-admin cluster zkstart` subcommand*
+. *Start ZooKeeper instances*
++
+First, you need to start ZooKeeper nodes. You can do this using the standard 
+command line tools that come with ZooKeeper. As a convenience, we provide a 
+`stardog-admin cluster zkstart` subcommand that you can use to start ZooKeeper
+instances:
 +
 [source,bash]
 ----
@@ -223,7 +228,7 @@ $ ./stardog-admin cluster zkstart --home ~/stardog # on node 2
 $ ./stardog-admin cluster zkstart --home ~/stardog # on node 3
 ----
 +
-Which uses the `zookeeper.properties` config file in `~/stardog` and log its
+This uses the `zookeeper.properties` config file in `~/stardog` and log its
 output to `~/stardog/zookeeper.log`. If your `$STARDOG_HOME` is set to `~/stardog`,
 then you don't need to specify the `--home` option. For more info about the command:
 +
@@ -232,7 +237,9 @@ then you don't need to specify the `--home` option. For more info about the comm
 $ ./stardog-admin help cluster zkstart
 ----
 +
-Once ZooKeeper is started, you can start Stardog Cluster:
+. *Start Stardog instances*
++
+Once ZooKeeper is started, you can start Stardog instances:
 +
 [source,bash]
 ----
@@ -241,7 +248,15 @@ $ ./stardog-admin server start --home ~/stardog --port 5821 # on node 2
 $ ./stardog-admin server start --home ~/stardog --port 5821 # on node 3
 ----
 +
-Again, if your `$STARDOG_HOME` is set to `~/stardog`, you don't need to specify
+**Important:** When starting Stardog instances for the cluster, unlike single server 
+mode, you need to provide the credentials of a superuser that will be used for 
+securing the data stored in ZooKeeper and for intra-cluster communication. Each node
+should be started with the same superuser credentials. By default, Stardog comes with
+a superuser `admin` that has password `"admin"` and that is the default credentials
+used by the above command. For a secure installation of Stardog cluster you should
+change these credentials and restart the cluster with new credentials.
++
+And again, if your `$STARDOG_HOME` is set to `~/stardog`, you don't need to specify
 the `--home` option.
 +
 NOTE: Make sure to allocate roughly twice as much heap for Stardog than you would normally
