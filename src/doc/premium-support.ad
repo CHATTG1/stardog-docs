@@ -30,11 +30,6 @@ devops cycles but keeps you up-to-date with the latest-greatest
 versions of Stardog, including security fixes, performance hot fixes,
 and deployment best practices and configurations.
 
-Some day all software will be distributed via containers; the days of
-the monolithic release, held for weeks or month to suit business
-cycles, are over. You heard it here first; well, okay, not *first* but
-you *got* it here *early*.
-
 == Priority Bug Fixes 
 
 With Maven and Docker in place, we've got a software delivery
