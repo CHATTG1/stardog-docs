@@ -447,11 +447,12 @@ contain cycles under some limits. One of these
 is that a rule body should not contain type triples or filters. Tree-like 
 dependencies are always allowed.
 +
-Of course the rule body may also contains triple patterns, which constitute a different 
+Of course the rule body may also contain triple patterns, which constitute a different 
 kind of graph: it should be linear when edge directions are 
 ignored. So no cycles or trees are allowed in this graph pattern. 
 Linear when directions are ignored means that `{ ?x :p ?y . ?x :p ?z }` is 
-linear but `{ ?x :p ?y . ?x :p ?z . ?x :p ?z }` is not.
+linear but `{ ?x :p ?y . ?x :p ?z . ?x :p ?t }` is not because there are three
+edges for the node represented by `?x`.
 +
 The reason for these limits boils down to the fact that recursive 
 rules and axioms are rewritten as SPARQL property paths. This is why rule 
