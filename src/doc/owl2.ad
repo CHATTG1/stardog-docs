@@ -438,7 +438,76 @@ will use.
 . Having the same predicate both in the rule body (`IF`) and the rule head
 (`THEN`) are supported in a limited way. Cycles are allowed only if the rule
 body does not contain type triples or filters and the triples in the rule body
-are linear (i.e. no cycles in the rule body either).
+are linear (i.e. no cycles in the rule body either). 
++
+In other words, a property used 
+in the rule head 
+depends on a property in the rule body and this dependency graph may 
+contain cycles under some limits. One of these 
+is that a rule body should not contain type triples or filters. Tree-like 
+dependencies are always allowed.
++
+Of course the rule body may also contains triple patterns, which constitute a different 
+kind of graph: it should be linear when edge directions are 
+ignored. So no cycles or trees are allowed in this graph pattern. 
+Linear when directions are ignored means that `{ ?x :p ?y . ?x :p ?z }` is 
+linear but `{ ?x :p ?y . ?x :p ?z . ?x :p ?z }` is not.
++
+The reason for these limits boils down to the fact that recursive 
+rules and axioms are rewritten as SPARQL property paths. This is why rule 
+bodies cannot contain anything but property atoms. Cycles are allowed 
+as long as we can express these as a regular grammar. Another way to 
+think about this is that these rules should be as expressive as OWL 
+property chains and the same restrictions defined for property chains  
+apply here, too. 
++
+Let's consider some examples.
++
+These rules are acceptable since no cycles appear in dependencies: 
++
+[source,sparql]                                                                                                                                               
+----  
+IF 
+  { ?x :hasFather ?y . ?y :hasBrother ?z } 
+THEN 
+  { ?x :hasUncle ?z }
+----
++
+[source,sparql]
+----
+IF 
+  { ?x :hasUncle ?y . ?y :hasWife ?z } 
+THEN 
+  { ?x :hasAuntInLaw ?z }
+----
++
+These rules are not acceptable since there is a cycle:
++
+[source,sparql]
+----
+IF 
+  { ?x :hasFather ?y . ?y :hasBrother ?z } 
+THEN 
+  { ?x :hasUncle ?z } 
+----
++
+[source,sparql]
+----
+IF 
+  { ?x :hasChild ?y . ?y :hasUncle ?z } 
+THEN 
+  { ?x :hasBrother ?z }
+----
++
+This kind of cycle is allowed:
++
+[source,sparql]
+----
+IF 
+  { ?x :hasChild ?y . ?y :hasSibling ?z } 
+THEN 
+  { ?x :hasChild ?z }
+----
 
 NOTE: (3) is a *general* limitation, not specific to Stardog Rules Syntax:
 recursion or cycles can occur through multiple rules, or it may occur as a
