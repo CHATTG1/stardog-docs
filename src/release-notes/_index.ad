@@ -20,6 +20,25 @@
 
 image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbsp; &nbsp; image:f.png[] Fixed bug
 
+== 4.1.1 Release
+[none]
+*MOD: Remove output log redirect on startup (#2970)
+*MOD: Change coalescing in SNARL Connections can cause a deep stack (#2951)
+*FIX: Removals might cause diff index to exceed the limit (#2967)
+*FIX: Open conn count is not accurate when there are open transactions (#2965)
+*FIX: NPE while loading security information from the system index (#2963)
+*FIX: Open conn and tx count not shown for previously created database (#2962)
+*FIX: Server properties not defined in StardogConfiguration are invisible to status (#2961)
+*FIX: Concurrent transactions fail when versioning is enabled (#2960)
+*FIX: NPE in nested merge joins (#2959)
+*FIX: NPE parsing describe * queries (#2957)
+*FIX: NPE iterating off end of context scan (#2954)
+*FIX: Incorrect handling of HAVING clause with implicit group (#2948)
+*FIX: SWRLB dateTime functions don't define a namespace (#2945)
+*FIX: SWRLB (dateTime|yearMonth)Duration functions return xsd:duration (#2944)
+*FIX: Versioning API dependency on prov should be non-transitive (#2932)
+*FIX: Clear all/context is inefficient (#2108)
+
 == 4.1 Release
 [none]
 
