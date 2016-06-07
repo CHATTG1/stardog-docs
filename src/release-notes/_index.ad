@@ -24,6 +24,10 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 [none]
 *MOD: Remove output log redirect on startup (#2970)
 *MOD: Change coalescing in SNARL Connections can cause a deep stack (#2951)
+*FIX: Service queries where variables are renamed in a projection return incorrect answers (#2975)
+*FIX: Virtual graphs with default mappings lost after a restart (#2973)
+*FIX: Push solution modifiers to SQL (#2972)
+*FIX: Wrong index order used when query defines a dataset (#2971)
 *FIX: Removals might cause diff index to exceed the limit (#2967)
 *FIX: Open conn count is not accurate when there are open transactions (#2965)
 *FIX: NPE while loading security information from the system index (#2963)
