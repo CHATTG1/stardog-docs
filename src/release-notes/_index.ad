@@ -22,8 +22,12 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 
 == 4.1.1 Release
 [none]
+*MOD: Show SQL queries while explaining virtual graph query (#2979)
 *MOD: Remove output log redirect on startup (#2970)
 *MOD: Change coalescing in SNARL Connections can cause a deep stack (#2951)
+*FIX: Problem with parsing bind + values (#2981)
+*FIX: DELETE/INSERT queries fail with sameAs reasoning (#2978)
+*FIX: Version diff fails for RDF patch format (#2977)
 *FIX: Service queries where variables are renamed in a projection return incorrect answers (#2975)
 *FIX: Virtual graphs with default mappings lost after a restart (#2973)
 *FIX: Push solution modifiers to SQL (#2972)
@@ -38,9 +42,11 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 *FIX: NPE parsing describe * queries (#2957)
 *FIX: NPE iterating off end of context scan (#2954)
 *FIX: Incorrect handling of HAVING clause with implicit group (#2948)
+*FIX: Key not present error while processing R2RML referencing object maps (#2946)
 *FIX: SWRLB dateTime functions don't define a namespace (#2945)
 *FIX: SWRLB (dateTime|yearMonth)Duration functions return xsd:duration (#2944)
 *FIX: Versioning API dependency on prov should be non-transitive (#2932)
+*FIX: Strict parsing option in stardog.properties is ignored (#2817)
 *FIX: Clear all/context is inefficient (#2108)
 
 == 4.1 Release
