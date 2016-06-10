@@ -25,6 +25,7 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 *MOD: Show SQL queries while explaining virtual graph query (#2979)
 *MOD: Remove output log redirect on startup (#2970)
 *MOD: Change coalescing in SNARL Connections can cause a deep stack (#2951)
+*FIX: Delete queries do not update search/geospatial index (#2983)
 *FIX: Problem with parsing bind + values (#2981)
 *FIX: DELETE/INSERT queries fail with sameAs reasoning (#2978)
 *FIX: Version diff fails for RDF patch format (#2977)
