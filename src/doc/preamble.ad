@@ -76,6 +76,6 @@ docs on Github] if you spot a problem.
 
 == Roadmap
 [horizontal]
-Stardog 4.2:: Native HDFS backend. Pelorus--a faceted graph browser--integrated with Stardog Web Console
-Stardog 4.3:: Generalizing R2RML virtual graph support
+Stardog 4.2:: "Stardocs": unification of unstructured data. Pelorus--a faceted graph browser--integrated with Stardog Web Console
+Stardog 4.3:: Native HDFS backend. Generalizing R2RML virtual graph support
 Stardog 5  :: Horizontally scalable, DCOS, graph analytics 
