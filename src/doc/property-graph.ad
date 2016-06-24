@@ -291,7 +291,7 @@ configuration file in `conf/` with the Stardog graph properties. The following e
 
 ----
 # Properties for creating a StardogGraph in Gremlin Server
-gremlin.graph=org.apache.tinkerpop.gremlin.stardog.structure.StardogGraph
+gremlin.graph=com.complexible.stardog.gremlin.structure.StardogGraph
 stardog.connection=snarl://localhost:5820/mygraph
 stardog.user=admin
 stardog.password=admin
