@@ -20,6 +20,30 @@
 
 image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbsp; &nbsp; image:f.png[] Fixed bug
 
+== 4.1.2 Release
+[none]
+
+*ADD: Add a SPARQL function for returning IRI namespace (#2992)
+*ADD: Add xsd:date cast function (#2976)
+*MOD: Use pretty formatting for R2RML output (#3006)
+*MOD: Do not import empty values from CSV files (#2994)
+*MOD: Put LocalName function in Stardog namespace (#2991)
+*FIX: Wrong parsing of multiple BINDs after OPTIONALs (#3018)
+*FIX: Non-determinism in cardinality estimations (#3017)
+*FIX: secure processing option for RIO prevents setting of entityExpansionLimit (#3015)
+*FIX: Wrong parsing of filters after an OPTIONAL (#3014)
+*FIX: Wrong join type for scans with context-first index order (#3013)
+*FIX: Combining consecutive FILTERs with && can reduce effectiveness of filter optimizations (#3009)
+*FIX: ClassCastException upon opening a database connection (#3005)
+*FIX: Configuring max URL length in HTTP server is not working (#3004)
+*FIX: IN filter expression doesn't handle type errors correctly (#3003)
+*FIX: Virtual mappings with xsd:negativeInteger fail (#3002)
+*FIX: Strict parsing mode does not validate some datatypes (#3001)
+*FIX: Implicit join detection fails in the presence of property paths (#3000)
+*FIX: EXISTS expression is evaluated incorrectly if not in a FILTER (#2996)
+*FIX: Incorrect skipping in scan with explicit active graph (#2995)
+*FIX: Wrong treatment of LIMIT in CONSTRUCT queries (#2985)
+*FIX: Geospatial queries with no results throws an exception (#2982)
 == 4.1.1 Release
 [none]
 *MOD: Show SQL queries while explaining virtual graph query (#2979)
