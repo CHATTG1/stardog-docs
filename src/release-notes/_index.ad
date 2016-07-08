@@ -44,6 +44,7 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 *FIX: Incorrect skipping in scan with explicit active graph (#2995)
 *FIX: Wrong treatment of LIMIT in CONSTRUCT queries (#2985)
 *FIX: Geospatial queries with no results throws an exception (#2982)
+
 == 4.1.1 Release
 [none]
 *MOD: Show SQL queries while explaining virtual graph query (#2979)
