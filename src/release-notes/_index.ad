@@ -20,6 +20,24 @@
 
 image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbsp; &nbsp; image:f.png[] Fixed bug
 
+== 4.1.3 Release
+[none]
+
+*MOD: User permission cli command does not show any example usage cli (#3057)
+*MOD: Minimize memory use when querying uncomitted changes (#3025)
+*MOD: Using the base index for cardinality estimations (#2338)
+*FIX: Parser doesn't propagate context into FILTER NOT EXISTS defect query-parser (#3058)
+*FIX: Class cast exception for aggregation queries with values defect query-eval (#3053)
+*FIX: Adding data to different databases causes running out of memory defect (#3051)
+*FIX: Another case of wrong parsing BINDs in queries (#3047)
+*FIX: Do not reuse plans that require a unary/binary index during transactions (#3039)
+*FIX: Named graph security doesn't work with WITH (#3037)
+*FIX: Incorrect results for queries using count indexes (#3034)
+*FIX: Wrong evaluation of a property path with non-projected variable (#3028)
+*FIX: AbstractQuery incorrectly dispatches boxed primitives (#3027)
+*FIX: PropertyFunctions should be able to use non-scan nodes as args (#3026)
+*FIX: VALUES should not eliminate duplicates (#3022)
+
 == 4.1.2 Release
 [none]
 
