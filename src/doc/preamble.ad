@@ -37,14 +37,16 @@ the link:/release-notes/[RELEASE NOTES] and
 
 |===
 | Stardog Version | HTML             | PDF
-| {version}       | link:/{version}#[✓]        | link:/stardog-manual-{version}.pdf[✓]
+| {version}       | link:/{version}/#[✓]        | link:/stardog-manual-{version}.pdf[✓]
+| 4.1.2           | link:/4.1.2/#[✓] | link:/stardog-manual-4.1.2.pdf[✓]
+| 4.1.1           | link:/4.1.1/#[✓] | link:/stardog-manual-4.1.1.pdf[✓]
 | 4.1             | link:/4.1#[✓]    | link:/stardog-manual-4.1.pdf[✓]
 | 4.0.5           | link:/4.0.5#[✓]  | link:/stardog-manual-4.0.5.pdf[✓]
 | 4.0.3           | link:/4.0.3#[✓]  | link:/stardog-manual-4.0.3.pdf[✓]
 | 4.0.2           | link:/4.0.2#[✓]  | link:/stardog-manual-4.0.2.pdf[✓]
 | 4.0.1           | link:/4.0.1#[✓]  | link:/stardog-manual-4.0.1.pdf[✓]
 | 4.0             | link:/4.0#[✓]    | link:/stardog-manual-4.0.pdf[✓]
-// | 3.1.4           | link:/3.1.4#[✓]  | link:/stardog-manual-3.1.4.pdf[✓]
+| 3.1.4           | link:/3.1.4#[✓]  | link:/stardog-manual-3.1.4.pdf[✓]
 |===
 
 == Downloading & Support
@@ -73,9 +75,3 @@ Leonard, John Shearer, Ryan Hohimer, and the crew at XSB.] You
 can also help by
 https://github.com/Complexible/stardog-docs/tree/master/src/doc[editing these
 docs on Github] if you spot a problem.
-
-== Roadmap
-[horizontal]
-Stardog 4.2:: "Stardocs": unification of unstructured data. Pelorus--a faceted graph browser--integrated with Stardog Web Console
-Stardog 4.3:: Native HDFS backend. Generalizing R2RML virtual graph support
-Stardog 5  :: Horizontally scalable, DCOS, graph analytics 
