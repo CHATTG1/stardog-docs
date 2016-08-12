@@ -20,6 +20,49 @@
 
 image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbsp; &nbsp; image:f.png[] Fixed bug
 
+== 4.1.3 Release
+[none]
+
+* image:m.png[Fixed,15,16]&nbsp;&nbsp; User permission cli command does not show any example usage cli (#3057)
+* image:m.png[Fixed,15,16]&nbsp;&nbsp; Minimize memory use when querying uncomitted changes (#3025)
+* image:m.png[Fixed,15,16]&nbsp;&nbsp; Using the base index for cardinality estimations (#2338)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Parser doesn't propagate context into FILTER NOT EXISTS defect query-parser (#3058)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Class cast exception for aggregation queries with values defect query-eval (#3053)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Adding data to different databases causes running out of memory defect (#3051)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Another case of wrong parsing BINDs in queries (#3047)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Do not reuse plans that require a unary/binary index during transactions (#3039)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Named graph security doesn't work with WITH (#3037)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Incorrect results for queries using count indexes (#3034)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Wrong evaluation of a property path with non-projected variable (#3028)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; AbstractQuery incorrectly dispatches boxed primitives (#3027)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; PropertyFunctions should be able to use non-scan nodes as args (#3026)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; VALUES should not eliminate duplicates (#3022)
+
+== 4.1.2 Release
+[none]
+
+* image:a.png[Fixed,15,14]&nbsp;&nbsp; Add a SPARQL function for returning IRI namespace (#2992)
+* image:a.png[Fixed,15,14]&nbsp;&nbsp; Add xsd:date cast function (#2976)
+* image:m.png[Fixed,15,16]&nbsp;&nbsp; Use pretty formatting for R2RML output (#3006)
+* image:m.png[Fixed,15,16]&nbsp;&nbsp; Do not import empty values from CSV files (#2994)
+* image:m.png[Fixed,15,16]&nbsp;&nbsp; Put LocalName function in Stardog namespace (#2991)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Wrong parsing of multiple BINDs after OPTIONALs (#3018)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Non-determinism in cardinality estimations (#3017)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; secure processing option for RIO prevents setting of entityExpansionLimit (#3015)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Wrong parsing of filters after an OPTIONAL (#3014)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Wrong join type for scans with context-first index order (#3013)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Combining consecutive FILTERs with && can reduce effectiveness of filter optimizations (#3009)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; ClassCastException upon opening a database connection (#3005)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Configuring max URL length in HTTP server is not working (#3004)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; IN filter expression doesn't handle type errors correctly (#3003)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Virtual mappings with xsd:negativeInteger fail (#3002)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Strict parsing mode does not validate some datatypes (#3001)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Implicit join detection fails in the presence of property paths (#3000)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; EXISTS expression is evaluated incorrectly if not in a FILTER (#2996)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Incorrect skipping in scan with explicit active graph (#2995)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Wrong treatment of LIMIT in CONSTRUCT queries (#2985)
+* image:f.png[Fixed,15,15]&nbsp;&nbsp; Geospatial queries with no results throws an exception (#2982)
+
 == 4.1.1 Release
 [none]
 * image:m.png[Fixed,15,16]&nbsp;&nbsp; Show SQL queries while explaining virtual graph query (#2979)

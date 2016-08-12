@@ -12,15 +12,17 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
       pkg: grunt.file.readJSON('package.json'),
-      autoprefixer: {
-          single_file: {
-              options: {
-                  browsers: ["> 1%", "ie10", "ie11"]
-              },
-              src: 'website/stardog.css',
-              dest: 'website/stardog.css'
-          },
-        },
+	  postcss: {
+		single_file: {
+			options: {
+				processors: [
+					require('autoprefixer')({browsers: ['> 1%', 'IE 10-11']})
+				]
+			},
+			src: 'website/stardog.css',
+			dest: 'website/stardog.css'
+		  	}
+		},
         //WARNING: never put this in a git repo dir...
         aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
         aws_s3: {
@@ -325,7 +327,7 @@ module.exports = function(grunt) {
                                    'copy:icv_img',
                                    'copy:main',
                                    'copy:css',
-                                   'autoprefixer',
+								   'postcss',
                                    'cssmin',
                                    'embed',
                                    'inline',
