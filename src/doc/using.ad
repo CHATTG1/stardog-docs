@@ -551,3 +551,18 @@ $ stardog data export mydb
 ----
 
 include::manpages.ad[]
+
+== Special Named Graph IRIs
+
+Stardog includes aliases for several commonly used sets of named
+graphs. These non-standard extensions are provided for convenience and
+can be used wherever named graph IRIs are expected. This includes
+SPARQL queries & updates, property graph operations and configuration
+values. Following is a list of special named graph IRIs.
+
+|===
+| Named Graph IRI                 | Refers to
+| tag:stardog:api:context:default | the default (no) context graph
+| tag:stardog:api:context:all     | all contexts, including the default (no) context graph
+| tag:stardog:api:context:named   | all named graphs, excluding the default graph
+|===
