@@ -1046,7 +1046,7 @@ link:../java/snarl/com/complexible/stardog/icv/ICV.html#asIndividuals(&#41;[`ICV
 
 === ICV and Transactions
 
-In addition to using the ICConnection a data oracle to tell whether or
+In addition to using the ICConnection as a data oracle to tell whether or
 not your data is valid with respect to some constraints, you can also
 use Stardog's ICV support to protect your database from invalid data by
 using ICV as a guard within transactions.
