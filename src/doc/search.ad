@@ -29,7 +29,7 @@ For example,
 SELECT DISTINCT ?s ?score
 WHERE {
 ?s ?p ?l.
-?l <tag:stardog:api:property:textMatch> 'mac'.
+(?l ?score) <tag:stardog:api:property:textMatch> 'mac'.
 }
 ----
 
@@ -48,7 +48,7 @@ optional second argument with the limit:
 SELECT DISTINCT ?s ?score
 WHERE {
 ?s ?p ?l.
-?l <tag:stardog:api:property:textMatch> ('mac' 100).
+(?l ?score) <tag:stardog:api:property:textMatch> ('mac' 100).
 }
 ----
 
