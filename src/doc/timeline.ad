@@ -5,6 +5,12 @@ at 1.0; it will be updated for each notable new release. For a complete list of
 changes, including notable bug fixes, see the {release-notes}[release notes].
 
 [horizontal]
+4.1::
+- Multi-coordinator Cluster
+- Cluster stability & performance improvements
+- Query graph & revision history simultaneously
+- New, faster SPARQL parser
+
 4.0::
 - TinkerPop3 and property graphs
 - virtual graphs
