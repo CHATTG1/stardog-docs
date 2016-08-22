@@ -357,7 +357,7 @@ the R2RML mappings corresponding to the above example:
         """ ];
     rr:subjectMap [
         rr:template "http://data.example.com/employee/{\"empno\"}";
-        rr:class emp:Employee ];
+        rr:class emp:Employee
     ];    
     rr:predicateObjectMap [ 
       rr:predicate		emp:name ; 
