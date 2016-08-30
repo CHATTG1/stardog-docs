@@ -552,7 +552,7 @@ $ stardog data export mydb
 
 include::manpages.ad[]
 
-== Special Named Graph IRIs
+== Naming
 
 Stardog includes aliases for several commonly used sets of named
 graphs. These non-standard extensions are provided for convenience and
