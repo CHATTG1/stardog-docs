@@ -46,13 +46,13 @@ include::cluster-management.ad[]
 
 include::search.ad[]
 
-include::docstore.ad[]
-
 include::owl2.ad[]
 
 include::icv.ad[]
 
 include::virtual-graphs.ad[]
+
+include::docstore.ad[]
 
 include::property-graph.ad[]
 
