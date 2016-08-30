@@ -1,0 +1,151 @@
+= Document Store
+
+Stardog includes a built-in document store subsystem. The document
+store provides configurable storage and processing for integrating
+unstructured data with a graph database.
+
+== Storage
+
+The document store allows storage and retrieval of documents in the
+form of files. Stardog treats documents as opaque blobs of data
+defering to the extraction process to make sense of individual
+documents. This means that document storage is independent of file and
+data formats.
+
+Stardog internally stores documents as files. The location of these
+files defaults to a subdirectory of the database but this can be
+overridden. Documents can be stored on a local filesystem (or
+abstraction thereof) accessible from the Stardog server or on Amazon
+S3 by setting the `docs.filesystem.uri` configuration option. The
+exact location is given by the `docs.path` configuration option.
+
+== Unstructured Data Extraction
+
+Stardog's document store is intended to provide a facility for
+integrating documents with RDF graphs. This facility allows processing
+a document to extract an RDF graph to add to the database. The default
+extractor, based on Apache Tika, collects metadata about the document
+and asserts this set of RDF statements to a named graph specific to
+the document. This pipeline is flexible allowing for arbitrary
+extraction components including NLP and ML methods.
+
+== Text Extraction
+
+The document store is fully integrated with the full-text search
+system. As with RDF extraction, text extraction supports arbitrary
+file formats and pluggable extractors are able to retrieve the text
+content of a document for indexing. Once a document is added, it's
+contents can be search in the same way as other literals using the
+standard `textMatch` predicate.
+
+== Managing Documents
+
+CRUD operations on documents can be performed from the command line,
+Java API or HTTP API. Please refer to the
+link:/java/snarl/com/complexible/stardog/docs/StardocsConnection.html[StardocsConnection]
+API for details of using the document store from Java.
+
+The following is an example session showing how to manage documents
+from the command line:
+
+[source,bash]
+----
+# We have a document stored in the file `whyfp90.pdf' which we will add to the document store
+$ ls -al whyfp90.pdf
+-rw-r--r-- 1 user user 200007 Aug 30 09:46 whyfp90.pdf
+
+# We add it to the document store and receive the document's IRI as a return value
+$ bin/stardog doc put myDB whyfp90.pdf
+Successfully put document in the document store: tag:stardog:api:docs:myDB:whyfp90.pdf
+
+# Alternatively, we can add it with a different name. Repeated calls
+# will update the document and refresh extraction results
+$ bin/stardog doc put myDB --name why-functional-programming-matters.pdf whyfp90.pdf
+Successfully put document in the document store: tag:stardog:api:docs:myDB:why-functional-programming-matters.pdf
+
+# We can subsequently retrieve documents and store them locally
+$ bin/stardog doc get myDB whyfp90.pdf
+Wrote document 'whyfp90.pdf' to file 'whyfp90.pdf'
+# Local files will not be overwritten
+$ bin/stardog doc get myDB whyfp90.pdf
+File 'whyfp90.pdf' already exists. You must remove it or specify a different filename.
+
+# How many documents are in the document store?
+$ bin/stardog doc count myDB
+Count: 2 documents
+
+# Removing a document will also clear it's named graph and full-text search index entries
+$ bin/stardog doc delete myDB whyfp90.pdf
+Successfully executed deletion.
+----
+
+== Named Graphs and Document Queries
+
+Documents in the document store are refered to by an IRI. As shown in
+the command line examples above, the IRI is returned from a document
+`put` call. The document store uses document/file names to refer to
+documents. The RDF index, and therefore SPARQL queries, use an IRI to
+refer to a document. The IRI is a combination of a prefix, the
+database name and the document name. RDF assertions extracted from a
+document are placed into a named graph identified by the document's
+IRI.
+
+Here we see the results of querying a document's named graph when
+using the default metadata extractor:
+
+[source,bash]
+----
+$ bin/stardog query execute myDB "select * { graph <tag:stardog:api:docs:myDB:whyfp90.pdf> { ?s ?p ?o } }"
++---------------------------------------+--------------------------------------------+--------------------------------------+
+|                   s                   |                     p                      |                  o                   |
++---------------------------------------+--------------------------------------------+--------------------------------------+
+| tag:stardog:api:docs:myDB:whyfp90.pdf | rdf:type                                   | http://xmlns.com/foaf/0.1/Document   |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | rdf:type                                   | tag:stardog:api:docs:Document        |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | tag:stardog:api:docs:fileSize              | 200007                               |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | http://purl.org/dc/elements/1.1/identifier | "whyfp90.pdf"                        |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | rdfs:label                                 | "whyfp90.pdf"                        |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | http://ns.adobe.com/pdf/1.3/PDFVersion     | "1.3"                                |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | http://ns.adobe.com/xap/1.0/CreatorTool    | "TeX"                                |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | http://ns.adobe.com/xap/1.0/t/pg/NPages    | 23                                   |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | http://purl.org/dc/terms/created           | "2006-05-19T13:42:00Z"^^xsd:dateTime |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | http://purl.org/dc/elements/1.1/format     | "application/pdf; version=1.3"       |
+| tag:stardog:api:docs:myDB:whyfp90.pdf | http://ns.adobe.com/pdf/1.3/encrypted      | "false"                              |
++---------------------------------------+--------------------------------------------+--------------------------------------+
+
+Query returned 11 results in 00:00:00.045
+----
+
+== Writing Custom Extractors
+
+The included metadata extractor is admittedly limited in it's
+usefulness when compared with more advanced text mining algorithms. A
+custom extractor connects the document store to algorithms tailored
+specifically to your data. The extractor SPI is flexible allowing
+integration of a wide array of analyses from NLP methods like
+part-of-speech tagging, entity recognition or sentiment analysis to
+machine learning models such as document ranking and clustering.
+
+The RDF extractor SPI is intended to allow processing a document with
+the output being a set of RDF assertions about the document. The RDF
+assertions are stored in a named graph specific to the document
+allowing provenance tracking and versatile querying. The extractor
+must implement the
+link:/java/snarl/com/complexible/stardog/docs/extraction/RDFExtractor.html[RDFExtractor]
+interface. The convenience class
+link:/java/snarl/com/complexible/stardog/docs/extraction/tika/TextProvidingRDFExtractor.html[TextProvidingRDFExtractor]
+is provided which extracts the text from the document before calling
+the extractor.
+
+The text extractor SPI gives you the opportunity to support arbitrary
+document formats. Implementations will be given a raw document and be
+expected to extractor a string of text which will be added to the
+full-text search index. Text extractors should implement the
+link:/java/snarl/com/complexible/stardog/docs/extraction/TextExtractor.html[TextExtractor]
+interface.
+
+Custom extractors are registered with the Java ServiceLoader under the
+link:/java/snarl/com/complexible/stardog/docs/extraction/RDFExtractor.html[RDFExtractor]
+or
+link:/java/snarl/com/complexible/stardog/docs/extraction/TextExtractor.html[TextExtractor]
+class names. Custom extractors can be referred to from the command
+line or APIs by their fully qualified or "simple" class names.

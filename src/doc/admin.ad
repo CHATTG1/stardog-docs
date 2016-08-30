@@ -540,6 +540,31 @@ See <<Man Pages>> for the details.
 
 4+|The status of the database: online or offline. It may be set so that the database is created initially in online or offline status; subsequently, it can't be set directly but only by using the relevant admin commands.
 
+|`*docs.default.rdf.extractors*`
+|Yes
+|`tika`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_DEFAULT_RDF_EXTRACTORS[StardocsOptions.DOCS_DEFAULT_RDF_EXTRACTORS]
+
+4+| Comma-separated list of names of RDF extractors to use when processing documents when no RDF extractor names are given.
+
+|`*docs.default.text.extractors*`
+|Yes
+|`tika`
+
+4+| Comma-separated list of names of text extractors to use when processing documents when no text extractor names are given.
+
+|`*docs.filesystem.uri*`
+|Yes
+|`file:///`
+
+4+| A URI indicating which `FileSystem` provider to use for document storage. In addition to local storage (`file:///`), documents can be stored on Amazon S3 (`s3:///`) or document storage can be disabled altogether (`none`).
+
+|`*docs.path*`
+|Yes
+|`docs/`
+
+4+| The path under which documents will be stored. A relative path is relative to the database directory. S3 storage should specify an absolute path with the bucket name as the first component of the path.
+
 |`*icv.active.graphs*`
 | No
 | `default`
