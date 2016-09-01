@@ -1,7 +1,9 @@
 include::header-logo.ad[]
 
-Stardog is an enterprise data unification platform based on semantic graphs, schema alignment, data modeling, 
-and deep reasoning.
+Stardog is an enterprise data unification platform. Stardog's semantic graphs,
+schema alignment, data modeling, and deep reasoning make it fast and easy for
+you to unify data without writing any code. See <<Unifying Enterprise Data>> for
+more details.
 
 .What's New in Stardog 4.1
 ****
@@ -32,20 +34,6 @@ Germany. 🌟🐶
 To learn more about where we've been and where we're headed, consult
 the link:/release-notes/[RELEASE NOTES] and
 <<Milestones,milestones>>.
-
-== Documentation
-
-|===
-| Stardog Version | HTML             | PDF
-| {version}       | link:/{version}#[✓]        | link:/stardog-manual-{version}.pdf[✓]
-| 4.1             | link:/4.1#[✓]    | link:/stardog-manual-4.1.pdf[✓]
-| 4.0.5           | link:/4.0.5#[✓]  | link:/stardog-manual-4.0.5.pdf[✓]
-| 4.0.3           | link:/4.0.3#[✓]  | link:/stardog-manual-4.0.3.pdf[✓]
-| 4.0.2           | link:/4.0.2#[✓]  | link:/stardog-manual-4.0.2.pdf[✓]
-| 4.0.1           | link:/4.0.1#[✓]  | link:/stardog-manual-4.0.1.pdf[✓]
-| 4.0             | link:/4.0#[✓]    | link:/stardog-manual-4.0.pdf[✓]
-// | 3.1.4           | link:/3.1.4#[✓]  | link:/stardog-manual-3.1.4.pdf[✓]
-|===
 
 == Downloading & Support
 
