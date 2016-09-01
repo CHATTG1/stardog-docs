@@ -1,44 +1,61 @@
-= Document Store
+== Unstructured Data 
 
-Stardog includes a built-in document store subsystem. The document
-store provides configurable storage and processing for integrating
-unstructured data with a graph database.
+Unifying unstructured data is by necessity a different process from unifying
+structured or semistructured data. As of 4.2, Stardog includes a document
+storage subsystem called STABS, which provides configurable storage and
+processing for unifying unstructured data with the Stardog graph.
 
-== Storage
+=== Background & Assumptions
 
-The document store allows storage and retrieval of documents in the
-form of files. Stardog treats documents as opaque blobs of data
-defering to the extraction process to make sense of individual
-documents. This means that document storage is independent of file and
-data formats.
+STABS makes some simplfying assumptions in Stardog {version} with respect to
+unstructured data unification--
 
-Stardog internally stores documents as files. The location of these
-files defaults to a subdirectory of the database but this can be
-overridden. Documents can be stored on a local filesystem (or
-abstraction thereof) accessible from the Stardog server or on Amazon
-S3 by setting the `docs.filesystem.uri` configuration option. The
-exact location is given by the `docs.path` configuration option.
+* Unbounded blobs in the database are a bad idea; Stardog manages documents (any
+  files, actually) in the local filesystem, in AWS S3, or in HDFS.
+* Documents are the most common kind of enterprise unstructured data.
+* There is no general purpose natural language processing, which means that
+  *extraction of structured data from unstructured documents* isn't a generally
+  solved problem, which in turns means Stardog users have to define (an
+  optional) workflow for Stardog to call on document ingest.
+* We can't train a classifier on data we don't have; which, again, means that
+  Stardog users have to train classifiers, extractors, entity or relationship
+  learners, etc on their data. Stardog will unify the results into its graph.
+* Sometimes document context matters, sometimes it doesn't; in other words, Stardog
+  (optionally) store and retrieve the original document on demand over REST, but
+  in some cases this isn't required or needed.
 
-== Unstructured Data Extraction
+=== Storage
 
-Stardog's document store is intended to provide a facility for
-integrating documents with RDF graphs. This facility allows processing
-a document to extract an RDF graph to add to the database. The default
-extractor, based on Apache Tika, collects metadata about the document
-and asserts this set of RDF statements to a named graph specific to
-the document. This pipeline is flexible allowing for arbitrary
-extraction components including NLP and ML methods.
+STABS allows storage and retrieval of documents in the form of
+files. Stardog treats documents as opaque blobs of data; Stardog defers to the
+extraction process to make sense of individual documents. This means that
+document storage is independent of file and data formats.
 
-== Text Extraction
+Stardog internally stores documents as files. The location of these files
+defaults to a subdirectory of `STARDOG_HOME` but this can be overridden.
+Documents can be stored on a local filesystem, or an abstraction thereof,
+accessible from the Stardog server or on Amazon S3 by setting the
+`docs.filesystem.uri` configuration option. The exact location is given by the
+`docs.path` configuration option.
 
-The document store is fully integrated with the full-text search
-system. As with RDF extraction, text extraction supports arbitrary
-file formats and pluggable extractors are able to retrieve the text
-content of a document for indexing. Once a document is added, it's
-contents can be search in the same way as other literals using the
-standard `textMatch` predicate.
+=== Structured Data Extraction
 
-== Managing Documents
+STABS supports an optional processing stage in which a document is processed to
+extract an RDF graph to add to the database. The default extractor, based on
+Apache Tika, collects metadata about the document and asserts this set of RDF
+statements to a named graph specific to the document. This pipeline is flexible
+and allows for arbitrary extraction components including NLP and ML methods.
+
+=== Text Extraction
+
+The document store is fully integrated with Stardog's <<Full-Text Search>>. As
+with RDF extraction, text extraction supports arbitrary file formats and
+pluggable extractors are able to retrieve the textual contents of a document for
+indexing. Once a document is added to STABS, its contents can be searched in the
+same way as other literals using the standard `textMatch` predicate in SPARQL
+queries.
+
+=== Managing Documents
 
 CRUD operations on documents can be performed from the command line,
 Java API or HTTP API. Please refer to the
@@ -79,23 +96,22 @@ $ bin/stardog doc delete myDB whyfp90.pdf
 Successfully executed deletion.
 ----
 
-== Named Graphs and Document Queries
+=== Named Graphs and Document Queries
 
-Documents in the document store are refered to by an IRI. As shown in
-the command line examples above, the IRI is returned from a document
-`put` call. The document store uses document/file names to refer to
-documents. The RDF index, and therefore SPARQL queries, use an IRI to
-refer to a document. The IRI is a combination of a prefix, the
-database name and the document name. RDF assertions extracted from a
-document are placed into a named graph identified by the document's
-IRI.
+Documents in STABS are referred to by IRI. As shown in the command line examples
+above, the IRI is returned from a document `put` call. The document store uses
+document/file names to refer to documents. The RDF index, and therefore SPARQL
+queries, use an IRI to refer to a document. The IRI is a combination of a
+prefix, the database name, and the document name. RDF assertions extracted from a
+document are placed into a named graph identified by the document's IRI.
 
-Here we see the results of querying a document's named graph when
-using the default metadata extractor:
+Here we see the results of querying a document's named graph when using the
+default metadata extractor:
 
 [source,bash]
 ----
 $ bin/stardog query execute myDB "select ?p ?o { graph <tag:stardog:api:docs:myDB:whyfp90.pdf> { ?s ?p ?o } }"
+
 +--------------------------------------------+--------------------------------------+
 |                     p                      |                  o                   |
 +--------------------------------------------+--------------------------------------+
@@ -115,30 +131,27 @@ $ bin/stardog query execute myDB "select ?p ?o { graph <tag:stardog:api:docs:myD
 Query returned 11 results in 00:00:00.045
 ----
 
-== Writing Custom Extractors
+=== Custom Extractors
 
-The included metadata extractor is admittedly limited in it's
-usefulness when compared with more advanced text mining algorithms. A
-custom extractor connects the document store to algorithms tailored
-specifically to your data. The extractor SPI is flexible allowing
-integration of a wide array of analyses from NLP methods like
-part-of-speech tagging, entity recognition or sentiment analysis to
-machine learning models such as document ranking and clustering.
+The included metadata extractor is pretty basic, especially when compared to
+machine learning or text mining algorithms. A custom extractor connects the
+document store to algorithms tailored specifically to your data. The extractor
+API allows integration of any arbitrary workflow or algorithm from NLP methods
+like part-of-speech tagging, entity recognition or sentiment analysis to machine
+learning models such as document ranking and clustering.
 
-The RDF extractor SPI is intended to allow processing a document with
-the output being a set of RDF assertions about the document. The RDF
-assertions are stored in a named graph specific to the document
-allowing provenance tracking and versatile querying. The extractor
-must implement the
+Extracted RDF assertions are stored in a named graph specific to the document, 
+allowing provenance tracking and versatile querying. The extractor must
+implement the
 link:/java/snarl/com/complexible/stardog/docs/extraction/RDFExtractor.html[RDFExtractor]
 interface. The convenience class
 link:/java/snarl/com/complexible/stardog/docs/extraction/tika/TextProvidingRDFExtractor.html[TextProvidingRDFExtractor]
-is provided which extracts the text from the document before calling
-the extractor.
+is provided which extracts the text from the document before calling the
+extractor.
 
-The text extractor SPI gives you the opportunity to support arbitrary
+The text extractor API gives you the opportunity to support arbitrary
 document formats. Implementations will be given a raw document and be
-expected to extractor a string of text which will be added to the
+expected to extract a string of text which will be added to the
 full-text search index. Text extractors should implement the
 link:/java/snarl/com/complexible/stardog/docs/extraction/TextExtractor.html[TextExtractor]
 interface.
