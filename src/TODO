@@ -1,7 +1,0 @@
-- cloudfront
-
-- cluster docs:
-  * no port for node address?
-  * remove some proxy arg?
-
-- namespace import
