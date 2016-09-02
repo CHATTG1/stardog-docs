@@ -1,16 +1,14 @@
 include::header-logo.ad[]
 
 Stardog is an enterprise data unification platform. Stardog's semantic graphs,
-schema alignment, data modeling, and deep reasoning make it fast and easy for
-you to unify data without writing any code. See <<Unifying Enterprise Data>> for
-more details.
+schema alignment, data modeling, and deep reasoning make it fast and easy to
+unify data without writing any code. See <<Unifying Enterprise Data>> for more
+details.
 
-.What's New in Stardog 4.1
+.What's New in Stardog 4.2
 ****
-- [x] <<Guarantees, Multi-coordinator Cluster>>
-- [x] Cluster stability & performance improvements
-- [x] <<Querying the Revision History, Query graph & revision history simultaneously>>
-- [x] New, faster SPARQL parser
+- [x] <<Unstructured Data, Document Store for Unstructured Data Unification>>
+- [x] Something else that is awesome! 
 ****
 
 Check out the <<Quick Start Guide>> to get Stardog installed and running in five easy steps.
@@ -28,8 +26,8 @@ control; http://www.w3.org/TR/owl2-overview/[OWL 2] and user-defined rules for
 inference and data analytics; virtual graphs; geospatial query answering; and
 programmatic interaction via several languages and network interfaces.
 
-Stardog is made with skill, taste, and a point of view in DC, Boston, Madison, and
-Germany. 🌟🐶
+Stardog is made with skill, taste, and a point of view in DC, Boston, Madison,
+Moscow, Wainiha, and Heidelberg. 🌟🐶
 
 To learn more about where we've been and where we're headed, consult
 the link:/release-notes/[RELEASE NOTES] and
@@ -61,9 +59,3 @@ Leonard, John Shearer, Ryan Hohimer, and the crew at XSB.] You
 can also help by
 https://github.com/Complexible/stardog-docs/tree/master/src/doc[editing these
 docs on Github] if you spot a problem.
-
-== Roadmap
-[horizontal]
-Stardog 4.2:: Native HDFS backend. Pelorus--a faceted graph browser--integrated with Stardog Web Console
-Stardog 4.3:: Generalizing R2RML virtual graph support
-Stardog 5  :: Horizontally scalable, DCOS, graph analytics 

@@ -136,7 +136,7 @@ Query returned 11 results in 00:00:00.045
 The included metadata extractor is pretty basic, especially when compared to
 machine learning or text mining algorithms. A custom extractor connects the
 document store to algorithms tailored specifically to your data. The extractor
-API allows integration of any arbitrary workflow or algorithm from NLP methods
+SPI allows integration of any arbitrary workflow or algorithm from NLP methods
 like part-of-speech tagging, entity recognition or sentiment analysis to machine
 learning models such as document ranking and clustering.
 
@@ -149,7 +149,7 @@ link:/java/snarl/com/complexible/stardog/docs/extraction/tika/TextProvidingRDFEx
 is provided which extracts the text from the document before calling the
 extractor.
 
-The text extractor API gives you the opportunity to support arbitrary
+The text extractor SPI gives you the opportunity to support arbitrary
 document formats. Implementations will be given a raw document and be
 expected to extract a string of text which will be added to the
 full-text search index. Text extractors should implement the
