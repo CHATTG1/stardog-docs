@@ -1036,7 +1036,7 @@ exact same results, too:
 [source,sparql]
 ----
 SELECT * {
-   dbpedia:Elvis_Presley nyt:presley_elvis_per ?p ?o
+   dbpedia:Elvis_Presley ?p ?o
 }
 ----
 
