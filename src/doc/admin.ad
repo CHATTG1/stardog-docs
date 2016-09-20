@@ -1429,6 +1429,8 @@ running query. The same general restriction is applied to query status;
 you cannot see status for a query that you do not own, and a superuser can
 see the status of every query.
 
+==== Managing Stored Queries
+
 === Managing Search
 
 Stardog's search service is described in <<Using Stardog>> section.
