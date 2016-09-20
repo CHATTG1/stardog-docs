@@ -2,13 +2,15 @@ include::header-logo.ad[]
 
 Stardog is an enterprise data unification platform. Stardog's semantic graphs,
 schema alignment, data modeling, and deep reasoning make it fast and easy to
-unify data without writing any code. See <<Unifying Enterprise Data>> for more
-details.
+unify data without writing any code. See <<Enterprise Data Unification>> for
+more details.
 
 .What's New in Stardog 4.2
 ****
-- [x] <<Unstructured Data, Document Store for Unstructured Data Unification>>
-- [x] Something else that is awesome! 
+- [x] <<Unstructured Data, Unstructured Data Unification>>
+- [x] <<Stored Queries>>
+- [x] Cluster Stability Improvements
+- [x] Performance of Aggregate Queries
 ****
 
 Check out the <<Quick Start Guide>> to get Stardog installed and running in five easy steps.
@@ -27,7 +29,7 @@ inference and data analytics; virtual graphs; geospatial query answering; and
 programmatic interaction via several languages and network interfaces.
 
 Stardog is made with skill, taste, and a point of view in DC, Boston, Madison,
-Moscow, Wainiha, and Heidelberg. 🌟🐶
+Moscow, and Heidelberg. 🌟🐶
 
 To learn more about where we've been and where we're headed, consult
 the link:/release-notes/[RELEASE NOTES] and

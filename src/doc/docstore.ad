@@ -1,46 +1,52 @@
 == Unstructured Data 
 
-Unifying unstructured data is by necessity a different process from unifying
+Unifying unstructured data is, by necessity, a different process from unifying
 structured or semistructured data. As of 4.2, Stardog includes a document
-storage subsystem called STABS, which provides configurable storage and
-processing for unifying unstructured data with the Stardog graph.
+storage subsystem called BITESfootnote:[Blob Indexing and Text Enrichment with
+Semantics], which provides configurable storage and processing for unifying
+unstructured data with the Stardog graph.
 
 === Background & Assumptions
 
-STABS makes some simplfying assumptions in Stardog {version} with respect to
+BITES makes some simplfying assumptions in Stardog {version} with respect to
 unstructured data unification--
 
 * Unbounded blobs in the database are a bad idea; Stardog manages documents (any
   files, actually) in the local filesystem, in AWS S3, or in HDFS.
 * Documents are the most common kind of enterprise unstructured data.
-* There is no general purpose natural language processing, which means that
+* There is no general purpose natural language processing, which means 
   *extraction of structured data from unstructured documents* isn't a generally
   solved problem, which in turns means Stardog users have to define (an
   optional) workflow for Stardog to call on document ingest.
-* We can't train a classifier on data we don't have; which, again, means that
+* We can't train a classifier on data we don't have; which, again, means
   Stardog users have to train classifiers, extractors, entity or relationship
-  learners, etc on their data. Stardog will unify the results into its graph.
+  learners, etc. on their data. Stardog will unify the results into its graph.
 * Sometimes document context matters, sometimes it doesn't; in other words, Stardog
   (optionally) store and retrieve the original document on demand over REST, but
   in some cases this isn't required or needed.
 
+=== Basic Usage
+
+See the <<man page>> for the CLI usage details, including how to interact with
+the HTTP API for BITES.
+
 === Storage
 
-STABS allows storage and retrieval of documents in the form of
-files. Stardog treats documents as opaque blobs of data; Stardog defers to the
-extraction process to make sense of individual documents. This means that
-document storage is independent of file and data formats.
+BITES allows storage and retrieval of documents in the form of files. Stardog
+treats documents as opaque blobs of data; it defers to the extraction process to
+make sense of individual documents. Document storage is independent of file and
+data formats.
 
 Stardog internally stores documents as files. The location of these files
 defaults to a subdirectory of `STARDOG_HOME` but this can be overridden.
-Documents can be stored on a local filesystem, or an abstraction thereof,
+Documents can be stored on local filesystem, or an abstraction thereof,
 accessible from the Stardog server or on Amazon S3 by setting the
 `docs.filesystem.uri` configuration option. The exact location is given by the
 `docs.path` configuration option.
 
 === Structured Data Extraction
 
-STABS supports an optional processing stage in which a document is processed to
+BITES supports an optional processing stage in which a document is processed to
 extract an RDF graph to add to the database. The default extractor, based on
 Apache Tika, collects metadata about the document and asserts this set of RDF
 statements to a named graph specific to the document. This pipeline is flexible
@@ -51,7 +57,7 @@ and allows for arbitrary extraction components including NLP and ML methods.
 The document store is fully integrated with Stardog's <<Full-Text Search>>. As
 with RDF extraction, text extraction supports arbitrary file formats and
 pluggable extractors are able to retrieve the textual contents of a document for
-indexing. Once a document is added to STABS, its contents can be searched in the
+indexing. Once a document is added to BITES, its contents can be searched in the
 same way as other literals using the standard `textMatch` predicate in SPARQL
 queries.
 
@@ -98,14 +104,14 @@ Successfully executed deletion.
 
 === Named Graphs and Document Queries
 
-Documents in STABS are referred to by IRI. As shown in the command line examples
-above, the IRI is returned from a document `put` call. The document store uses
-document/file names to refer to documents. The RDF index, and therefore SPARQL
-queries, use an IRI to refer to a document. The IRI is a combination of a
-prefix, the database name, and the document name. RDF assertions extracted from a
-document are placed into a named graph identified by the document's IRI.
+Documents in BITES are identified by IRI. As shown in the command line examples
+above, the IRI is returned from a document `put` call. The IRI is a combination
+of a prefix, the database name, and the document name. The CLI uses the document
+name to refer to the documents. The RDF index, and therefore SPARQL queries, use
+the IRIs to refer to the documents. RDF assertions extracted from a document are
+placed into a named graph identified by the document's IRI.
 
-Here we see the results of querying a document's named graph when using the
+Here we can see the results of querying a document's named graph when using the
 default metadata extractor:
 
 [source,bash]
@@ -133,14 +139,15 @@ Query returned 11 results in 00:00:00.045
 
 === Custom Extractors
 
-The included metadata extractor is pretty basic, especially when compared to
-machine learning or text mining algorithms. A custom extractor connects the
+The included metadata extractor is intentionally basic, especially when compared
+to machine learning or text mining algorithms. A custom extractor connects the
 document store to algorithms tailored specifically to your data. The extractor
 SPI allows integration of any arbitrary workflow or algorithm from NLP methods
-like part-of-speech tagging, entity recognition or sentiment analysis to machine
-learning models such as document ranking and clustering.
+like part-of-speech tagging, entity recognition, relationship learning, or
+sentiment analysis to machine learning models such as document ranking and
+clustering.
 
-Extracted RDF assertions are stored in a named graph specific to the document, 
+Extracted RDF assertions are stored in a named graph specific to the document,
 allowing provenance tracking and versatile querying. The extractor must
 implement the
 link:/java/snarl/com/complexible/stardog/docs/extraction/RDFExtractor.html[RDFExtractor]
