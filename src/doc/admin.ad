@@ -1283,16 +1283,18 @@ $ stardog-admin metadata get -o index.named.graphs my_db_name
 
 === Managing Stored Queries
 
-Queries of any type of query (SELECT, CONSTRUCT, UPDATE, ...) can be 
-stored in Stardog and executed directly by using the name of the 
-stored query. Stored queries can be shared with other users which 
-gives those users the ability to run those queries provided that 
-they have appropriate permissions for the database.
+Stardog 4.2 added the capability to name and store SPARQL queries for future
+evaluation by referring to the query's name.
+
+Queries of any type can be stored in Stardog and executed directly by using the
+name of the stored query. Stored queries can be shared with other users, which
+gives those users the ability to run those queries provided that they have
+appropriate permissions for a database.
 
 ==== Storing Queries
 
-Queries can be stored using the `stored add` command and specifying 
-a unique name for the stored query:
+Queries can be stored using the `stored add` command and specifying a unique
+name for the stored query:
 
 [source,bash]
 ----
@@ -1308,11 +1310,11 @@ query:
 $ stardog-admin stored add listProperties.sparql
 ----
 
-By default, stored queries can be executed over any database. This can be 
-limited by providing a specific database name with the `-d/--database`
-option. Also, by default, only users who stored the query can access that
-stored query. Using the `--shared` flag will allow other users to execute
-the stored query.
+By default, stored queries can be executed over any database. But they can be
+scoped by providing a specific database name with the `-d/--database` option.
+Also, by default, only the user who stored the query can access that stored
+query. Using the `--shared` flag will allow other users to execute the stored
+query.
 
 The following example stores a shared query with a custom name that can 
 be executed over only the database `myDb`:
@@ -1321,7 +1323,7 @@ be executed over only the database `myDb`:
 $ stardog-admin stored add --shared -d myDb -n listProperties "select distinct ?p {?s ?p ?o}"
 ----
 
-Stored query names are unique for a Stardog instance. Existing stored
+Stored query names must be unique for a Stardog instance. Existing stored
 queries can be replaced using the `--overwrite` option in the command.
 
 ==== Running Stored Queries
@@ -1371,9 +1373,9 @@ The results are formatted tabularly:
 3 stored queries
 ----
 
-Users can only see the queries they stored and the queries stored by
-other users that have been flagged as shares. The `--verbose` option 
-will show more details about the stored queries.
+Users can only see the queries they've stored and the queries stored by other
+users that have been `--shared`. The `--verbose` option will show more details
+about the stored queries.
 
 ==== Removing Stored Queries
 
@@ -1391,7 +1393,6 @@ If you would like to clear all the stored queries then use the
 ----
 $ stardog-admin stored remove -a
 ----
-
 
 === Managing Running Queries
 
