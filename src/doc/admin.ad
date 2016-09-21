@@ -482,7 +482,7 @@ requires a Java plugin that implements the Stardog Server logging
 interface; see <<Java Programming>> for more information; and the log
 rotation policy (file size or time).
 
-Slow query logging is also available. See the <<Managing Queries>> section below.
+Slow query logging is also available. See the <<Managing Running Queries>> section below.
 
 == Database Admin
 
@@ -1281,7 +1281,119 @@ following command:
 $ stardog-admin metadata get -o index.named.graphs my_db_name
 ----
 
-=== Managing Queries
+=== Managing Stored Queries
+
+Queries of any type of query (SELECT, CONSTRUCT, UPDATE, ...) can be 
+stored in Stardog and executed directly by using the name of the 
+stored query. Stored queries can be shared with other users which 
+gives those users the ability to run those queries provided that 
+they have appropriate permissions for the database.
+
+==== Storing Queries
+
+Queries can be stored using the `stored add` command and specifying 
+a unique name for the stored query:
+
+[source,bash]
+----
+$ stardog-admin stored add -n types "select distinct ?type {?s a ?type}"
+----
+
+If a file is used to specify the query string without an explicit 
+`-n/--name` option then the name of the query file is used for the stored 
+query:
+
+[source,bash]
+----
+$ stardog-admin stored add listProperties.sparql
+----
+
+By default, stored queries can be executed over any database. This can be 
+limited by providing a specific database name with the `-d/--database`
+option. Also, by default, only users who stored the query can access that
+stored query. Using the `--shared` flag will allow other users to execute
+the stored query.
+
+The following example stores a shared query with a custom name that can 
+be executed over only the database `myDb`:
+
+----
+$ stardog-admin stored add --shared -d myDb -n listProperties "select distinct ?p {?s ?p ?o}"
+----
+
+Stored query names are unique for a Stardog instance. Existing stored
+queries can be replaced using the `--overwrite` option in the command.
+
+==== Running Stored Queries
+
+Stored queries can be executed using the regular query execution command
+by passing the name of the stored query:
+
+[source,bash]
+----
+$ stardog query myDb listProperties
+----
+
+Other commands like `query explain` also accept stored query names.
+
+==== Listing Stored Queries
+
+To see all the stored queries, use the `stored list` subcommand:
+
+[source,bash]
+----
+$ stardog-admin stored list
+----
+
+The results are formatted tabularly:
+
+[source,bash]
+----
++--------+-----------------------------------------+
+|  Name  |            Query String                 |
++--------+-----------------------------------------+
+| graphs | SELECT ?graph (count(*) as ?size)       | 
+|        | FROM NAMED stardog:context:all          |
+|        | WHERE { GRAPH ?graph {?s ?p ?o}}        |
+|        | GROUP BY ?graph                         |
+|        | ORDER BY desc(?size)                    |
+| people | CONSTRUCT WHERE {                       | 
+|        |    ?person a foaf:Person ;              |
+|        |            ?p ?o                        |
+|        | }                                       |
+| types  | SELECT DISTINCT ?type ?label            |
+|        | WHERE {                                 |
+|        |    ?s a ?type .                         |
+|        |    OPTIONAL { ?type rdfs:label ?label } | 
+|        | }                                       |
++--------+-----------------------------------------+
+
+3 stored queries
+----
+
+Users can only see the queries they stored and the queries stored by
+other users that have been flagged as shares. The `--verbose` option 
+will show more details about the stored queries.
+
+==== Removing Stored Queries
+
+Stored queries can be removed using the `stored remove` command:
+
+[source,bash]
+----
+$ stardog-admin stored remove storedQueryName
+----
+
+If you would like to clear all the stored queries then use the 
+`-a/--all` option:
+
+[source,bash]
+----
+$ stardog-admin stored remove -a
+----
+
+
+=== Managing Running Queries
 
 Stardog includes the capability to manage running queries according to
 configurable policies set at run-time; this capability includes support
@@ -1428,8 +1540,6 @@ kill any running query submitted by that user, and a superuser can kill any
 running query. The same general restriction is applied to query status;
 you cannot see status for a query that you do not own, and a superuser can
 see the status of every query.
-
-==== Managing Stored Queries
 
 === Managing Search
 

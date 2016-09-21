@@ -15,7 +15,8 @@ http://www.w3.org/TR/2012/CR-sparql11-entailment-20121108/[OWL 2
 Direct Semantics entailment regime].
 
 To execute a SPARQL query against a Stardog database, use the `query`
-subcommand:
+subcommand with a query string, a query file, or the name of a stored
+query:
 
 [source,bash]
 ----
@@ -23,7 +24,8 @@ $ stardog query myDb "select * where { ?s ?p ?o }"
 ----
 
 Detailed information on using the query command in Stardog can be found
-on its link:man/query-execute.html[`man` page].
+on its link:man/query-execute.html[`man` page]. See <<Managing Stored Queries>> 
+section for configuration, usage, and details of stored queries.
 
 === DESCRIBE
 
@@ -90,12 +92,6 @@ This works more or less like any SPARQL query, as long as the right geospatial
 vocabulary is used in the data.
 
 See the <<Geospatial Query>> chapter for configuration and usage.
-
-=== Stored Queries
-
-
-See <<Managing Stored Queries>> section for configuration, usage, and details.
-
 
 == Traversing
 
