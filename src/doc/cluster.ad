@@ -429,9 +429,7 @@ is, non-Cluster configuration, too.]
 To use Stardog Cluster with standard Stardog clients and CLI tools in the
 ordinary way--`stardog-admin` and `stardog`--you must have Stardog installed
 locally. With the provided Stardog binaries in the Stardog Cluster distribution
-you can query the state of Cluster:footnote:[In 3.x we will integrate Netflix's
-Exhibitor for Stardog Cluster management. Ping us if this is a priority for
-you.]
+you can query the state of Cluster:
 
 [source,bash]
 ----
