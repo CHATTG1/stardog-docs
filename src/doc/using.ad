@@ -562,9 +562,9 @@ values. Following is a list of special named graph IRIs.
 
 |===
 | Named Graph IRI                 | Refers to
-| tag:stardog:api:context:default | the default (no) context graph
-| tag:stardog:api:context:all     | all contexts, including the default (no) context graph
-| tag:stardog:api:context:named   | all named graphs, excluding the default graph
+| `tag:stardog:api:context:default` | the default (no) context graph
+| `tag:stardog:api:context:all`     | all contexts, including the default (no) context graph
+| `tag:stardog:api:context:named`   | all named graphs, excluding the default graph
 |===
 
 include::manpages.ad[]
