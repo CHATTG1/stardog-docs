@@ -8,7 +8,7 @@ more details.
 .What's New in Stardog 4.2
 ****
 - [x] <<Unstructured Data, Unstructured Data Unification>>
-- [x] <<Stored Queries>>
+- [x] <<Stored Queries, Managing Stored Queries>>
 - [x] Cluster Stability Improvements
 - [x] Performance of Aggregate Queries
 ****
