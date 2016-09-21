@@ -552,8 +552,6 @@ $ stardog data export mydb
        :knows :Bob .
 ----
 
-include::manpages.ad[]
-
 == Naming
 
 Stardog includes aliases for several commonly used sets of named
@@ -568,3 +566,6 @@ values. Following is a list of special named graph IRIs.
 | tag:stardog:api:context:all     | all contexts, including the default (no) context graph
 | tag:stardog:api:context:named   | all named graphs, excluding the default graph
 |===
+
+include::manpages.ad[]
+
