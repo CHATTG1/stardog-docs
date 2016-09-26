@@ -699,7 +699,7 @@ the default graph, respectively. In the context of database configurations only,
 
 |`*search.reindex.mode*`
 | Yes
-| `async`
+| `sync`
 |
 
 4+|Determines how search indexes are maintained. The legal value of `search.reindex.mode` is one of the strings `sync`
