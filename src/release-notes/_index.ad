@@ -32,6 +32,7 @@ image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbs
 *ADD: Make cluster session timeout configurable (#2833)
 *ADD: Support UNION in Stardog rules syntax (#2383)
 *MOD: Don't embed the error message in the reason phrase (#3165)
+*MOD: Use a more efficient classTree query for the webconsole (#3159)
 *MOD: Translate geof:within usages in FILTERs to the equivalent property function (#3137)
 *MOD: Improved cancellation interrupts when building intermediate results (#3085)
 *MOD: Improve error messages for metadata operations on CLI (#3081)
