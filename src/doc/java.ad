@@ -14,6 +14,8 @@ for RDF that works with Stardog.
 
 == SNARL Protocol Buffers
 
+WARNING: SNARL is deprecated in Stardog 4.2 and will be removed in Stardog 5.
+
 The native Stardog protocol, SNARL, is based on Google Protocol Buffers. The
 definitions for the various parts of SNARL are
 
