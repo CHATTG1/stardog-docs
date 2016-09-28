@@ -24,7 +24,7 @@ functions appear in multiple namespaces, but all of the namespaces will work:
 The function names and URIs supported by Stardog are included below.
 Some of these functions exist in SPARQL natively, which just means they can be
 used without an explicit namespace. Some of the functions have a URI that can
-be used but they are also overladed arithmetic operators. for example, if you 
+be used but they are also overloaded arithmetic operators. For example, if you 
 want to add two day time durations you can simply use the expression 
 `?duration1 + ?duration2` instead of `swrlb:addDayTimeDurations(?duration1 + ?duration2)`.
 
