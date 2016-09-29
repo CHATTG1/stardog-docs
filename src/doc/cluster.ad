@@ -135,7 +135,7 @@ On node 1:
 +
 [source,bash]
 ----
-tickTime=2000
+tickTime=3000
 # Make sure this directory exists and
 # ZK can write and read to and from it.
 dataDir=/data/zookeeperdata/
@@ -154,7 +154,7 @@ On node 2:
 +
 [source,bash]
 ----
-tickTime=2000
+tickTime=3000
 dataDir=/data/zookeeperdata/
 clientPort=2180
 initLimit=5
@@ -168,7 +168,7 @@ Finally, on node 3:
 +
 [source,bash]
 ----
-tickTime=2000
+tickTime=3000
 dataDir=/data/zookeeperdata/
 clientPort=2180
 initLimit=5
@@ -424,14 +424,51 @@ handle resources available.footnote:[This point is especially true of Cluster
 but may be relevant for some workloads on a single Stardog database, that
 is, non-Cluster configuration, too.]
 
+=== Connection/Session Timeouts
+
+Stardog nodes connect to the ZooKeeper cluster and establishes a 
+https://zookeeper.apache.org/doc/trunk/zookeeperProgrammers.html#ch_zkSessions[session]. 
+The session is kept alive by PING requests sent by the client. If the Stardog 
+node does not send these requests to the ZooKeeper server (due to network issues,
+node failure, etc.) the session will timeout and the Stardog node will get into 
+a suspended state and it will reject any queries or transactions until it can 
+establish the session again.
+
+If a Stardog node is overloaded then it might fail to send the PING requests
+to ZooKeeeper server in a timely manner. This usually happens when Stardog's
+memory usage is close to the limit and there are frequent GC pauses. This 
+would cause Stardog nodes to be suspended unnecessarily. In order to prevent
+this problem make sure Stardog nodes have enough memory allocated and tweak
+the timeout options.
+
+There are two different configuration options that control timeouts for the
+ZooKeeper server. The `pack.connection.timeout` option specifies the max time 
+that Stardog waits to establish a connection to ZooKeeper. The `pack.session.timeout`
+option specifies the session timeout explained above. You can set these values
+in `stardog.properties` as follows:
+
+[source,bash]
+----
+pack.connection.timeout=15s
+pack.session.timeout=60s
+----
+
+Note that, ZooKeeper has limitations about how these values can be set based on 
+the `tickTime` value specified in the ZooKeeper configuration file. Session
+timeout needs to be a minimum of 2 times the `tickTime` and a maximum of 20 times 
+the `tickTime`. So a session timeout of `60s` requires the `tickTime` to be at 
+least `3s` (in ZooKepeer configuration file this value should be entered in 
+milliseconds). If the session timeout is not in the allowed range the ZooKeeper 
+will negotiate a new timeout value and Stardog will print a warning about this
+in the `stardog.log` file.
+
+
 === Client Usage
 
 To use Stardog Cluster with standard Stardog clients and CLI tools in the
 ordinary way--`stardog-admin` and `stardog`--you must have Stardog installed
 locally. With the provided Stardog binaries in the Stardog Cluster distribution
-you can query the state of Cluster:footnote:[In 3.x we will integrate Netflix's
-Exhibitor for Stardog Cluster management. Ping us if this is a priority for
-you.]
+you can query the state of Cluster:
 
 [source,bash]
 ----

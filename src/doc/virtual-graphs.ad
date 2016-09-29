@@ -1,12 +1,13 @@
-= Virtual Graphs
+== Structured Data, aka Virtual Graphs
 
-Stardog supports *Virtual Graphs*, that is, tabular data declaratively mapped
-into a Stardog database graph and queries by Stardog _in situ_, typically
-using SQL. Stardog rewrites (a portion of) SPARQL queries against the Stardog
-database into SQL, issues that SQL query to an RDBMS, and translates the SQL
-results into SPARQL results. Virtual Graphs can be used for mapping any tabular
-data, e.g. CSV, to RDF and Stardog will support mapping other tabular formats to
-graphs in future releases, including enterprise directory services.
+Stardog supports a set of techniques for unifing *structured enterprise data*,
+chiefly, *Virtual Graphs*: tabular data declaratively mapped into a Stardog
+database graph and queries by Stardog _in situ_, typically using SQL. Stardog
+rewrites (a portion of) SPARQL queries against the Stardog database into SQL,
+issues that SQL query to an RDBMS, and translates the SQL results into SPARQL
+results. Virtual Graphs can be used for mapping any tabular data, e.g. CSV, to
+RDF and Stardog will support mapping other tabular formats to graphs in future
+releases, including XML, JSON, and enterprise directory services.
 
 A Virtual Graph has three components:
 
@@ -22,7 +23,7 @@ RDF. The mappings are defined using the http://www.w3.org/TR/r2rml/[R2RML]
 mapping language, but a simpler <<Stardog Mapping Syntax>> is also supported for
 serializing R2RML mappings.
 
-== Supported RDBMSes
+=== Supported RDBMSes
 //See https://github.com/ontop/ontop/wiki/ObdalibPluginJDBC#Driver_class
 
 Stardog Virtual Graphs supports the following relational database systems; please <<mailto:inquiries@complexible.com,inquire>> if you need support for another.
@@ -35,7 +36,7 @@ Stardog Virtual Graphs supports the following relational database systems; pleas
 * H2
 * SAP HANA
 
-== Managing Virtual Graphs
+=== Managing Virtual Graphs
 
 In order to query a Virtual Graph it first must be registered with Stardog.
 Adding a new virtual graph is done via the following command:
@@ -97,7 +98,7 @@ the mappings and configuration options associated with a virtual graph
 respectively. Registered virtual graphs can be removed using the `virtual remove`
 command. See the <<Man Pages>> for the details of these commands.
 
-== Querying Virtual Graphs
+=== Querying Virtual Graphs
 
 Querying Virtual Graphs is done by using the `GRAPH` clause, using a special
 graph URI in the form `virtual://myGraph` to query the Virtual Graph named
@@ -137,7 +138,7 @@ SELECT * {
 NOTE: Query performance will be best if the `GRAPH` clause for Virtual Graphs is
 as selective as possible.
 
-== Virtual Graph Security
+=== Virtual Graph Security
 
 Accessing Virtual Graphs can be controlled similar to regular named graphs as
 explained in the <<Named Graph Security>> section. If named graph security is
@@ -151,7 +152,7 @@ to enable named graph security globally by setting `security.named.graphs=true`
 in `stardog.properties`. Otherwise creating a new database without proper
 configuration would allow users to access those Virtual Graphs.
 
-== Materializing Virtual Graphs
+=== Materializing Virtual Graphs
 
 In some cases you need to *materialize the information stored in RDBMS directly
 into RDF*. There is a special command `virtual import` that can be used to
@@ -196,7 +197,7 @@ Query performance over materialized graphs will be
 better as the data will be indexed locally by Stardog, but materialization may
 not be practical in cases where frequency of change is very high.
 
-== CSV as Virtual Graph
+=== CSV as Virtual Graph
 
 Mappings can be used to treat CSV files as Virtual Graphs since they represent
 tabular data similar to RDBMS tables. But unlike RDBMS tables, CSV files are
@@ -224,7 +225,7 @@ file has a header line at the beginning). Note that, whitespace characters in
 Java properties file need to be escaped so if you want to import tab-separated
 value files set `csv.separator=\t` in the configuration file.
 
-== Stardog Mapping Syntax
+=== Stardog Mapping Syntax
 
 The Stardog Mapping Syntax (SMS) is an alternative way to serialize R2RML
 mappings that is much simpler to read and write and has the same expressive

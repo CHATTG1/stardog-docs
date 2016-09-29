@@ -3,8 +3,8 @@
 module.exports = function(grunt) {
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
-    var theId = grunt.option("id") || "4.1.1";
-    var theDate = grunt.option("date") || "14 June 2016";
+    var theId = grunt.option("id") || "4.2";
+    var theDate = grunt.option("date") || "27 September 2016";
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 		  	}
 		},
         //WARNING: never put this in a git repo dir...
-        aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
+        //aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
         aws_s3: {
              options: {
                     accessKeyId: "<%= aws.secret %>",
@@ -85,7 +85,7 @@ module.exports = function(grunt) {
             },
         },
       invalidate_cloudfront: {
-          aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
+          //aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
           options: {
               key: "<%= aws.secret %>",
               secret: "<%= aws.key %>",
@@ -327,7 +327,7 @@ module.exports = function(grunt) {
                                    'copy:icv_img',
                                    'copy:main',
                                    'copy:css',
-								   'postcss',
+								                   'postcss',
                                    'cssmin',
                                    'embed',
                                    'inline',

@@ -10,246 +10,189 @@ XPath and SWRL. Any of these functions can be used in queries or rules. Some
 functions appear in multiple namespaces, but all of the namespaces will work:
 
 .Table of Stardog Function Namespaces
+[cols="<10,<40"]
 |===
-|Prefix    |Namespace
-
-|`stardog`
-|`tag:stardog:api:functions:`
-
-|`fn`
-|`\http://www.w3.org/2005/xpath-functions#`
-
-|`math`
-|`\http://www.w3.org/2005/xpath-functions/math#`
-
-|`swrlb`
-|`\http://www.w3.org/2003/11/swrlb#`
-
-|`afn`
-|`\http://jena.hpl.hp.com/ARQ/function#`
+| Prefix | Namespace
+| stardog | `tag:stardog:api:functions:`
+| fn | `http://www.w3.org/2005/xpath-functions#`
+| math | `http://www.w3.org/2005/xpath-functions/math#`
+| swrlb | `http://www.w3.org/2003/11/swrlb#`
+| leviathan | `http://www.dotnetrdf.org/leviathan#`
+| afn | `http://jena.hpl.hp.com/ARQ/function#`
 |===
 
 The function names and URIs supported by Stardog are included below.
 Some of these functions exist in SPARQL natively, which just means they can be
-used without an explicit namespace.
+used without an explicit namespace. Some of the functions have a URI that can
+be used but they are also overloaded arithmetic operators. For example, if you 
+want to add two day time durations you can simply use the expression 
+`?duration1 + ?duration2` instead of `swrlb:addDayTimeDurations(?duration1 + ?duration2)`.
 
 .Table of Stardog Function Names & URIs
 |===
-|Function name |Recognized URI(s)
-
-|`abs`
-|`fn:numeric-abs` +
-`swrlb:abs`
-
-|`acos`
-|`math:acos`
-
-|`add`
-|`fn:numeric-add`
-
-|`asin`
-|`math:asin`
-
-|`atan`
-|`math:atan`
-
-|`ceil`
-|`fn:numeric-ceil` +
-`swrlb:ceiling`
-
-|`concat`
-|`fn:concat` +
-`swrlb:stringConcat`
-
-|`contains`
-|`fn:contains` +
-`swrlb:contains`
-
-|`containsIgnoreCase`
-|`swrlb:containsIgnoreCase`
-
-|`cos`
-|`math:cos` +
-`swrlb:cos`
-
-|`cosh`
-|`stardog:cosh`
-
-|`gmean`
-|`stardog:gmean`
-
-|`date`
-|`swrlb:date`
-
-|`dateTime`
-|`swrlb:dateTime`
-
-|`day`
-|`fn:day-from-dateTime`
-
-|`dayTimeDuration`
-|`swrlb:dayTimeDuration`
-
-|`divide`
-|`fn:numeric-divide` +
-`swrlb:divide`
-
-|`encode_for_uri`
-|`fn:encode_for_uri`
-
-|`exp`
-|`math:exp` +
-`afn:e`
-
-|`floor`
-|`fn:numeric-floor` +
-`swrlb:floor`
-
-|`hours`
-|`fn:hours-from-dateTime`
-
-|`integerDivide`
-|`fn:numeric-integer-divide` +
-`swlrb:integerDivide`
-
-|`lcase`
-|`fn:lower-case` +
-`swlrb:lowerCase`
-
-|`log`
-|`math:log`
-
-|`log10`
-|`math:log10`
-
-|`max`
-|`fn:max` +
-`afn:max`
-
-|`min`
-|`fn:min` +
-`afn:min`
-
-|`minutes`
-|`fn:minutes-from-dateTime`
-
-|`mod`
-|`swrlb:mod`
-
-|`month`
-|`fn:month-from-dateTime`
-
-|`multiply`
-|`fn:numeric-multiply`
-
-|`normalizeSpace`
-|`fn:normalize-space` +
-`swrlb:normalizeSpace`
-
-|`pi`
-|`math:pi` +
-`afn:pi`
-
-|`pow`
-|`math:pow` +
-`swrlb:pow`
-
-|`replace`
-|`fn:replace`
-
-|`round`
-|`fn:numeric-round` +
-`swrlb:round`
-
-|`roundHalfToEven`
-|`fn:numeric-round-half-to-even` +
-`swrlb:roundHalfToEven`
-
-|`seconds`
-|`fn:seconds-from-dateTime`
-
-|`sin`
-|`math:sin` +
-`swrlb:sin`
-
-|`sinh`
-|`stardog:sinh`
-
-|`sqrt`
-|`math:sqrt` +
-`afn:sqrt`
-
-|`strafter`
-|`fn:substring-after` +
-`swrlb:substringAfter`
-
-|`strbefore`
-|`fn:substring-before` +
-`swrlb:substringBefore`
-
-|`strends`
-|`fn:ends-with` +
-`swrlb:endsWith`
-
-|`stringEqualIgnoreCase`
-|`swrlb:stringEqualIgnoreCase`
-
-|`strlen`
-|`fn:string-length` +
-`swrlb:stringLength`
-
-|`strstarts`
-|`fn:starts-with` +
-`swrlb:startsWith`
-
-|`substring`
-|`fn:substring` +
-`swrlb:substring`
-
-|`subtract`
-|`fn:numeric-subtract` +
-`swrlb:subtract`
-
-|`tan`
-|`math:tan` +
-`swrlb:tan`
-
-|`tanh`
-|`stardog:tanh`
-
-|`time`
-|`swrlb:time`
-
-|`timezone`
-|`fn:timezone-from-dateTime`
-
-|`toDegrees`
-|`stardog:toDegrees`
-
-|`toRadians`
-|`stardog:toRadians`
-
-|`translate`
-|`fn:translate` +
-`swrlb:translate`
-
-|`ucase`
-|`fn:upper-case` +
-`swrlb:upperCase`
-
-|`unaryMinus`
-|`fn:numeric-unary-minus` +
-`swrlb:unaryMinus`
-
-|`unaryPlus`
-|`fn:numeric-unary-plus` +
-`swrlb:unaryPlus`
-
-|`year`
-|`fn:year-from-dateTime`
-
-|`yearMonthDuration`
-|`swrlb:yearMonthDuration`
+| Function name | Recognized URIs and Symbols
+| abs | https://www.w3.org/TR/sparql11-query/#func-abs[ABS], http://www.w3.org/2005/xpath-functions#numeric-abs[fn:numeric-abs], http://www.w3.org/2003/11/swrlb#abs[swrlb:abs]
+| acos | http://www.w3.org/2005/xpath-functions/math#acos[math:acos], http://www.dotnetrdf.org/leviathan#cos-1[leviathan:cos-1]
+| addDayTimeDurations | `+`, http://www.w3.org/2003/11/swrlb#addDayTimeDurations[swrlb:addDayTimeDurations]
+| addDayTimeDurationToDate | `+`, http://www.w3.org/2003/11/swrlb#addDayTimeDurationToDate[swrlb:addDayTimeDurationToDate]
+| addDayTimeDurationToDateTime | `+`, http://www.w3.org/2003/11/swrlb#addDayTimeDurationToDateTime[swrlb:addDayTimeDurationToDateTime]
+| addDayTimeDurationToTime | `+`, http://www.w3.org/2003/11/swrlb#addDayTimeDurationToTime[swrlb:addDayTimeDurationToTime]
+| addYearMonthDurations | `+`, http://www.w3.org/2003/11/swrlb#addYearMonthDurations[swrlb:addYearMonthDurations]
+| addYearMonthDurationToDate | `+`, http://www.w3.org/2003/11/swrlb#addYearMonthDurationToDate[swrlb:addYearMonthDurationToDate]
+| addYearMonthDurationToDateTime | `+`, http://www.w3.org/2003/11/swrlb#addYearMonthDurationToDateTime[swrlb:addYearMonthDurationToDateTime]
+| asin | http://www.w3.org/2005/xpath-functions/math#asin[math:asin], http://www.dotnetrdf.org/leviathan#sin-1[leviathan:sin-1]
+| atan | http://www.w3.org/2005/xpath-functions/math#atan[math:atan]
+| bnode | https://www.w3.org/TR/sparql11-query/#func-bnode[BNODE]
+| boolean | http://www.w3.org/2001/XMLSchema#boolean[xsd:boolean]
+| cartesian | http://www.dotnetrdf.org/leviathan#cartesian[leviathan:cartesian]
+| ceil | https://www.w3.org/TR/sparql11-query/#func-ceil[CEIL], http://www.w3.org/2005/xpath-functions#numeric-ceil[fn:numeric-ceil], http://www.w3.org/2003/11/swrlb#ceiling[swrlb:ceiling]
+| concat | https://www.w3.org/TR/sparql11-query/#func-concat[CONCAT], http://www.w3.org/2005/xpath-functions#concat[fn:concat], http://www.w3.org/2003/11/swrlb#stringConcat[swrlb:stringConcat]
+| contains | https://www.w3.org/TR/sparql11-query/#func-contains[CONTAINS], http://www.w3.org/2005/xpath-functions#contains[fn:contains], http://www.w3.org/2003/11/swrlb#contains[swrlb:contains]
+| containsIgnoreCase | http://www.w3.org/2003/11/swrlb#containsIgnoreCase[swrlb:containsIgnoreCase]
+| cos | http://www.w3.org/2005/xpath-functions/math#cos[math:cos], http://www.w3.org/2003/11/swrlb#cos[swrlb:cos], http://www.dotnetrdf.org/leviathan#cos[leviathan:cos]
+| cosec | http://www.dotnetrdf.org/leviathan#cosec[leviathan:cosec]
+| cosec-1 | http://www.dotnetrdf.org/leviathan#cosec-1[leviathan:cosec-1]
+| cosh | `stardog:cosh`
+| cotan | http://www.dotnetrdf.org/leviathan#cotan[leviathan:cotan]
+| cotan-1 | http://www.dotnetrdf.org/leviathan#cotan-1[leviathan:cotan-1]
+| cube | http://www.dotnetrdf.org/leviathan#cube[leviathan:cube]
+| datatype | https://www.w3.org/TR/sparql11-query/#func-datatype[Datatype]
+| date | http://www.w3.org/2003/11/swrlb#date[swrlb:date]
+| dateTime | http://www.w3.org/2001/XMLSchema#dateTime[xsd:dateTime]
+| day | https://www.w3.org/TR/sparql11-query/#func-day[DAY], http://www.w3.org/2005/xpath-functions#day-from-dateTime[fn:day-from-dateTime]
+| dayTimeDuration | http://www.w3.org/2003/11/swrlb#dayTimeDuration[swrlb:dayTimeDuration]
+| decimal | http://www.w3.org/2001/XMLSchema#decimal[xsd:decimal]
+| divideDayTimeDuration | `/`, http://www.w3.org/2003/11/swrlb#divideDayTimeDuration[swrlb:divideDayTimeDuration]
+| divideYearMonthDuration | `/`, http://www.w3.org/2003/11/swrlb#divideYearMonthDuration[swrlb:divideYearMonthDuration]
+| double | http://www.w3.org/2001/XMLSchema#double[xsd:double]
+| e | http://www.dotnetrdf.org/leviathan#e[leviathan:e], http://www.w3.org/2005/xpath-functions/math#exp[math:exp], http://jena.hpl.hp.com/ARQ/function#e[afn:e]
+| encode_for_uri | https://www.w3.org/TR/sparql11-query/#func-encode_for_uri[ENCODE_FOR_URI], http://www.w3.org/2005/xpath-functions#encode-for-uri[fn:encode-for-uri]
+| factorial | http://www.dotnetrdf.org/leviathan#factorial[leviathan:factorial]
+| float | http://www.w3.org/2001/XMLSchema#float[xsd:float]
+| floor | https://www.w3.org/TR/sparql11-query/#func-floor[FLOOR], http://www.w3.org/2005/xpath-functions#numeric-floor[fn:numeric-floor], http://www.w3.org/2003/11/swrlb#floor[swrlb:floor]
+| gmean | `tag:stardog:api:gmean`
+| hours | https://www.w3.org/TR/sparql11-query/#func-hours[HOURS], http://www.w3.org/2005/xpath-functions#hours-from-dateTime[fn:hours-from-dateTime]
+| identifier | `tag:stardog:api:identifier`
+| integer | http://www.w3.org/2001/XMLSchema#integer[xsd:integer]
+| iri | https://www.w3.org/TR/sparql11-query/#func-iri[IRI], https://www.w3.org/TR/sparql11-query/#func-irifunction[IRIFunction], https://www.w3.org/TR/sparql11-query/#func-uri[URI], https://www.w3.org/TR/sparql11-query/#func-urifunction[URIFunction]
+| isbnode | https://www.w3.org/TR/sparql11-query/#func-isbnode[IsBNode]
+| isiri | https://www.w3.org/TR/sparql11-query/#func-isiri[IsIRI], https://www.w3.org/TR/sparql11-query/#func-isuri[IsURI]
+| isliteral | https://www.w3.org/TR/sparql11-query/#func-isliteral[IsLiteral]
+| isnumeric | https://www.w3.org/TR/sparql11-query/#func-isnumeric[IsNumeric]
+| isresource | https://www.w3.org/TR/sparql11-query/#func-isresource[IsResource]
+| label | https://www.w3.org/TR/sparql11-query/#func-label[Label]
+| lang | https://www.w3.org/TR/sparql11-query/#func-lang[Lang]
+| langmatches | https://www.w3.org/TR/sparql11-query/#func-langmatches[LangMatches]
+| lcase | https://www.w3.org/TR/sparql11-query/#func-lcase[LCASE], http://www.w3.org/2005/xpath-functions#lower-case[fn:lower-case], http://www.w3.org/2003/11/swrlb#lowerCase[swrlb:lowerCase]
+| localname | `stardog:localname`, http://jena.hpl.hp.com/ARQ/function#localname[afn:localname]
+| log | http://www.w3.org/2005/xpath-functions/math#log[math:log], http://www.dotnetrdf.org/leviathan#ln[leviathan:ln]
+| log10 | http://www.w3.org/2005/xpath-functions/math#log10[math:log10], http://www.dotnetrdf.org/leviathan#log[leviathan:log]
+| max | http://www.w3.org/2005/xpath-functions#max[fn:max], http://jena.hpl.hp.com/ARQ/function#max[afn:max]
+| md5 | https://www.w3.org/TR/sparql11-query/#func-md5[MD5], http://www.dotnetrdf.org/leviathan#md5hash[leviathan:md5hash]
+| min | http://www.w3.org/2005/xpath-functions#min[fn:min], http://jena.hpl.hp.com/ARQ/function#min[afn:min]
+| minutes | https://www.w3.org/TR/sparql11-query/#func-minutes[MINUTES], http://www.w3.org/2005/xpath-functions#minutes-from-dateTime[fn:minutes-from-dateTime]
+| mod | http://www.w3.org/2003/11/swrlb#mod[swrlb:mod]
+| month | https://www.w3.org/TR/sparql11-query/#func-month[MONTH], http://www.w3.org/2005/xpath-functions#month-from-dateTime[fn:month-from-dateTime]
+| namespace | `stardog:namespace`, http://jena.hpl.hp.com/ARQ/function#namespace[afn:namespace]
+| normalizeSpace | https://www.w3.org/TR/sparql11-query/#func-normalizespace[normalizeSpace], http://www.w3.org/2005/xpath-functions#normalize-space[fn:normalize-space], http://www.w3.org/2003/11/swrlb#normalizeSpace[swrlb:normalizeSpace]
+| now | https://www.w3.org/TR/sparql11-query/#func-now[NOW]
+| numeric-add | http://www.w3.org/2005/xpath-functions#numeric-add[fn:numeric-add]
+| numeric-divide | http://www.w3.org/2005/xpath-functions#numeric-divide[fn:numeric-divide], http://www.w3.org/2003/11/swrlb#divide[swrlb:divide]
+| numeric-integer-divide | http://www.w3.org/2005/xpath-functions#numeric-integer-divide[fn:numeric-integer-divide], http://www.w3.org/2003/11/swrlb#integerDivide[swrlb:integerDivide]
+| numeric-multiply | http://www.w3.org/2005/xpath-functions#numeric-multiply[fn:numeric-multiply]
+| numeric-round-half-to-even | http://www.w3.org/2005/xpath-functions#numeric-round-half-to-even[fn:numeric-round-half-to-even], http://www.w3.org/2003/11/swrlb#roundHalfToEven[swrlb:roundHalfToEven]
+| numeric-subtract | http://www.w3.org/2005/xpath-functions#numeric-subtract[fn:numeric-subtract], http://www.w3.org/2003/11/swrlb#subtract[swrlb:subtract]
+| numeric-unary-minus | http://www.w3.org/2005/xpath-functions#numeric-unary-minus[fn:numeric-unary-minus], http://www.w3.org/2003/11/swrlb#unaryMinus[swrlb:unaryMinus]
+| numeric-unary-plus | http://www.w3.org/2005/xpath-functions#numeric-unary-plus[fn:numeric-unary-plus], http://www.w3.org/2003/11/swrlb#unaryPlus[swrlb:unaryPlus]
+| pi | http://www.w3.org/2005/xpath-functions/math#pi[math:pi], http://jena.hpl.hp.com/ARQ/function#pi[afn:pi]
+| pow | http://www.w3.org/2005/xpath-functions/math#pow[math:pow], http://www.w3.org/2003/11/swrlb#pow[swrlb:pow], http://www.dotnetrdf.org/leviathan#pow[leviathan:pow]
+| pythagoras | http://www.dotnetrdf.org/leviathan#pythagoras[leviathan:pythagoras]
+| rand | https://www.w3.org/TR/sparql11-query/#func-rand[RAND], http://www.dotnetrdf.org/leviathan#rnd[leviathan:rnd]
+| reciprocal | http://www.dotnetrdf.org/leviathan#reciprocal[leviathan:reciprocal]
+| regex | https://www.w3.org/TR/sparql11-query/#func-regex[Regex], http://www.w3.org/2005/xpath-functions#matches[fn:matches], http://www.w3.org/2003/11/swrlb#matches[swrlb:matches]
+| replace | https://www.w3.org/TR/sparql11-query/#func-replace[REPLACE], http://www.w3.org/2005/xpath-functions#replace[fn:replace], http://www.w3.org/2003/11/swrlb#replace[swrlb:replace]
+| root | http://www.dotnetrdf.org/leviathan#root[leviathan:root]
+| round | https://www.w3.org/TR/sparql11-query/#func-round[ROUND], http://www.w3.org/2005/xpath-functions#numeric-round[fn:numeric-round], http://www.w3.org/2003/11/swrlb#round[swrlb:round]
+| sec | http://www.dotnetrdf.org/leviathan#sec[leviathan:sec]
+| sec-1 | http://www.dotnetrdf.org/leviathan#sec-1[leviathan:sec-1]
+| seconds | https://www.w3.org/TR/sparql11-query/#func-seconds[SECONDS], http://www.w3.org/2005/xpath-functions#seconds-from-dateTime[fn:seconds-from-dateTime]
+| sha1 | https://www.w3.org/TR/sparql11-query/#func-sha1[SHA1]
+| sha256 | https://www.w3.org/TR/sparql11-query/#func-sha256[SHA256], http://www.dotnetrdf.org/leviathan#sha256hash[leviathan:sha256hash]
+| sha384 | https://www.w3.org/TR/sparql11-query/#func-sha384[SHA384]
+| sha512 | https://www.w3.org/TR/sparql11-query/#func-sha512[SHA512]
+| sin | http://www.w3.org/2005/xpath-functions/math#sin[math:sin], http://www.w3.org/2003/11/swrlb#sin[swrlb:sin], http://www.dotnetrdf.org/leviathan#sin[leviathan:sin]
+| sinh | `stardog:sinh`
+| sq | http://www.dotnetrdf.org/leviathan#sq[leviathan:sq]
+| sqrt | http://www.w3.org/2005/xpath-functions/math#sqrt[math:sqrt], http://jena.hpl.hp.com/ARQ/function#sqrt[afn:sqrt], http://www.dotnetrdf.org/leviathan#sqrt[leviathan:sqrt]
+| str | https://www.w3.org/TR/sparql11-query/#func-str[Str]
+| strafter | https://www.w3.org/TR/sparql11-query/#func-strafter[STRAFTER], http://www.w3.org/2005/xpath-functions#substring-after[fn:substring-after], http://www.w3.org/2003/11/swrlb#substringAfter[swrlb:substringAfter]
+| strbefore | https://www.w3.org/TR/sparql11-query/#func-strbefore[STRBEFORE], http://www.w3.org/2005/xpath-functions#substring-before[fn:substring-before], http://www.w3.org/2003/11/swrlb#substringBefore[swrlb:substringBefore]
+| strdt | https://www.w3.org/TR/sparql11-query/#func-strdt[STRDT]
+| strends | https://www.w3.org/TR/sparql11-query/#func-strends[STRENDS], http://www.w3.org/2005/xpath-functions#ends-with[fn:ends-with], http://www.w3.org/2003/11/swrlb#endsWith[swrlb:endsWith]
+| string | http://www.w3.org/2001/XMLSchema#string[xsd:string]
+| stringEqualIgnoreCase | http://www.w3.org/2003/11/swrlb#stringEqualIgnoreCase[swrlb:stringEqualIgnoreCase]
+| strlang | https://www.w3.org/TR/sparql11-query/#func-strlang[STRLANG]
+| strlen | https://www.w3.org/TR/sparql11-query/#func-strlen[STRLEN], http://www.w3.org/2005/xpath-functions#string-length[fn:string-length], http://www.w3.org/2003/11/swrlb#stringLength[swrlb:stringLength]
+| strstarts | https://www.w3.org/TR/sparql11-query/#func-strstarts[STRSTARTS], http://www.w3.org/2005/xpath-functions#starts-with[fn:starts-with], http://www.w3.org/2003/11/swrlb#startsWith[swrlb:startsWith]
+| struuid | https://www.w3.org/TR/sparql11-query/#func-struuid[STRUUID]
+| substr | https://www.w3.org/TR/sparql11-query/#func-substr[SUBSTR], http://www.w3.org/2005/xpath-functions#substring[fn:substring], http://www.w3.org/2003/11/swrlb#substring[swrlb:substring]
+| subtractDates | `-`, http://www.w3.org/2003/11/swrlb#subtractDates[swrlb:subtractDates]
+| subtractDayTimeDurationFromDate | `-`, http://www.w3.org/2003/11/swrlb#subtractDayTimeDurationFromDate[swrlb:subtractDayTimeDurationFromDate]
+| subtractDayTimeDurationFromDateTime | `-`, http://www.w3.org/2003/11/swrlb#subtractDayTimeDurationFromDateTime[swrlb:subtractDayTimeDurationFromDateTime]
+| subtractDayTimeDurationFromTime | `-`, http://www.w3.org/2003/11/swrlb#subtractDayTimeDurationFromTime[swrlb:subtractDayTimeDurationFromTime]
+| subtractDayTimeDurations | `-`, http://www.w3.org/2003/11/swrlb#subtractDayTimeDurations[swrlb:subtractDayTimeDurations]
+| subtractTimes | `-`, http://www.w3.org/2003/11/swrlb#subtractTimes[swrlb:subtractTimes]
+| subtractYearMonthDurationFromDate | `-`, http://www.w3.org/2003/11/swrlb#subtractYearMonthDurationFromDate[swrlb:subtractYearMonthDurationFromDate]
+| subtractYearMonthDurationFromDateTime | `-`, http://www.w3.org/2003/11/swrlb#subtractYearMonthDurationFromDateTime[swrlb:subtractYearMonthDurationFromDateTime]
+| subtractYearMonthDurations | `-`, http://www.w3.org/2003/11/swrlb#subtractYearMonthDurations[swrlb:subtractYearMonthDurations]
+| tan | http://www.w3.org/2005/xpath-functions/math#tan[math:tan], http://www.w3.org/2003/11/swrlb#tan[swrlb:tan]
+| tanh | `stardog:tanh`
+| ten | http://www.dotnetrdf.org/leviathan#ten[leviathan:ten]
+| time | http://www.w3.org/2003/11/swrlb#time[swrlb:time]
+| timezone | https://www.w3.org/TR/sparql11-query/#func-timezone[TIMEZONE], http://www.w3.org/2005/xpath-functions#timezone-from-dateTime[fn:timezone-from-dateTime]
+| toDegrees | `stardog:toDegrees`, http://www.dotnetrdf.org/leviathan#radians-to-degrees[leviathan:radians-to-degrees]
+| toRadians | `stardog:toRadians`, http://www.dotnetrdf.org/leviathan#degrees-to-radians[leviathan:degrees-to-radians]
+| translate | https://www.w3.org/TR/sparql11-query/#func-translate[TRANSLATE], http://www.w3.org/2005/xpath-functions#translate[fn:translate], http://www.w3.org/2003/11/swrlb#translate[swrlb:translate]
+| tz | https://www.w3.org/TR/sparql11-query/#func-tz[TZ]
+| ucase | https://www.w3.org/TR/sparql11-query/#func-ucase[UCASE], http://www.w3.org/2005/xpath-functions#upper-case[fn:upper-case], http://www.w3.org/2003/11/swrlb#upperCase[swrlb:upperCase]
+| uuid | https://www.w3.org/TR/sparql11-query/#func-uuid[UUID]
+| year | https://www.w3.org/TR/sparql11-query/#func-year[YEAR], http://www.w3.org/2005/xpath-functions#year-from-dateTime[fn:year-from-dateTime]
+| yearMonthDuration | http://www.w3.org/2003/11/swrlb#yearMonthDuration[swrlb:yearMonthDuration]
 |===
 
 include::timeline.ad[]
+
+== Previous Versions of Docs
+
+.Table of Historical Docs
+|===
+| Stardog Version | HTML             | PDF
+
+|{version}
+|link:/{version}#[✓]
+|link:/stardog-manual-{version}.pdf[✓]
+
+|4.1
+|link:/4.1#[✓]
+|link:/stardog-manual-4.1.pdf[✓]
+
+|4.0.5
+|link:/4.0.5#[✓]
+|link:/stardog-manual-4.0.5.pdf[✓]
+
+|4.0.3
+|link:/4.0.3#[✓]
+|link:/stardog-manual-4.0.3.pdf[✓]
+
+|4.0.2
+|link:/4.0.2#[✓]
+|link:/stardog-manual-4.0.2.pdf[✓]
+
+|4.0.1
+|link:/4.0.1#[✓]
+|link:/stardog-manual-4.0.1.pdf[✓]
+
+|4.0
+|link:/4.0#[✓]
+|link:/stardog-manual-4.0.pdf[✓]
+|===

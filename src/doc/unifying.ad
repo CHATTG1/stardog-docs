@@ -1,0 +1,46 @@
+= Enterprise Data Unification 
+
+Stardog is an enterprise data unification platform built on smart graph
+technology. Enterprises have lots of data and lots of data sources and almost
+all of them are locked away in IT silos and stovepipes that impede insight,
+analysis, reporting, compliance, and operations.
+
+State of the art IT management tells us to *organize data, systems, assets,
+staffs, schedules, and budgets* vertically to mirror lines of business. But
+increasingly all the internal and external demands on IT are *horizontal* in
+nature: the data is organized vertically, but the enterprise increasingly needs
+to access and understand it horizontally.
+
+== The Stardog Solution
+
+Stardog is all about *virtualizing data and data sources*. The dominant IT trend
+of the past 10 years is *virtualization* of IT assets. And by "virtualization"
+we mean a kind of _principled lying for the sake of productivity_. For example,
+
+1. A Storage Area Network virtualizes storage by effectively promising users
+  that there is *one infinitely-sized, infallible hard drive* for the
+  enterprise. Lots of SAN engineers and vendors work long hours making this
+  promise valid. Obviously there is no infinitely-sized hard drive.
+1. "The Cloud", based on both virtual machine and containerization technologies,
+  virtualizes compute by effectively promising users that there are infinite
+  numbers of computers and compute power available upon demand. Lots of cloud
+  vendors (okay, actually, two or three cloud vendors) spend lots of capital on
+  infrasructure and operations to make this promise valid. Obviously there
+  aren't infinite computers to spin up in "the cloud".
+1. Data Center Operating Systems virtualize the data center by effectively
+  promising users that they can allocate data-center scale clusters on demand.
+  Obviously the data center isn't just another application.
+
+*Stardog virtualizes data and data sources by effectively promising to act like
+one big database for the whole enterprise.*
+
+And now we can see the real promise of the graph data model. Only the
+graph data model is sufficiently abstract and expressive to represent all
+enterprise data and data sources in such a way as to allow them to be
+virtualized, that is, harmonized and unified within a single data model and
+system.
+
+Stardog handles the *enterprise data spectrum* as it exists today in the
+post-SQL, post-relational world: databases and documents; structured,
+semistructured, and unstructured data; warehouse (slow moving), federation (fast
+moving), and system of record (new) data sources.

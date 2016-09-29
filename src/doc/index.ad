@@ -28,6 +28,8 @@
 
 include::preamble.ad[]
 
+//include::problem.ad[]
+
 include::premium-support.ad[]
 
 include::qsg.ad[]
@@ -50,7 +52,11 @@ include::owl2.ad[]
 
 include::icv.ad[]
 
+include::unifying.ad[]
+
 include::virtual-graphs.ad[]
+
+include::docstore.ad[]
 
 include::property-graph.ad[]
 
@@ -82,8 +88,6 @@ include::faq.ad[]
 
 include::bench.ad[]
 
-//include::testing.ad[]
-
 include::compatibility.ad[]
 
 include::known-issues.ad[]
@@ -91,3 +95,4 @@ include::known-issues.ad[]
 include::glossary.ad[]
 
 include::appendix-a.ad[]
+
