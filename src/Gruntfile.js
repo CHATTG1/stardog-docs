@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 		  	}
 		},
         //WARNING: never put this in a git repo dir...
-        //aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
+        aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
         aws_s3: {
              options: {
                     accessKeyId: "<%= aws.secret %>",
@@ -85,7 +85,7 @@ module.exports = function(grunt) {
             },
         },
       invalidate_cloudfront: {
-          //aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
+          aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
           options: {
               key: "<%= aws.secret %>",
               secret: "<%= aws.key %>",
