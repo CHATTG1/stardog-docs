@@ -165,34 +165,16 @@ include::timeline.ad[]
 == Previous Versions of Docs
 
 .Table of Historical Docs
-|===
-| Stardog Version | HTML             | PDF
 
-|{version}
-|link:/{version}#[✓]
-|link:/stardog-manual-{version}.pdf[✓]
-
-|4.1
-|link:/4.1#[✓]
-|link:/stardog-manual-4.1.pdf[✓]
-
-|4.0.5
-|link:/4.0.5#[✓]
-|link:/stardog-manual-4.0.5.pdf[✓]
-
-|4.0.3
-|link:/4.0.3#[✓]
-|link:/stardog-manual-4.0.3.pdf[✓]
-
-|4.0.2
-|link:/4.0.2#[✓]
-|link:/stardog-manual-4.0.2.pdf[✓]
-
-|4.0.1
-|link:/4.0.1#[✓]
-|link:/stardog-manual-4.0.1.pdf[✓]
-
-|4.0
-|link:/4.0#[✓]
-|link:/stardog-manual-4.0.pdf[✓]
+| Stardog Version | HTML              | PDF
+|{version}        | link:/{version}#[✓] |link:/stardog-manual-{version}.pdf[✓]
+| 4.1.3           | link:/4.1.3/#[✓] | link:/stardog-manual-4.1.3.pdf[✓]
+| 4.1.2           | link:/4.1.2/#[✓] | link:/stardog-manual-4.1.2.pdf[✓]
+| 4.1.1           | link:/4.1.1/#[✓] | link:/stardog-manual-4.1.1.pdf[✓]
+| 4.1             | link:/4.1#[✓]    | link:/stardog-manual-4.1.pdf[✓]
+| 4.0.5           | link:/4.0.5#[✓]  | link:/stardog-manual-4.0.5.pdf[✓]
+| 4.0.3           | link:/4.0.3#[✓]  | link:/stardog-manual-4.0.3.pdf[✓]
+| 4.0.2           | link:/4.0.2#[✓]  | link:/stardog-manual-4.0.2.pdf[✓]
+| 4.0.1           | link:/4.0.1#[✓]  | link:/stardog-manual-4.0.1.pdf[✓]
+| 4.0             | link:/4.0#[✓]    | link:/stardog-manual-4.0.pdf[✓]
 |===
