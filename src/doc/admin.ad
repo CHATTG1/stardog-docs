@@ -138,7 +138,7 @@ To install:
 $ brew install bash-completion
 ----
 
-To enable, edit ``.bash\_profile`:
+To enable, edit `.bash\_profile`:
 
 [source,bash]
 ----
@@ -556,7 +556,7 @@ See <<Man Pages>> for the details.
 
 |`*docs.filesystem.uri*`
 |Yes
-|`file:\/\/\/`
+|`file:///`
 | link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_FILESYSTEM_URI[StardocsOptions.DOCS_FILESYSTEM_URI]
 
 4+| A URI indicating which `FileSystem` provider to use for document storage. In addition to local storage (`file:///`), documents can be stored on Amazon S3 (`s3:///`) or document storage can be disabled altogether (`none`).
