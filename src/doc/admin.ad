@@ -550,18 +550,21 @@ See <<Man Pages>> for the details.
 |`*docs.default.text.extractors*`
 |Yes
 |`tika`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_DEFAULT_TEXT_EXTRACTORS[StardocsOptions.DOCS_DEFAULT_TEXT_EXTRACTORS]
 
 4+| Comma-separated list of names of text extractors to use when processing documents when no text extractor names are given.
 
 |`*docs.filesystem.uri*`
 |Yes
 |`file:///`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_FILESYSTEM_URI[StardocsOptions.DOCS_FILESYSTEM_URI]
 
 4+| A URI indicating which `FileSystem` provider to use for document storage. In addition to local storage (`file:///`), documents can be stored on Amazon S3 (`s3:///`) or document storage can be disabled altogether (`none`).
 
 |`*docs.path*`
 |Yes
 |`docs/`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_PATH[StardocsOptions.DOCS_PATH]
 
 4+| The path under which documents will be stored. A relative path is relative to the database directory. S3 storage should specify an absolute path with the bucket name as the first component of the path.
 
