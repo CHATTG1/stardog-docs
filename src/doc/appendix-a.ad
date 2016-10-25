@@ -165,7 +165,7 @@ include::timeline.ad[]
 == Previous Versions of Docs
 
 .Table of Historical Docs
-|===
+
 | Stardog Version | HTML              | PDF
 |{version}        | link:/{version}#[✓] |link:/stardog-manual-{version}.pdf[✓]
 | 4.1.3           | link:/4.1.3/#[✓] | link:/stardog-manual-4.1.3.pdf[✓]

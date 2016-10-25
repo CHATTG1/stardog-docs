@@ -138,7 +138,7 @@ To install:
 $ brew install bash-completion
 ----
 
-To enable, edit ``.bash\_profile`:
+To enable, edit `.bash\_profile`:
 
 [source,bash]
 ----
