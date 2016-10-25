@@ -1195,10 +1195,8 @@ frequency of updates.
 
 Stardog supports loading data from compressed files directly: there's no need to
 uncompress files before loading. Loading compressed data is the recommended way
-to load large input files. Stardog supports GZIP and ZIP compressions
-natively.footnote:[Compressed data may only be loaded at database creation time.
-We will support adding compressed data to an existing database in a future
-release.]
+to load large input files. Stardog supports GZIP, BZIP2 and ZIP compressions
+natively.
 
 ==== GZIP and BZIP2
 

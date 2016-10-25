@@ -73,7 +73,7 @@ To convert new or existing constraints into SPARQL queries for export:
 
 [source,bash]
 ----
-$ stardog icv convert myDb out.rdf
+$ stardog icv convert myDb constraints.rdf
 ----
 
 To explain a constraint violation:
@@ -94,7 +94,7 @@ To validate a database (or some named graphs) with respect to constraints:
 
 [source,bash]
 ----
-$ stardog validate --contexts http://example.org/context1 http://example.org/context2
+$ stardog icv validate --contexts http://example.org/context1 http://example.org/context2
 ----
 
 == ICV Guard Mode
@@ -107,7 +107,7 @@ these steps are as follows:
 [source,bash]
 ----
 $ ./stardog-admin db offline --timeout 0 myDb #take the database offline
-$ ./stardog-admin db metadata set -o icv.enabled=true myDb #enable ICV
+$ ./stardog-admin metadata set -o icv.enabled=true myDb #enable ICV
 $ ./stardog-admin db online myDb #put the database online
 ----
 

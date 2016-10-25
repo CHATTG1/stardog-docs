@@ -12,7 +12,7 @@ BITES makes some simplfying assumptions in Stardog {version} with respect to
 unstructured data unification--
 
 * Unbounded blobs in the database are a bad idea; Stardog manages documents (any
-  files, actually) in the local filesystem, in AWS S3, or in HDFS.
+  files, actually) in the local filesystem, in AWS S3, or (soon) in HDFS.
 * Documents are the most common kind of enterprise unstructured data.
 * There is no general purpose natural language processing, which means 
   *extraction of structured data from unstructured documents* isn't a generally
@@ -27,7 +27,7 @@ unstructured data unification--
 
 === Basic Usage
 
-See the <<man page>> for the CLI usage details, including how to interact with
+See the <<Man Pages>> for the CLI usage details, including how to interact with
 the HTTP API for BITES.
 
 === Storage
