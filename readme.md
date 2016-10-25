@@ -8,23 +8,12 @@ Grunt and some Ruby stuffs.
 
 ## Development Setup
 
-* make an rvm environment; 2.1.5 works.  If you have rvm, `rvm use ruby 2.1.5`
-* `cd src; bundle` for installing asciidoctor and related dependencies
-* `npm install` to install Grunt and related dependencies
-* If one of the dependency fails, you can manually reinstall a gem with `gem install <gem>`, and then re-run `bundle`
-* `cd src/style ; bundle install` to install the CSS processing
-* Problems?  Run `rvm list` to see what version of Ruby you are using
-
-Sometimes Compass is just incredibly stupid and you may have to
-install Zurb Foundation via Gem by hand.
+No longer do you need to set up a local environment. Just check out the docker image via the directions [here](https://github.com/stardog-union/stardog/wiki/Deploying-documentation)
 
 ## Editing Docs
 
 * edit *.ad files using asciidoctor syntax. Note: Asciidoctor != Markdown...!
 * edit Sass in style if you need to tweak CSS (you probably don't)
-* build with `grunt`
-* publish with `grunt pub`
-* release with `grunt pub --id=x.y.z --date="'DD Month YYYY"`
-* install Prince to build a PDF (optional)
+* build, publish, and release through the [docker image](https://github.com/stardog-union/stardog/wiki/Deploying-documentation)
 
 Be aware of [LICENSE.txt](http://creativecommons.org/licenses/by-sa/3.0/).
