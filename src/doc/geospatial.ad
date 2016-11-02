@@ -97,7 +97,7 @@ specifically points and rectangles. However, WKT can encode more complex spatial
 structures, most notably, polygons.
 
 To enable support for these more complex shapes, download
-http://www.vividsolutions.com/jts/JTSHome.htm[JTS] and include its JAR in
+http://central.maven.org/maven2/com/vividsolutions/jts-core/1.14.0/jts-core-1.14.0.jar[JTS] and include the JAR in
 Stardog's *server* classpath. Then set `spatial.use.jts=true` in your
 `stardog.properties` file. When you restart Stardog, it will pick up JTS and
 you'll be able to use more complex WKT formatted shapes.
