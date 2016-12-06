@@ -20,6 +20,47 @@
 
 image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbsp; &nbsp; image:f.png[] Fixed bug
 
+== 4.2.1 Release
+[none]
+
+*MOD: Avoid unneccesary validations for updates (#3299)
+*MOD: Need estimations for joins on context variables (#3254)
+*MOD: Health check causes bogus connection warnings/errors (#3252)
+*MOD: Admin commands print log4j warnings (#3247)
+*MOD: Memory settings not logged on startup (#3244)
+*MOD: Improve UX for expired licenses (#3232)
+*MOD: Improve virtual graph import/export performance (#3207)
+*MOD: Get rid of incorrect warnings about unrecognized options (#3191)
+*MOD: Duration multiplication functions are not registered for the SWRLB namespace (#3176)
+*MOD: Return version ID when versioning is committed (#3091)
+*MOD: Query plans with reasoning can be cached (#988)
+*FIX: IN filters don't work within disjunctions (#3318)
+*FIX: Stardog Versioning API connection leak (#3314)
+*FIX: Zero-length property paths return duplicates inside transactions (#3307)
+*FIX: Keep HTTP connections alive when using chunked responses (#3286)
+*FIX: `query.all.graphs` does not work for SPARQL Update queries (#3285)
+*FIX: Property paths with * are incorrect with named graphs (#3274)
+*FIX: Service node reports incorrect variables (#3257)
+*FIX: Webconsole fails to export CONSTRUCT query results (#3255)
+*FIX: Jena bindings pulls old httpclient jars into client jars (#3243)
+*FIX: Inverse negated property path returns same result as non-inverted (#3240)
+*FIX: Incorrect sort order for property paths (#3239)
+*FIX: Differential index keeps growing (#3234)
+*FIX: Query obfuscate output is wrong when stored namespaces are used (#3228)
+*FIX: Obfuscating queries with prefixed datatypes throws ClassCastException (#3227)
+*FIX: Construct queries return incomplete sameAs inferences with joins (#3225)
+*FIX: TMP files aren't being flushed when buffering large queries (#3223)
+*FIX: Reasoning error with property chains not used in assertions (#3219)
+*FIX: Iterators created for insert/where queries are not closed (#3212)
+*FIX: CLI displays java.io.EOFException on query timeout (#3210)
+*FIX: Exporting virtual graphs in the CLI does not work (#3206)
+*FIX: JSON file extension not recognized (#3202)
+*FIX: Fix error in binary result parsing (#3194)
+*FIX: failed VG init cannot be removed (#3172)
+*FIX: Queries with punning may fail (#2645)
+*FIX: Property paths can cross named graph boundaries (#1851)
+*FIX: Cannot explain recursive reasoning results (#926)
+
 == 4.2 Release
 [none]
 
