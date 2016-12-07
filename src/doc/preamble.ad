@@ -1,14 +1,15 @@
 include::header-logo.ad[]
 
-Stardog is an enterprise data unification platform based on semantic graphs, schema alignment, data modeling, 
-and deep reasoning.
+Stardog is an enterprise data unification platform. Stardog's semantic graphs,
+data modeling, and deep reasoning make it fast and easy to unify data without
+writing code. See <<Enterprise Data Unification>> for more details.
 
-.What's New in Stardog 4.1
+.What's New in Stardog 4.2
 ****
-- [x] <<Guarantees, Multi-coordinator Cluster>>
-- [x] Cluster stability & performance improvements
-- [x] <<Querying the Revision History, Query graph & revision history simultaneously>>
-- [x] New, faster SPARQL parser
+- [x] <<Unstructured Data, Unstructured Data Unification>>
+- [x] <<Managing Stored Queries, Stored Queries>>
+- [x] Cluster Stability Improvements
+- [x] Performance of Aggregate Queries
 ****
 
 Check out the <<Quick Start Guide>> to get Stardog installed and running in five easy steps.
@@ -26,26 +27,12 @@ control; http://www.w3.org/TR/owl2-overview/[OWL 2] and user-defined rules for
 inference and data analytics; virtual graphs; geospatial query answering; and
 programmatic interaction via several languages and network interfaces.
 
-Stardog is made with skill, taste, and a point of view in DC, Boston, Madison, and
-Germany. 🌟🐶
+Stardog is made with skill, taste, and a point of view in DC, Boston, Heidelberg, Madison, Moscow, Hanalei, 
+Manchester PA, and New Hampshire. 🌟🐶
 
 To learn more about where we've been and where we're headed, consult
 the link:/release-notes/[RELEASE NOTES] and
 <<Milestones,milestones>>.
-
-== Documentation
-
-|===
-| Stardog Version | HTML             | PDF
-| {version}       | link:/{version}#[✓]        | link:/stardog-manual-{version}.pdf[✓]
-| 4.1             | link:/4.1#[✓]    | link:/stardog-manual-4.1.pdf[✓]
-| 4.0.5           | link:/4.0.5#[✓]  | link:/stardog-manual-4.0.5.pdf[✓]
-| 4.0.3           | link:/4.0.3#[✓]  | link:/stardog-manual-4.0.3.pdf[✓]
-| 4.0.2           | link:/4.0.2#[✓]  | link:/stardog-manual-4.0.2.pdf[✓]
-| 4.0.1           | link:/4.0.1#[✓]  | link:/stardog-manual-4.0.1.pdf[✓]
-| 4.0             | link:/4.0#[✓]    | link:/stardog-manual-4.0.pdf[✓]
-// | 3.1.4           | link:/3.1.4#[✓]  | link:/stardog-manual-3.1.4.pdf[✓]
-|===
 
 == Downloading & Support
 
@@ -73,9 +60,3 @@ Leonard, John Shearer, Ryan Hohimer, and the crew at XSB.] You
 can also help by
 https://github.com/Complexible/stardog-docs/tree/master/src/doc[editing these
 docs on Github] if you spot a problem.
-
-== Roadmap
-[horizontal]
-Stardog 4.2:: Native HDFS backend. Pelorus--a faceted graph browser--integrated with Stardog Web Console
-Stardog 4.3:: Generalizing R2RML virtual graph support
-Stardog 5  :: Horizontally scalable, DCOS, graph analytics 

@@ -73,7 +73,7 @@ To convert new or existing constraints into SPARQL queries for export:
 
 [source,bash]
 ----
-$ stardog icv convert myDb out.rdf
+$ stardog icv convert myDb constraints.rdf
 ----
 
 To explain a constraint violation:
@@ -94,7 +94,7 @@ To validate a database (or some named graphs) with respect to constraints:
 
 [source,bash]
 ----
-$ stardog validate --contexts http://example.org/context1 http://example.org/context2
+$ stardog icv validate --contexts http://example.org/context1 http://example.org/context2
 ----
 
 == ICV Guard Mode
@@ -107,7 +107,7 @@ these steps are as follows:
 [source,bash]
 ----
 $ ./stardog-admin db offline --timeout 0 myDb #take the database offline
-$ ./stardog-admin db metadata set -o icv.enabled=true myDb #enable ICV
+$ ./stardog-admin metadata set -o icv.enabled=true myDb #enable ICV
 $ ./stardog-admin db online myDb #put the database online
 ----
 
@@ -129,12 +129,12 @@ command will explain the IC violations for constraints stored in the database:
 $ stardog icv explain --reasoning "myDB"
 ----
 
-It is possible to explain violations for external constraints by passing the
-file with constraints as an additional argument:
+The command is flexible to change the number of violations displayed, and to explain 
+violations for external constraints by passing the file with constraints as an additional argument:
 
 [source,bash]
 ----
-$ stardog icv explain --reasoning "myDB" constraints.ttl
+$ stardog icv explain --reasoning --limit 2 "myDB" constraints.ttl
 ----
 
 === Security Note
@@ -950,6 +950,54 @@ and, consequently, E is valid.footnote:[This is a good example of open world and
 closed world reasoning interacting for the win.]
 
 If you made it this far, you deserve a drink!
+
+=== Constraints Formats
+
+In addition to OWL, ICV constraints can be expressed in SPARQL and Stardog Rules. In
+both cases, the constraints define queries and rules to find violations.  These constraints
+can be added individually, or defined together in a file as shown below:
+
+ 
+[source,sparql]
+----
+@prefix rule: <tag:stardog:api:rule:> .
+@prefix icv: <tag:stardog:api:icv:> .
+
+# Rule Constraint
+[] a rule:SPARQLRule ; 
+
+   rule:content """
+
+    prefix : <http://example.org/>
+    
+	IF { 
+	    ?x a :Employee .  
+	} 
+	THEN { 
+		?x :employeeNum ?number . 
+	}  
+
+   """ .
+
+
+# SPARQL Constraint
+[] a icv:Constraint ;
+
+   icv:query """
+    prefix : <http://example.org/>
+
+   	select * { 
+       
+        ?x a :Employee . 
+
+	    FILTER NOT EXISTS {
+	        ?x :employeeNum ?number .
+	    } 
+	} 
+
+   """ .
+----
+
 
 == Using ICV Programmatically
 

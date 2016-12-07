@@ -158,3 +158,21 @@ $ mkfifo some-data.rdf
 $ xz -dc some-data.rdf.xz > some-data.rdf &
 $ stardog-admin db create -n test some-data.rdf
 ----
+
+=== SNARL Protocol
+
+Question:: I'm using Stardog and I'm seeing messages about SNARL deprecation, what's that about?
+
+Answer:: As of Stardog 4.2, the SNARL protocol is no longer the default protocol for Stardog and 
+is deprecated. Support for the SNARL protocol will be removed in the Stardog 5 release. The HTTP
+protocol is now the default protocol and is recommended for all users. If you're seeing the 
+deprecation warnings it's because you're explicitly using the SNARL protocol somewhere in your 
+application.
+
+All you have to do to migrate these usages is change `snarl`/`snarls` to `http`/`https` and 
+you're done. You can no longer disable support for HTTP when starting the server; the `--no-http`
+option does noting, and the SNARL protocol is not enabled by default anymore and has to be
+explicitly enabled by using `--snarl`.
+
+Please note, the SNARL _protocol_ has been deprecated. The SNARL API is still supported and the 
+recommended Java API for Stardog.

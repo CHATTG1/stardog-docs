@@ -39,6 +39,11 @@ type **as POM** (`pom`):
 ----
 <1> **The dependency type must be set to `pom`.**
 
+Note: Though Gradle may still work without doing this, it is still best practice to specify the dependency type there as well:
+----
+compile "com.complexible.stardog:client-snarl:${VERSION}@pom"
+----
+
 === Public Maven Repo
 
 The public Maven repository for the current Stardog release is

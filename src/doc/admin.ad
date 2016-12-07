@@ -138,7 +138,7 @@ To install:
 $ brew install bash-completion
 ----
 
-To enable, edit ``.bash\_profile`:
+To enable, edit `.bash\_profile`:
 
 [source,bash]
 ----
@@ -482,7 +482,7 @@ requires a Java plugin that implements the Stardog Server logging
 interface; see <<Java Programming>> for more information; and the log
 rotation policy (file size or time).
 
-Slow query logging is also available. See the <<Managing Queries>> section below.
+Slow query logging is also available. See the <<Managing Running Queries>> section below.
 
 == Database Admin
 
@@ -539,6 +539,34 @@ See <<Man Pages>> for the details.
 | link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ONLINE[DatabaseOptions.ONLINE]
 
 4+|The status of the database: online or offline. It may be set so that the database is created initially in online or offline status; subsequently, it can't be set directly but only by using the relevant admin commands.
+
+|`*docs.default.rdf.extractors*`
+|Yes
+|`tika`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_DEFAULT_RDF_EXTRACTORS[StardocsOptions.DOCS_DEFAULT_RDF_EXTRACTORS]
+
+4+| Comma-separated list of names of RDF extractors to use when processing documents when no RDF extractor names are given.
+
+|`*docs.default.text.extractors*`
+|Yes
+|`tika`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_DEFAULT_TEXT_EXTRACTORS[StardocsOptions.DOCS_DEFAULT_TEXT_EXTRACTORS]
+
+4+| Comma-separated list of names of text extractors to use when processing documents when no text extractor names are given.
+
+|`*docs.filesystem.uri*`
+|Yes
+|`file:///`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_FILESYSTEM_URI[StardocsOptions.DOCS_FILESYSTEM_URI]
+
+4+| A URI indicating which `FileSystem` provider to use for document storage. In addition to local storage (`file:///`), documents can be stored on Amazon S3 (`s3:///`) or document storage can be disabled altogether (`none`).
+
+|`*docs.path*`
+|Yes
+|`docs/`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_PATH[StardocsOptions.DOCS_PATH]
+
+4+| The path under which documents will be stored. A relative path is relative to the database directory. S3 storage should specify an absolute path with the bucket name as the first component of the path.
 
 |`*icv.active.graphs*`
 | No
@@ -699,7 +727,7 @@ the default graph, respectively. In the context of database configurations only,
 
 |`*search.reindex.mode*`
 | Yes
-| `async`
+| `sync`
 |
 
 4+|Determines how search indexes are maintained. The legal value of `search.reindex.mode` is one of the strings `sync`
@@ -1167,10 +1195,8 @@ frequency of updates.
 
 Stardog supports loading data from compressed files directly: there's no need to
 uncompress files before loading. Loading compressed data is the recommended way
-to load large input files. Stardog supports GZIP and ZIP compressions
-natively.footnote:[Compressed data may only be loaded at database creation time.
-We will support adding compressed data to an existing database in a future
-release.]
+to load large input files. Stardog supports GZIP, BZIP2 and ZIP compressions
+natively.
 
 ==== GZIP and BZIP2
 
@@ -1256,7 +1282,120 @@ following command:
 $ stardog-admin metadata get -o index.named.graphs my_db_name
 ----
 
-=== Managing Queries
+=== Managing Stored Queries
+
+Stardog 4.2 added the capability to name and store SPARQL queries for future
+evaluation by referring to the query's name.
+
+Queries of any type can be stored in Stardog and executed directly by using the
+name of the stored query. Stored queries can be shared with other users, which
+gives those users the ability to run those queries provided that they have
+appropriate permissions for a database.
+
+==== Storing Queries
+
+Queries can be stored using the `stored add` command and specifying a unique
+name for the stored query:
+
+[source,bash]
+----
+$ stardog-admin stored add -n types "select distinct ?type {?s a ?type}"
+----
+
+If a file is used to specify the query string without an explicit 
+`-n/--name` option then the name of the query file is used for the stored 
+query:
+
+[source,bash]
+----
+$ stardog-admin stored add listProperties.sparql
+----
+
+By default, stored queries can be executed over any database. But they can be
+scoped by providing a specific database name with the `-d/--database` option.
+Also, by default, only the user who stored the query can access that stored
+query. Using the `--shared` flag will allow other users to execute the stored
+query.
+
+The following example stores a shared query with a custom name that can 
+be executed over only the database `myDb`:
+
+----
+$ stardog-admin stored add --shared -d myDb -n listProperties "select distinct ?p {?s ?p ?o}"
+----
+
+Stored query names must be unique for a Stardog instance. Existing stored
+queries can be replaced using the `--overwrite` option in the command.
+
+==== Running Stored Queries
+
+Stored queries can be executed using the regular query execution command
+by passing the name of the stored query:
+
+[source,bash]
+----
+$ stardog query myDb listProperties
+----
+
+Other commands like `query explain` also accept stored query names.
+
+==== Listing Stored Queries
+
+To see all the stored queries, use the `stored list` subcommand:
+
+[source,bash]
+----
+$ stardog-admin stored list
+----
+
+The results are formatted tabularly:
+
+[source,bash]
+----
++--------+-----------------------------------------+
+|  Name  |            Query String                 |
++--------+-----------------------------------------+
+| graphs | SELECT ?graph (count(*) as ?size)       | 
+|        | FROM NAMED stardog:context:all          |
+|        | WHERE { GRAPH ?graph {?s ?p ?o}}        |
+|        | GROUP BY ?graph                         |
+|        | ORDER BY desc(?size)                    |
+| people | CONSTRUCT WHERE {                       | 
+|        |    ?person a foaf:Person ;              |
+|        |            ?p ?o                        |
+|        | }                                       |
+| types  | SELECT DISTINCT ?type ?label            |
+|        | WHERE {                                 |
+|        |    ?s a ?type .                         |
+|        |    OPTIONAL { ?type rdfs:label ?label } | 
+|        | }                                       |
++--------+-----------------------------------------+
+
+3 stored queries
+----
+
+Users can only see the queries they've stored and the queries stored by other
+users that have been `--shared`. The `--verbose` option will show more details
+about the stored queries.
+
+==== Removing Stored Queries
+
+Stored queries can be removed using the `stored remove` command:
+
+[source,bash]
+----
+$ stardog-admin stored remove storedQueryName
+----
+
+If you would like to clear all the stored queries then use the 
+`-a/--all` option:
+
+[source,bash]
+----
+$ stardog-admin stored remove -a
+----
+
+=== Managing Running Queries
 
 Stardog includes the capability to manage running queries according to
 configurable policies set at run-time; this capability includes support
@@ -1266,7 +1405,7 @@ time threshold automatically; and **logging** slow queries for analysis.
 
 Stardog is pre-configured with sensible *server-wide* defaults for query
 management parameters; these defaults may be overridden or disabled per
-database.
+database, or even per query.
 
 ==== Configuring Query Management
 
@@ -1278,7 +1417,10 @@ default configuration has a server-wide query timeout value of
 You can customize the server-wide timeout value and then set
 per-database custom values, too. Any database without a custom value
 inherits the server-wide value. To disable query timeout, set
-`query.timeout` to `0`.
+`query.timeout` to `0`. If individual queries need to set their own timeout,
+this can be done (by passing a `timeout` parameter over HTTP or using
+the `--timeout` flag on the CLI), but only if the `query.timeout.override.enabled`
+property is set to true for the database (true is the default).
 
 ==== Listing Queries
 
