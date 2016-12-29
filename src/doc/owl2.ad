@@ -435,6 +435,9 @@ work; if there are conflicts, the "closest definition wins", that is, if
 database, the definition in the rule content is the one that Stardog
 will use.
 
+. FILTER NOT EXISTS and MINUS are not supported inside rules. Negation breaks
+monotonic reasoning and is not supported.
+
 . Having the same predicate both in the rule body (`IF`) and the rule head
 (`THEN`) are supported in a limited way. Cycles are allowed only if the rule
 body does not contain type triples or filters and the triples in the rule body
