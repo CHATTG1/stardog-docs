@@ -1592,23 +1592,23 @@ article and a paper in a conference proceedings. The query plan used by Stardog
              `─ Scan[PSOC](?inproc, dc:creator, ?person) [#898K]
 ----
 
- The plan is arranged in an hierarchical, tree-like structure. The nodes, called
- _operators_, represent units of data processing during evaluation. They
- correspond to evaluations of graphs patterns or solution modifiers as defined
- in https://www.w3.org/TR/sparql11-query/#sparqlDefinition[SPARQL 1.1
- specification]. All operators can be regarded as functions which may take some
- data as input and produce some data as output. All input and and output data is
- represented as streams of
- https://www.w3.org/TR/sparql11-query/#sparqlSolutions[solutions], that is, sets
- of bindings of the form `x -> value` where `x` is a variable used in the query
- and `value` is some RDF term (IRI, blank node, or literal). Examples of
- operators include scans, joins, filters, unions, etc.
+The plan is arranged in an hierarchical, tree-like structure. The nodes, called
+_operators_, represent units of data processing during evaluation. They
+correspond to evaluations of graphs patterns or solution modifiers as defined in
+https://www.w3.org/TR/sparql11-query/#sparqlDefinition[SPARQL 1.1
+specification]. All operators can be regarded as functions which may take some
+data as input and produce some data as output. All input and and output data is
+represented as streams of
+https://www.w3.org/TR/sparql11-query/#sparqlSolutions[solutions], that is, sets
+of bindings of the form `x -> value` where `x` is a variable used in the query
+and `value` is some RDF term (IRI, blank node, or literal). Examples of
+operators include scans, joins, filters, unions, etc.
  
- Numbers in square brackets after each node refer to the _estimated_ cardinality
- of the node, i.e. how many solutions Stardog expects this operator to produce
- when the query is evaluated. Statistics-based cardinality estimation in Stardog
- merits a separate blog post, but here are the key points for the purpose of
- reading query plans: 
+Numbers in square brackets after each node refer to the _estimated_ cardinality
+of the node, i.e. how many solutions Stardog expects this operator to produce
+when the query is evaluated. Statistics-based cardinality estimation in Stardog
+merits a separate blog post, but here are the key points for the purpose of
+reading query plans:
  
  1. all estimations are approximate and their accuracy can
  vary greatly (generally: more precise for bottom nodes, less precise for upper nodes) 
