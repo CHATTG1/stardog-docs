@@ -75,9 +75,7 @@ removed when syncing with the cluster state.
 
 == Configuration
 
-In the following example we will set up a cluster with total of 6 nodes.
-Zookeeper will be deployed on nodes 1-3 whereas Stardog will will be deployed on
-nodes 4-6. To deploy Stardog Cluster you use `stardog-admin` commands and some
+To deploy Stardog Cluster you use `stardog-admin` commands and some
 additional configuration. Stardog Cluster depends on Apache ZooKeeper.
 
 You may be able to use `stardog-admin cluster generate` to bootstrap a cluster
@@ -96,6 +94,10 @@ runs in a different machine and, if possible, that ZooKeeper has a separate
 drive for its data directory. If you need a larger cluster, adjust
 accordingly.
 
+In the following example we will set up a cluster with total of 6 nodes.
+Zookeeper will be deployed on nodes 1-3 whereas Stardog will be deployed on
+nodes 4-6.
+
 . <<Quick Start Guide,Install>> Stardog {version} on each machine in the cluster.
 +
 NOTE: The best thing to do here, of course, is to use whatever infrastructure
@@ -113,9 +115,10 @@ the following information **for each Stardog node in the cluster**:
 # Flag to enable the cluster, without this flag set, the rest of the properties have no effect
 pack.enabled=true
 # this node's IP address (or hostname) where other Stardog nodes are going to connect
-pack.node.address=196.69.68.1
+# this value is optional but if provided it should be unique for each Stardog node
+pack.node.address=196.69.68.4
 # the connection string for ZooKeeper where cluster state is stored
-pack.zookeeper.address=196.69.68.4:2180,196.69.68.5:2180,196.69.68.6:2180
+pack.zookeeper.address=196.69.68.1:2180,196.69.68.2:2180,196.69.68.3:2180
 ----
 +
 `pack.zookeeper.address` is a ZooKeeper connection string where cluster stores its
@@ -124,11 +127,9 @@ is `InetAddress.getLocalhost().getAddress()`, which should work for many deploym
 using an atypical network topology and the default value is not correct, you can provide a value for this
 property.
 +
-. Create the ZooKeeper configuration for each Zookeeper node. This config file
-is just a standard ZooKeeper configuration file. The following config file
-should be sufficient for most cases.
-+
-On node 1:
+. Create the ZooKeeper configuration for each Zookeeper node. This config file is just a standard 
+ZooKeeper configuration file and the same config file can be used for all Zookeeper nodes. The 
+following config file should be sufficient for most cases. 
 +
 [source,bash]
 ----
@@ -142,34 +143,6 @@ syncLimit=2
 # This is an enumeration of all Zk nodes in
 # the cluster and must be identical in
 # each node's config.
-server.1=196.69.68.1:2888:3888
-server.2=196.69.68.2:2888:3888
-server.3=196.69.68.3:2888:3888
-----
-+
-On node 2:
-+
-[source,bash]
-----
-tickTime=3000
-dataDir=/data/zookeeperdata/
-clientPort=2180
-initLimit=5
-syncLimit=2
-server.1=196.69.68.1:2888:3888
-server.2=196.69.68.2:2888:3888
-server.3=196.69.68.3:2888:3888
-----
-+
-Finally, on node 3:
-+
-[source,bash]
-----
-tickTime=3000
-dataDir=/data/zookeeperdata/
-clientPort=2180
-initLimit=5
-syncLimit=2
 server.1=196.69.68.1:2888:3888
 server.2=196.69.68.2:2888:3888
 server.3=196.69.68.3:2888:3888
@@ -189,7 +162,7 @@ $ mkdir /data/zookeeperdata # on node 3
 ----
 +
 . ZooKeeper requires a `myid` file in the `dataDir` folder to identify itself, you will create that file as follows
-for `node1` and `node2`, respectively:
+for `node1`, `node2`, and `node3`, respectively:
 +
 [source,bash]
 ----
@@ -206,10 +179,6 @@ HAProxyfootnote:[There's nothing special about HAProxy here; you could implement
 this proxy functionality in many different ways. We use HAProxy because it's
 relatively easy and ubiquitous. YMMV.] as an example of how to use of Stardog
 Cluster behind a proxy for load-balancing and fail-over capability.
-
-NOTE: As mentioned earlier, we recommend to have Stardog and ZooKeeper nodes in
-different machines, but for the purpose of this example we'll colocate them in
-the same machines.
 
 . *Start ZooKeeper instances*
 +
