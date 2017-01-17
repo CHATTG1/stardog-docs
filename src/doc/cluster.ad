@@ -76,13 +76,11 @@ removed when syncing with the cluster state.
 == Configuration
 
 To deploy Stardog Cluster you use `stardog-admin` commands and some
-additional configuration. Stardog Cluster depends on Apache
-ZooKeeper.
+additional configuration. Stardog Cluster depends on Apache ZooKeeper.
 
-In Stardog 3.0 we added `stardog-admin cluster generate` to bootstrap
-a cluster configuration and, thus, to ease installation. You may be
-able to get away with simply passing a list of hostnames or IP
-addresses for the cluster's nodes.
+You may be able to use `stardog-admin cluster generate` to bootstrap a cluster
+configuration and, thus, to ease installation by simply passing a list of
+hostnames or IP addresses for the cluster's nodes.
 
 [source,bash]
 ----
@@ -91,33 +89,34 @@ $ stardog-admin cluster generate --output-dir /home/stardog 10.0.0.1 10.0.0.2 10
 
 See the link:/man/cluster-generate.html[man page] for the details.
 
-In the following installation notes, we install Stardog Cluster in a
-pseudo-distributed 3-node configuration, that is, Stardog and ZooKeeper nodes
-are colocated in the same machine. In a production environment we strongly recommend
-that each ZooKeeper process runs in a different machine and, if possible, that
-ZooKeeper has a separate drive for its data directory. If you need a larger
-cluster, adjust accordingly.footnote:[In order to deploy a cluster to a single
-machine--for example, for testing or development--you must ensure that
-each Stardog and ZooKeeper servers has a different home location.]
+In a production environment we strongly recommend that each ZooKeeper process
+runs in a different machine and, if possible, that ZooKeeper has a separate
+drive for its data directory. If you need a larger cluster, adjust
+accordingly.
+
+In the following example we will set up a cluster with total of 6 nodes.
+Zookeeper will be deployed on nodes 1-3 whereas Stardog will be deployed on
+nodes 4-6.
 
 . <<Quick Start Guide,Install>> Stardog {version} on each machine in the cluster.
 +
-NOTE: The smart thing to do here, of course, is to use whatever infrastructure
+NOTE: The best thing to do here, of course, is to use whatever infrastructure
 you have in place to automate software installation. Adapting Stardog
 installation to Chef, Puppet, cfengine, etc. is left as an exercise for the
 reader.
 +
 . Make sure a valid Stardog license key (whether Developer, Enterprise, or a
 30-day eval key) for the size of cluster you're creating exists and resides in
-`STARDOG_HOME` on each node. You must also have a `stardog.properties` file with the following
-information **for each node in the cluster**:
+`STARDOG_HOME` on each node. You must also have a `stardog.properties` file with
+the following information **for each Stardog node in the cluster**:
 +
 [source,bash]
 ----
 # Flag to enable the cluster, without this flag set, the rest of the properties have no effect
 pack.enabled=true
 # this node's IP address (or hostname) where other Stardog nodes are going to connect
-pack.node.address=196.69.68.1
+# this value is optional but if provided it should be unique for each Stardog node
+pack.node.address=196.69.68.4
 # the connection string for ZooKeeper where cluster state is stored
 pack.zookeeper.address=196.69.68.1:2180,196.69.68.2:2180,196.69.68.3:2180
 ----
@@ -128,10 +127,9 @@ is `InetAddress.getLocalhost().getAddress()`, which should work for many deploym
 using an atypical network topology and the default value is not correct, you can provide a value for this
 property.
 +
-. Create the ZooKeeper configuration for each node. This config file is just a standard ZooKeeper configuration file. The following
-config file should be sufficient for most cases.
-+
-On node 1:
+. Create the ZooKeeper configuration for each Zookeeper node. This config file is just a standard 
+ZooKeeper configuration file and the same config file can be used for all Zookeeper nodes. The 
+following config file should be sufficient for most cases. 
 +
 [source,bash]
 ----
@@ -142,37 +140,9 @@ dataDir=/data/zookeeperdata/
 clientPort=2180
 initLimit=5
 syncLimit=2
-# This is an enumeration of all nodes in
+# This is an enumeration of all Zk nodes in
 # the cluster and must be identical in
 # each node's config.
-server.1=196.69.68.1:2888:3888
-server.2=196.69.68.2:2888:3888
-server.3=196.69.68.3:2888:3888
-----
-+
-On node 2:
-+
-[source,bash]
-----
-tickTime=3000
-dataDir=/data/zookeeperdata/
-clientPort=2180
-initLimit=5
-syncLimit=2
-server.1=196.69.68.1:2888:3888
-server.2=196.69.68.2:2888:3888
-server.3=196.69.68.3:2888:3888
-----
-+
-Finally, on node 3:
-+
-[source,bash]
-----
-tickTime=3000
-dataDir=/data/zookeeperdata/
-clientPort=2180
-initLimit=5
-syncLimit=2
 server.1=196.69.68.1:2888:3888
 server.2=196.69.68.2:2888:3888
 server.3=196.69.68.3:2888:3888
@@ -192,7 +162,7 @@ $ mkdir /data/zookeeperdata # on node 3
 ----
 +
 . ZooKeeper requires a `myid` file in the `dataDir` folder to identify itself, you will create that file as follows
-for `node1` and `node2`, respectively:
+for `node1`, `node2`, and `node3`, respectively:
 +
 [source,bash]
 ----
@@ -209,10 +179,6 @@ HAProxyfootnote:[There's nothing special about HAProxy here; you could implement
 this proxy functionality in many different ways. We use HAProxy because it's
 relatively easy and ubiquitous. YMMV.] as an example of how to use of Stardog
 Cluster behind a proxy for load-balancing and fail-over capability.
-
-NOTE: As mentioned earlier, we recommend to have Stardog and ZooKeeper nodes in
-different machines, but for the purpose of this example we'll colocate them in
-the same machines.
 
 . *Start ZooKeeper instances*
 +
@@ -243,9 +209,9 @@ Once ZooKeeper is started, you can start Stardog instances:
 +
 [source,bash]
 ----
-$ ./stardog-admin server start --home ~/stardog --port 5821 # on node 1
-$ ./stardog-admin server start --home ~/stardog --port 5821 # on node 2
-$ ./stardog-admin server start --home ~/stardog --port 5821 # on node 3
+$ ./stardog-admin server start --home ~/stardog --port 5821 # on node 4
+$ ./stardog-admin server start --home ~/stardog --port 5821 # on node 5
+$ ./stardog-admin server start --home ~/stardog --port 5821 # on node 6
 ----
 +
 **Important:** When starting Stardog instances for the cluster, unlike single server 
@@ -380,8 +346,7 @@ installation described previously:
 Stardog configuration::
 
 * different `STARDOG_HOME` for each node
-* different Stardog port for each node
-** the easiest setup is if no Stardog listens on port `5820`
+* different Stardog port for each node; the easiest setup is if no Stardog listens on port `5820`
 * at least one (but no more than one) proxy on port `5820`
 * different Watchdog port for each node via `watchdog.port` in `stardog.properties`
 

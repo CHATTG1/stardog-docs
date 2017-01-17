@@ -477,7 +477,7 @@ $ stardog data obfuscate --config obfConfig.ttl myDatabase  obfDatabase.ttl
 
 The configuration specifies which URIs and strings will be obfuscated by
 defining inclusion and exclusion filters. See the example configuration file
-in the https://github.com/Complexible/stardog-examples/blob/master/config/obfuscation.ttl:[stardog-examples Github repo.]
+in the https://github.com/Complexible/stardog-examples/blob/master/config/obfuscation.ttl[stardog-examples Github repo.]
 
 Once the data is obfuscated, queries written against the original data will
 no longer work. Stardog provides query obfuscation capability, too, so that

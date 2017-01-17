@@ -20,6 +20,44 @@
 
 image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbsp; &nbsp; image:f.png[] Fixed bug
 
+== 4.2.3 Release
+[none]
+*ADD: Add command to export all namespaces (#2739)
+*MOD: `textMatch` should return all results by default (#3411)
+*MOD: Optimize r/w access to the full-text index (#3398)
+*MOD: Optimize merge joins when the left operand produces unique values for the join key (#3360)
+*MOD: Align spatial extraction between bulk load and transaction updates (#3331)
+*MOD: Support human readable durations in `query --timeout` option (#3302)
+*MOD: Use generated credentials for ZK and intra-cluster authz (#3267)
+*FIX: Implicit projection is incorrectly expanded where there are subqueries (#3456)
+*FIX: Incorrect handling of combinations of FILTER EXISTS and BIND in the parser (#3436)
+*FIX: Incorrect conditional check in script (#3425)
+*FIX: wktLiterals in queries are being aggressively cached (#3373)
+*FIX: Rules using UUID() prevent schema export (#3371)
+*FIX: NPE in MappingDictionary when calling localname(bnode()) (#3339)
+*FIX: Regex wrongly assumes that the pattern is a constant (#3312)
+*FIX: Plan cache is invalidated too early (#3266)
+
+== 4.2.2 Release
+[none]
+
+*MOD: Upgrade Curator and ZooKeeper versions (#3415)
+*MOD: Improve Stardog client for large updates in memory (#3401)
+*MOD: Suppress connection errors in the log (#3378)
+*MOD: Optimize COUNT with regard to variable usage (#3367)
+*MOD: Geospatial indexing should simply skip malformed shapes (#3362)
+*MOD: For any spatial features which are malformed, print the literal value of the feature to the log (#3343)
+*MOD: Health check calls cause bogus warnings to be logged (#3127)
+*MOD: Do not index non-string literals in Lucene (#2264)
+*FIX: Bug in SPARQL replace function (#3385)
+*FIX: Spatial index is rebuilding completely after adding any data (#3379)
+*FIX: Resolve variable usage issue with using reasoning with virtual graphs (#3349)
+*FIX: MemoryManager fails when heap pool cannot be identified (#3348)
+*FIX: No limit on incoming triples when displaying resource (#3345)
+*FIX: VG query optimized incorrectly with filter pushing (#3342)
+*FIX: Subquery projection declares all its variables as assured (#3338)
+*FIX: geof:within should accept a constant as the first argument (#3329)
+
 == 4.2.1 Release
 [none]
 
