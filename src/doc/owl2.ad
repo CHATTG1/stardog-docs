@@ -364,7 +364,8 @@ sugar--property paths, especially, but also bnode syntax--make complex
 Stardog Rules concise and elegant.
 
 NOTE: Starting in Stardog 3.0, it's legal to use any valid Stardog
-built-in function in Stardog Rules.
+built-in function in Stardog Rules (see rule limitations below for
+few excpetions).
 
 ==== How to Use Stardog Rules
 
@@ -435,8 +436,29 @@ work; if there are conflicts, the "closest definition wins", that is, if
 database, the definition in the rule content is the one that Stardog
 will use.
 
-. FILTER NOT EXISTS and MINUS are not supported inside rules. Negation breaks
-monotonic reasoning and is not supported.
+. Stardog Rule Syntax has the same expressivity of https://www.w3.org/Submission/SWRL/:[SWRL]
+which means the SPARQL features allowed in rules are limited. Specifically, a triple pattern 
+in a rule should be in one of the following forms:
++
+a) **term~1~** `rdf:type` **class-uri**
++
+b) **term~1~** **prop-uri** **term~2~** 
++
+where **class-uri** is a user-defined class and **prop-uri** is a user-defined property 
+respectively.\note{Built-in URIs such as `rdfs:subClassOf` or `owl:TransitiveProperty` are not allowed in rules}
+Only property paths allowed in rules are inverse path (`^p`), sequence path (`p1 / p2`)
+and alternative path (`p1 | p2`) as long as these paths don't violate the above 
+conditions. for example, property path `rdf:type/rdfs:label` is not valid because according to
+the https://www.w3.org/TR/sparql11-query/#propertypath-syntaxforms:[SPARQL spec] this
+would mean the object of a `rdf:type` triple pattern is a variable. 
++
+Rule body (`IF`) and only rule body may optionally contain `UNION`, `BIND` or
+`FILTER` clauses. However, functions `EXISTS`, `NOT EXISTS`, or `NOW()` cannot be
+used in rules. User-defined functions (UDF) may be used in rules but if the UDF is not
+a https://en.wikipedia.org/wiki/Pure_function:[pure function] then the results
+are undefined.
++
+Other SPARQL features are not allowed in rules.
 
 . Having the same predicate both in the rule body (`IF`) and the rule head
 (`THEN`) are supported in a limited way. Cycles are allowed only if the rule
@@ -654,12 +676,12 @@ female is an "uncle with a niece":
 [source,sparql]
 ----
 IF {
-      $x a Person; a :Male; :hasSibling $y;
-      $y :isParentOf $z;
-      $z a :Female.
+      ?x a Person; a :Male; :hasSibling ?y;
+      ?y :isParentOf ?z;
+      ?z a :Female.
 }
 THEN {
-      $x a :UncleOfNiece.
+      ?x a :UncleOfNiece.
 }
 ----
 
@@ -670,10 +692,10 @@ rule even more concisely:
 [source,sparql]
 ----
 IF {
-      $x a :Person, :Male; :hasSibling/:isParentOf [a :Female]
+      ?x a :Person, :Male; :hasSibling/:isParentOf [a :Female]
 }
 THEN {
-      $x a :UncleOfNiece.
+      ?x a :UncleOfNiece.
 }
 ----
 
