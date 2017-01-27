@@ -436,7 +436,7 @@ work; if there are conflicts, the "closest definition wins", that is, if
 database, the definition in the rule content is the one that Stardog
 will use.
 
-. Stardog Rule Syntax has the same expressivity of https://www.w3.org/Submission/SWRL/:[SWRL]
+. Stardog Rule Syntax has the same expressivity of https://www.w3.org/Submission/SWRL/[SWRL]
 which means the SPARQL features allowed in rules are limited. Specifically, a triple pattern 
 in a rule should be in one of the following forms:
 +
@@ -444,18 +444,19 @@ a) **term~1~** `rdf:type` **class-uri**
 +
 b) **term~1~** **prop-uri** **term~2~** 
 +
-where **class-uri** is a user-defined class and **prop-uri** is a user-defined property 
-respectively.\note{Built-in URIs such as `rdfs:subClassOf` or `owl:TransitiveProperty` are not allowed in rules}
+where **class-uri** is a URI referring to a user-defined class and **prop-uri** is a URI 
+referring to a user-defined property.footnote:[Built-in URIs such as `rdfs:subClassOf` or `owl:TransitiveProperty` are not allowed in rules]
++
 Only property paths allowed in rules are inverse path (`^p`), sequence path (`p1 / p2`)
-and alternative path (`p1 | p2`) as long as these paths don't violate the above 
-conditions. for example, property path `rdf:type/rdfs:label` is not valid because according to
-the https://www.w3.org/TR/sparql11-query/#propertypath-syntaxforms:[SPARQL spec] this
-would mean the object of a `rdf:type` triple pattern is a variable. 
+and alternative path (`p1 | p2`) but these paths should not violate the above 
+conditions. For example, property path `rdf:type/rdfs:label` is not valid because according to
+the https://www.w3.org/TR/sparql11-query/#propertypath-syntaxforms[SPARQL spec] this
+would mean the object of a `rdf:type` triple pattern is a variable not a user-defined class. 
 +
 Rule body (`IF`) and only rule body may optionally contain `UNION`, `BIND` or
 `FILTER` clauses. However, functions `EXISTS`, `NOT EXISTS`, or `NOW()` cannot be
 used in rules. User-defined functions (UDF) may be used in rules but if the UDF is not
-a https://en.wikipedia.org/wiki/Pure_function:[pure function] then the results
+a https://en.wikipedia.org/wiki/Pure_function[pure function] then the results
 are undefined.
 +
 Other SPARQL features are not allowed in rules.
