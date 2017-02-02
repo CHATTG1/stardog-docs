@@ -3,8 +3,8 @@
 module.exports = function(grunt) {
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
-    var theId = grunt.option("id") || "4.2.2";
-    var theDate = grunt.option("date") || "29 December 2016";
+    var theId = grunt.option("id") || "4.2.3";
+    var theDate = grunt.option("date") || "17 January 2017";
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
@@ -101,7 +101,16 @@ module.exports = function(grunt) {
                   }
               ]
           },
-        },
+      },
+      cloudfront: {
+          options: {
+              accessKeyId: "<%= aws.secret %>",
+              secretAccessKey: "<%= aws.key %>",
+              distributionId: 'E9J6BU91BD488',
+              invalidations: ["/*"],
+          },
+          all: {},
+      },
       compass: {                      
           dist: {                     
               options: {
@@ -188,7 +197,25 @@ module.exports = function(grunt) {
               nonull: true,
               cwd: 'doc/',
               src: 'icv/*',
-              dest: 'website/',
+              invalidate_cloudfront: {
+                  aws: grunt.file.readJSON("../../grunt-aws-SECRET.json"),
+                  options: {
+                      key: "<%= aws.secret %>",
+                      secret: "<%= aws.key %>",
+                      distribution: '<%= aws.cf3 %>'
+                  },
+                  index: {
+                      files: [
+                          { //nothing else ever changes
+                              expand: true,
+                              cwd: "website/",
+                              src: ["index.html", "/index.html"],
+                              dest: ''
+                          }
+                      ]
+                  },
+              },
+       dest: 'website/',
               expand: true,
           },
           icv_img: {
@@ -338,6 +365,7 @@ module.exports = function(grunt) {
         'replace:release_notes',
         'shell:release_notes',
     ]);
+    grunt.registerTask("kill", ["cloudfront:all"]);
     grunt.registerTask('pub', [
         'release_notes',
         'default',
