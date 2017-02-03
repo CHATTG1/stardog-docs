@@ -185,7 +185,7 @@ module.exports = function(grunt) {
           },
           pdf: {
               command: function() {
-                  comm = "prince website/index.html --baseurl=http://docs.stardog.com/ --javascript --media=screen -o website/stardog-manual-";
+                  comm = "prince website/index.html --baseurl=https://docs.stardog.com/ --javascript --media=screen -o website/stardog-manual-";
                   comm += theId;
                   comm += ".pdf";
                   return comm
@@ -256,7 +256,7 @@ module.exports = function(grunt) {
                app: 'Safari',
            },
            prod: {
-               path : 'http://docs.stardog.com/',
+               path : 'https://docs.stardog.com/',
                app: 'Google Chrome'
            },
       },
@@ -306,7 +306,7 @@ module.exports = function(grunt) {
               overwrite: true,
               replacements: [{
                   from: "</title>",
-                  to: "</title><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic|Anonymous+Pro:400,400italic' rel='stylesheet' type='text/css'>"
+                  to: "</title><link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,400italic|Anonymous+Pro:400,400italic' rel='stylesheet' type='text/css'>"
               },{
                   from: '<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>',
                   to: ''
