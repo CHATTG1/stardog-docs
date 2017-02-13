@@ -332,6 +332,10 @@ module.exports = function(grunt) {
                       to: "* image:a.png[Fixed,15,14]&nbsp;&nbsp; "
                   },
                   {
+                      from: "http://fonts",
+                      to:   "https://fonts"
+                  },
+                  {
                       from: "*FIX: ",
                       to: "* image:f.png[Fixed,15,15]&nbsp;&nbsp; "
                   },
