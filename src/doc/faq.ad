@@ -1,6 +1,18 @@
-== Frequently Asked Questions
+== FAQ 
 
 Some frequently asked questions for which we have answers.
+
+=== How do I report a bug? What information should I include?
+
+Question:: Something isn't working and I don't know what to do... 
+
+Answer:: A bug report seems prudent in this case; customers should use their
+dedicated support channel. Others may use the 
+https://community.stardog.com[support forum]. You should include, at a minimum:
+
+1. which release and version of Stardog you are using 4.x? 5.x? Community? Enterprise?
+1. which JVM you are using
+1. anything from `stardog.log` (in `STARDOG_HOME`) that seems relevant
 
 === Why can't I load Dbpedia (or other RDF) data?
 
