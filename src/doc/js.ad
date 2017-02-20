@@ -1,9 +1,9 @@
 = Javascript Programming
 
-The http://complexible.github.io/stardog.js/docs/stardog.html[documentation] for
+The http://stardog-union.github.io/stardog.js/docs/stardog.html[documentation] for
 stardog.js is available at the
-http://complexible.github.io/stardog.js/[stardog.js] site; source code is
-available on https://github.com/complexible/stardog.js[Github] and
+http://stardog-union.github.io/stardog.js/[stardog.js] site; source code is
+available on https://github.com/stardog-union/stardog.js[Github] and
 https://npmjs.org/package/stardog[npm].
 
 == stardog.js
