@@ -220,7 +220,13 @@ securing the data stored in ZooKeeper and for intra-cluster communication. Each 
 should be started with the same superuser credentials. By default, Stardog comes with
 a superuser `admin` that has password `"admin"` and that is the default credentials
 used by the above command. For a secure installation of Stardog cluster you should
-change these credentials and restart the cluster with new credentials.
+change these credentials by specifying the `pack.zookeeper.auth` setting in
+stardog.properties and restart the cluster with new credentials:
++
+[source,bash]
+----
+pack.zookeeper.auth=username:password
+----
 +
 And again, if your `$STARDOG_HOME` is set to `~/stardog`, you don't need to specify
 the `--home` option.
