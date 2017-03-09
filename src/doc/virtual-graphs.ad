@@ -173,7 +173,7 @@ It is also possible to specify a target named graph by using the
 	
 [source,bash]
 ----
-$ stardog-admin virtual import -g http://example.com/targetGraph dept.properties dept.ttl
+$ stardog-admin virtual import -g http://example.com/targetGraph myDb dept.properties dept.ttl
 ----
 
 This `virtual import` command is equivalent to the following SPARQL update query:
