@@ -1,8 +1,6 @@
 Stardog Documentation
 =====================
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/clarkparsia/stardog-docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 We write Stardog docs in Asciidoc. We build with a combination of
 Grunt and some Ruby stuffs.
 
