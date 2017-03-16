@@ -58,6 +58,11 @@ ul.sectlevel0 {
     }
 }
 
+.etp p {
+    float: right;
+    margin-top: -55px;
+}
+
 #toctitle {
     @include cell {
         display:none;
