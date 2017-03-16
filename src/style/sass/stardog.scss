@@ -50,12 +50,12 @@ ul.sectlevel0 {
     color: $sd-med-blue;
     font-weight: 300;
     font-size: 56px;
+    border-bottom: 1px solid $sd-med-blue;
 
     @include cell {
         text-transform: uppercase;
         font-weight: 200;
     }
-   
 }
 
 #toctitle {
