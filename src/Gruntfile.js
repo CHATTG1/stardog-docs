@@ -322,6 +322,21 @@ module.exports = function(grunt) {
                   to: '<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>\n<script>hljs.initHighlightingOnLoad()</script>\n</body>'
               }]
           },
+          mixed: {
+              src: ["website/release-notes/index.html"],
+              //dest: ["website/release-notes/index.html"],
+              overwrite: true,
+              replacements: [
+                  {
+                      from: "http://fonts",
+                      to:   "https://fonts"
+                  },
+                  {
+                      from: "url(http://fonts.googleapis.com/",
+                      to: "url(http://fonts.googleapis.com/"
+                  },
+              ]
+          },
           release_notes: {
               src: ['release-notes/_index.ad'],
               dest: ['release-notes/index.ad'],
@@ -330,10 +345,6 @@ module.exports = function(grunt) {
                   {
                       from: "*ADD: ",
                       to: "* image:a.png[Fixed,15,14]&nbsp;&nbsp; "
-                  },
-                  {
-                      from: "http://fonts",
-                      to:   "https://fonts"
                   },
                   {
                       from: "*FIX: ",
@@ -367,6 +378,7 @@ module.exports = function(grunt) {
     grunt.registerTask("release_notes", [
         'clean:release_notes',
         'replace:release_notes',
+        'replace:mixed',
         'shell:release_notes',
     ]);
     grunt.registerTask("kill", ["cloudfront:all"]);
