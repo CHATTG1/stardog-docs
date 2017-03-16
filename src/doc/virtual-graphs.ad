@@ -1,4 +1,9 @@
 == Structured Data, aka Virtual Graphs
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/virtual-graphs.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 Stardog supports a set of techniques for unifing *structured enterprise data*,
 chiefly, *Virtual Graphs*: tabular data declaratively mapped into a Stardog

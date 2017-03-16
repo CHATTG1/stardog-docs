@@ -1,4 +1,9 @@
 == Using Maven
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/maven.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 As of Stardog 3.0, we support Maven for both client and server
 JARs. The following table summarizes the type of dependencies that you

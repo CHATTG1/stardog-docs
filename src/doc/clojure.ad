@@ -1,4 +1,9 @@
 = Clojure Programming
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/clojure.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 The stardog-clj http://github.com/complexible/stardog-clj[source code]
 is available as Apache 2.0 licensed code.

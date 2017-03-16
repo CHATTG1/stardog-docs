@@ -1,4 +1,9 @@
 = Full-Text Search
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/search.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 Stardog's builtin full-text search system indexes data stored in Stardog for
 information retrieval queries.

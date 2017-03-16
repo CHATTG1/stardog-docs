@@ -1,4 +1,9 @@
 = .Net Programming
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/dotnet.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 In the <<Network Programming>> section, we looked at
 how to interact with Stardog over a network via HTTP and SNARL

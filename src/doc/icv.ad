@@ -1,4 +1,9 @@
 = Validating Constraints
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/icv.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 Stardog Integrity Constraint Validation ("ICV") validates RDF data stored in a
 Stardog database according to data rules (i.e., "constraints") described by

@@ -1,4 +1,9 @@
 = High Availability Cluster
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/cluster.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 In this section we explain how to configure, use, and administer Stardog Cluster
 for uninterrupted operations. Stardog Cluster is a collection of Stardog Server

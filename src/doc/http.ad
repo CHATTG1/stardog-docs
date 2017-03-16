@@ -1,4 +1,9 @@
 = Network Programming
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/http.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 In the <<Java Programming>> section, we consider interacting with Stardog
 programmatically from a Java program. In this section we consider interacting

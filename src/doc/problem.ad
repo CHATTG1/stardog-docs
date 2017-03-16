@@ -1,4 +1,9 @@
 = What Problem Does Stardog Solve? 
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/problem.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 Stardog is an enterprise data unification platform built on smart graph
 technology. But what does that *really mean*? Enterprises have lots of data and

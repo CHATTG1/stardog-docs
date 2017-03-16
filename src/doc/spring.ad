@@ -1,4 +1,10 @@
 = Spring Programming
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/spring.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
+
 
 The Spring for Stardog http://github.com/complexible/stardog-spring[source
 code] is available on Github. Binary releases are available on the

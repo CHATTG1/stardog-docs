@@ -10,11 +10,11 @@
 :source-highlighter: highlightjs
 :page-layout: base
 :page-javascripts: [view-result]
-:description: Stardog is a fast, lightweight graph database that supports SPARQL, RDF, OWL, property graphs, Gremlin, virtual graphs, and user-defined rules.
+:description: Stardog is the world's leading Enterprise Knowledge Graph. 
 :compat-mode!:
 :last-update-label!:
 :doctype: book
-:docinfo:
+:docinfo: private 
 :table-caption:
 :example-caption:
 :figure-caption:
@@ -84,8 +84,6 @@ include::migration.ad[]
 
 include::understand.ad[]
 
-include::faq.ad[]
-
 include::bench.ad[]
 
 include::compatibility.ad[]
@@ -95,4 +93,3 @@ include::known-issues.ad[]
 include::glossary.ad[]
 
 include::appendix-a.ad[]
-

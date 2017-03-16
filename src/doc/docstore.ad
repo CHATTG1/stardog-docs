@@ -1,4 +1,9 @@
 == Unstructured Data 
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/docstore.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 Unifying unstructured data is, by necessity, a different process from unifying
 structured or semistructured data. As of 4.2, Stardog includes a document

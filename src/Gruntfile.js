@@ -301,7 +301,7 @@ module.exports = function(grunt) {
           }
       },
       replace: {
-          main: {
+            main: {
               src: ['website/index.html'],
               overwrite: true,
               replacements: [{

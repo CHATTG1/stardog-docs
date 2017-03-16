@@ -1,4 +1,9 @@
 == Compatibility Policies
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/compatibility.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 The Stardog 4.x release ("Stardog" for short) is a major milestone in
 the development of the system. Stardog is a stable platform for the

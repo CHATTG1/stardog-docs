@@ -1,4 +1,9 @@
 = Enterprise Data Unification 
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/unifying.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 Stardog is an enterprise data unification platform built on smart graph
 technology. Enterprises have lots of data and lots of data sources and almost

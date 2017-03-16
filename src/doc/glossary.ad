@@ -1,5 +1,10 @@
 [glossary]
 == Glossary
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/glossary.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
 
 In the Stardog documentation, the following terms have a specific
 technical meaning.
