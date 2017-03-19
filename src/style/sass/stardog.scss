@@ -1,7 +1,7 @@
 @import "settings/stardog";
 @import "components/asciidoc";
 
-// Your custom SCSS should be written here...
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700|Source+Sans+Pro:200,300,400,400i,600,900');
 
 html * {
    @include box-sizing(border-box);
@@ -14,6 +14,10 @@ body {
    color: $body-font-color;
    position: relative;
    -webkit-font-smoothing: $font-smoothing;
+   font-variant-numeric: tabular-nums;
+   -moz-font-feature-settings: "tnum";
+   -webkit-font-feature-settings: "tnum";
+   font-feature-settings: "tnum";
 }
 
 html, body {
@@ -26,9 +30,9 @@ html, body {
 
 div#toctitle {
     position: fixed;
-    color: $sd-red;
+    color: #f04e11;
     z-index: 10;
-    font-weight: 500;
+    font-weight: 400;
     background: rgba(248,248,247,.9);
     margin-bottom: 20px;
 } 
@@ -46,21 +50,31 @@ ul.sectlevel0 {
     margin-top: 2.5em;
 }
 
+#content h1.sect0>a.link {
+    color: $sd-lime;
+}
+
 .sect0 {
-    color: $sd-med-blue;
-    font-weight: 300;
-    font-size: 56px;
-    border-bottom: 1px solid $sd-med-blue;
+    //color: $sd-med-blue;
+    color: $sd-lime;
+    font-weight: 200;
+    font-size: 72px;
 
     @include cell {
         text-transform: uppercase;
         font-weight: 200;
+        font-size: 32px;
     }
 }
 
 .etp p {
-    float: right;
-    margin-top: -55px;
+    float: left;
+    border: $sd-med-blue 1px solid;
+    padding: 3px;
+    margin-top: -20px;
+    a {
+        color: $sd-med-blue;
+    }
 }
 
 #toctitle {
@@ -69,10 +83,12 @@ ul.sectlevel0 {
     }
 }
 
+//title
 #header > h1:first-child {
-    color: $sd-lime;
-    font-size: 100px;
-    font-weight: 200;
+    color: $sd-orange;
+    font-size: 124pt;
+    font-weight: 900;
+    margin-left: 0;
 
     @include tablet {
         font-size: 52px;
@@ -87,7 +103,19 @@ ul.sectlevel0 {
 }
 
 #header .details {
-    display: none;
+    border: none;
+    #author {
+        //color: $sd-orange;
+        font-size: 64pt;
+        font-weight: 300;
+        text-transform: uppercase;
+        color: #f04e11;
+        padding-left: 0;
+        margin-left: 0;
+    }
+    #revnumber {
+        display: none;
+    }
 }
 
 ul.checklist {

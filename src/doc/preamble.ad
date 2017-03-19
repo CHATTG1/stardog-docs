@@ -4,12 +4,16 @@ Stardog is an Enterprise Knowledge Graph platform. Stardog's semantic graphs,
 data modeling, and deep reasoning make it fast and easy to turn data into
 knowledge without writing code.
 
-.What's New in Stardog 4.2
+.What's New in Stardog 5
 ****
-- [x] <<Unstructured Data, Unstructured Data Unification>>
-- [x] <<Managing Stored Queries, Stored Queries>>
-- [x] Cluster Stability Improvements
-- [x] Performance of Aggregate Queries
+- [x] <<Graviton, Push Button Cloud Deployment>>
+- [x] Query, Geospatial, & Search Performance
+- [x] Pauseless, Native Memory Management
+- [x] <<VEGA, Next-gen Virtual Graph Engine>>
+- [x] Query Hints
+- [x] HA Cluster Improvements
+- [x] Pivotal Cloud Foundry Support
+- [x] Tableau Web Data Connector
 ****
 
 Check out the <<Quick Start Guide>> to get Stardog installed and running in five easy steps.
@@ -27,7 +31,7 @@ control; http://www.w3.org/TR/owl2-overview/[OWL 2] and user-defined rules for
 inference and data analytics; virtual graphs; geospatial query answering; and
 programmatic interaction via several languages and network interfaces.
 
-Stardog is made with skill, taste, and a point of view in DC, Boston,
+Stardog is made by hand with skill, taste, and a point of view in DC, Boston,
 Heidelberg, Madison, Moscow, Hanalei, Houston, South Dakota, Porto, 
 Manchester, PA, Columbia, MO, and Pittsburgh. 🌟🐶
 

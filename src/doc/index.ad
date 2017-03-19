@@ -1,5 +1,7 @@
 = {title}
-:title: Stardog 4: The Manual
+:author: The Manual
+:title: Stardog 5 
+//:author: The Manual
 :maven: true
 :revnumber: {version}
 :tp3-version: 3.0.2-incubating
@@ -23,7 +25,6 @@
 :linkattrs:
 :base-url: http://docs.stardog.com/
 :release-notes: {base-url}release-notes/
-//:cache-uri:
 :sectlinks:
 
 include::preamble.ad[]
