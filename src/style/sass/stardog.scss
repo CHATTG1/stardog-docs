@@ -24,8 +24,10 @@ html, body {
    font-family: $body-font-family;
    height: 100%;
 }
+
 .sidebarblock>.content>.title {
     text-align: left;
+    font-size: 48px;
 }
 
 div#toctitle {
@@ -35,7 +37,7 @@ div#toctitle {
     font-weight: 400;
     background: rgba(248,248,247,.9);
     margin-bottom: 20px;
-} 
+}
 
 ul.sectlevel0 {
     margin-top: 40px;
