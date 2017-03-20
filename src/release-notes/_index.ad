@@ -18,7 +18,21 @@
 :cache-uri:
 :sectlinks:
 
-image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system &nbsp; &nbsp; image:f.png[] Fixed bug
+image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system
+&nbsp; &nbsp; image:f.png[] Fixed bug &nbsp; &nbsp; image:s.png[] Security vulernability
+
+== 4.2.4 Release
+[none]
+*SEC: Fixed privilege escalation in HA Cluster; *affected version*: Stardog 4.2.3
+ (*SD-SEC-HA1*)
+
+WARNING: As discovered by Martin Hostettler and Fabian Cretton, Stardog cluster
+has a privilege escalation vulnerability fixed in 4.2.4. User and role
+permissions propagate correctly, but whenever any user attempted to run any
+command on the cluster with valid credentials, they were auth'd as a superuser.
+So given any valid credentials, once auth'd you could do anything. Single
+servers are not affected by vulnerability.
+
 
 == 4.2.3 Release
 [none]
