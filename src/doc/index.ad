@@ -29,8 +29,6 @@
 
 include::preamble.ad[]
 
-//include::problem.ad[]
-
 include::premium-support.ad[]
 
 include::qsg.ad[]
@@ -39,13 +37,11 @@ include::using.ad[]
 
 include::admin.ad[]
 
-//include::security.ad[]
+include::unifying.ad[]
 
 include::cluster.ad[]
 
 include::cluster-management.ad[]
-
-//include::docker.ad[]
 
 include::search.ad[]
 
@@ -53,15 +49,9 @@ include::owl2.ad[]
 
 include::icv.ad[]
 
-include::unifying.ad[]
-
-include::virtual-graphs.ad[]
-
-include::docstore.ad[]
+include::geospatial.ad[]
 
 include::property-graph.ad[]
-
-include::geospatial.ad[]
 
 include::security.ad[]
 
