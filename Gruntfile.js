@@ -325,7 +325,7 @@ module.exports = function(grunt) {
 								                   'postcss',
                                    'cssmin',
                                    'embed',
-                                   'inline',
+//                                   'inline',
                                    'clean:css',
                                   ]);
     grunt.registerTask("release_notes", [
