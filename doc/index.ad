@@ -1,0 +1,86 @@
+= {title}
+:author: The Manual
+:title: Stardog 5 
+//:author: The Manual
+:maven: true
+:revnumber: {version}
+:tp3-version: 3.0.2-incubating
+:toc: right 
+:toc-title: {version}—{release-date}
+:toclevels: 1 
+:experimental:
+:source-highlighter: highlightjs
+:page-layout: base
+:page-javascripts: [view-result]
+:description: Stardog is the world's leading Enterprise Knowledge Graph. 
+:compat-mode!:
+:last-update-label!:
+:doctype: book
+:docinfo: private 
+:table-caption:
+:example-caption:
+:figure-caption:
+:idprefix!:
+:imagesdir: img
+:linkattrs:
+:base-url: http://docs.stardog.com/
+:release-notes: {base-url}release-notes/
+:sectlinks:
+
+include::preamble.ad[]
+
+include::premium-support.ad[]
+
+include::qsg.ad[]
+
+include::using.ad[]
+
+include::admin.ad[]
+
+include::unifying.ad[]
+
+include::cluster.ad[]
+
+include::cluster-management.ad[]
+
+include::search.ad[]
+
+include::owl2.ad[]
+
+include::icv.ad[]
+
+include::geospatial.ad[]
+
+include::property-graph.ad[]
+
+include::security.ad[]
+
+include::programming.ad[]
+
+include::java.ad[]
+
+include::http.ad[]
+
+include::js.ad[]
+
+include::clojure.ad[]
+
+include::dotnet.ad[]
+
+include::spring.ad[]
+
+include::groovy.ad[]
+
+include::migration.ad[]
+
+include::understand.ad[]
+
+include::bench.ad[]
+
+include::compatibility.ad[]
+
+include::known-issues.ad[]
+
+include::glossary.ad[]
+
+include::appendix-a.ad[]

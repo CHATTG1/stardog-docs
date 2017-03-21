@@ -37,3 +37,5 @@ src/website-gzipd/
 src/release-notes/index.ad
 src/website-gzipd/release-notes/index.html
 website/release-notes/index.html
+website
+.sass-cache/
