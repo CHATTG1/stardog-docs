@@ -98,7 +98,7 @@ module.exports = function(grunt) {
                   expand: true,
                   cwd: 'doc/img',
                   src: ['*.png', '*.jpg'],
-                  dest: 'doc/optimized-img/'
+                  dest: 'doc/img/'
               }]
           }
       },
@@ -142,7 +142,6 @@ module.exports = function(grunt) {
               }
           }
       },
-      //the fuck is this?
       copy: {
           main: {
               nonull: true,
