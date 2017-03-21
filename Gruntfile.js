@@ -117,7 +117,7 @@ module.exports = function(grunt) {
                   comm += " -a linkcss"
                   comm += " -a stylesheet=stardog.css"; //make an arg?
                   comm += " doc/index.ad";
-                  comm += " -a data-uri"
+                 // comm += " -a data-uri"
                   comm += " -o website/index.html 2> /dev/null"
                   //console.log(comm);
                   return comm
@@ -126,7 +126,7 @@ module.exports = function(grunt) {
           release_notes: {
               command: function () {
                   comm = "asciidoctor ";
-                  comm += "-a allow-uri-read -a embedcss -a stylesheet='../doc/stardog.css' release-notes/index.ad -a data-uri "
+                  comm += "-a allow-uri-read -a embedcss -a data-uri -a stylesheet='../doc/stardog.css' release-notes/index.ad -a data-uri "
                   comm += "-o website/release-notes/index.html"
                   //console.log(comm);
                   return comm
@@ -338,9 +338,6 @@ module.exports = function(grunt) {
     grunt.registerTask('pub', [
         'release_notes',
         'default',
-        'shell:pdf',
-        'compress',
-        'aws_s3:gzipd',
     ]);
     grunt.registerTask("stage", [
         'release_notes',

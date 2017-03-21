@@ -1,9 +1,8 @@
 include::header-logo.ad[]
 
-Stardog is the world's leading Enterprise Knowledge Graph platform.
+Stardog is the world's leading *Enterprise Knowledge Graph*.
 
-Semantic graphs, data modeling, and deep reasoning make it fast and easy to turn
-enterprise data into knowledge.
+Stardog makes it fast and easy to turn enterprise data into knowledge.
 
 .What's New in Stardog 5
 ****
