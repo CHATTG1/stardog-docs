@@ -166,10 +166,17 @@ module.exports = function(grunt) {
           },
           icv_img: {
               nonull: true,
-              cwd: 'doc/optimized-img',
+              cwd: 'doc/img',
               src: 'ClassDiagram.png',
               dest: 'website/icv/',
               expand: true
+          },
+          images: {
+            nonull: true,
+            cwd: 'doc/img',
+            src: '*',
+            dest: 'website/img/',
+            expand: true
           },
           css: {
               nonull:true,
@@ -317,23 +324,25 @@ module.exports = function(grunt) {
                                    'compass',
                                    'shell:build',
                                    'replace',
-                                   'htmlmin',
+                                  // 'htmlmin',
                                    'copy:icv_img',
                                    'copy:main',
                                    'copy:css',
-								                   'postcss',
+                                   'copy:images',
+			                             'postcss',
                                    'cssmin',
                                    //'embed',
 //                                   'inline',
                                    //'clean:css',
                                   ]);
     grunt.registerTask("release_notes", [
-        'clean:release_notes',
+//        'clean:release_notes',
         'replace:release_notes',
         'replace:mixed',
         'shell:release_notes',
     ]);
     grunt.registerTask("kill", ["cloudfront:all"]);
+    grunt.registerTask("local", ["clean"]);
     grunt.registerTask('pub', [
         'release_notes',
         'default',
