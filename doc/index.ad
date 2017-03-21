@@ -21,7 +21,7 @@
 :example-caption:
 :figure-caption:
 :idprefix!:
-:imagesdir: optimized-img/
+:imagesdir: img
 :linkattrs:
 :base-url: http://docs.stardog.com/
 :release-notes: {base-url}release-notes/
