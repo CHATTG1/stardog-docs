@@ -343,6 +343,10 @@ module.exports = function(grunt) {
               overwrite: false,
               replacements: [
                   {
+                      from: "*SEC: ",
+                      to: "* image:s.png[Security,15,15]&nbsp;&nbsp; "
+                  } ,
+                  {
                       from: "*ADD: ",
                       to: "* image:a.png[Fixed,15,14]&nbsp;&nbsp; "
                   },
