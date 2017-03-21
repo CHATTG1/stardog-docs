@@ -1,0 +1,190 @@
+== FAQ 
+
+Some frequently asked questions for which we have answers.
+
+=== How do I report a bug? What information should I include?
+
+Question:: Something isn't working and I don't know what to do... 
+
+Answer:: A bug report seems prudent in this case; customers should use their
+dedicated support channel. Others may use the 
+https://community.stardog.com[support forum]. You should include, at a minimum:
+
+1. which release and version of Stardog you are using 4.x? 5.x? Community? Enterprise?
+1. which JVM you are using
+1. anything from `stardog.log` (in `STARDOG_HOME`) that seems relevant
+
+=== Why can't I load Dbpedia (or other RDF) data?
+
+Question:: I get a parsing error when loading Dbpedia or some other RDF. What can I do?
+
+Answer:: First, it's not a bad thing to expect data providers to publish valid data. Second, it is, apparently, a very naive thing to expect data providers to publish valid data...
++
+Stardog supports a loose parsing mode which will ignore certain kinds of data invalidity and may allow you to load invalid data. See `strict.parsing` in <<Configuration Options>>.
+
+=== Why doesn't search work?
+
+Question:: I created a database but search doesn't work.
+
+Answer:: Search is disabled by default; you can enable it at database creation
+time, or at any subsequent time, using the Web Console or by using
+link:/man/metadata-set.html[`metadata set`] CLI. It can be enabled using link:/man/db-create.html[`db
+create`] too.
+
+=== Why don't my queries work?!
+
+Question:: I've got some named graphs and blah blah my queries don't work blah blah.
+
+Answer::
+
+Queries with FROM NAMED with a named graph that is not **in** Stardog will not cause
+Stardog to download the data from an arbitrary HTTP URL and include it in the
+query. _Stardog will only evaluate queries over data that has been loaded into
+it_.
++
+SPARQL queries without a context or named graph are executed against **the
+default, unnamed graph**. In Stardog, **the default graph is not the union of all
+the named graphs and the default graph**. This behavior is configurable via
+the `query.all.graphs` configuration parameter.
+
+=== Why is Stardog Cluster acting weird or running slowly?
+
+Question:: Should I put Stardog HA and Zookeeper on the same hard drives?
+
+Answer:: Never never never do this. Zookeeper is a very disk-chatty system and displays bad IO contention with Stardog query evaluation. Running both Zk and Stardog on the same disks will result in bad performance and, in some cases, intermittent failures.
+
+=== SPARQL 1.1
+
+Question:: Does Stardog support SPARQL 1.1?
+
+Answer:: Yes.
+
+=== Deadlocks and Slowdowns
+
+Question:: Stardog slows down or deadlocks?! I don't understand why,
+I'm just trying to send some queries and do something with the
+results...in a tight inner loop of doom!
+
+Answer:: Make sure you are closing result sets (`TupleQueryResult`
+and `GraphQueryResult`; or the Jena equivalents) when you are done with
+them. These hold open resources both on the client and on the server and
+failing to close them when you are done will cause files, streams,
+lions, tigers, and bears to be held open. If you do that enough, then
+you'll eventually exhaust all of the resources in their respective
+pools, which can cause slowness or, in some cases, deadlocks waiting for
+resources to be returned.
++
+Similarly close your connections when you are done with them. Failing to
+close `Connections`, `Iterations`, `QueryResults`, and other *closeable*
+objects will lead to undesirable behavior.
+
+=== Bulk Update Performance
+
+Question:: I'm adding one triple at a time, in a tight loop, to
+Stardog; is this the ideal strategy with respect to performance?
+
+Question:: I'm adding millions of triples to Stardog and I'm
+wondering if that's the best approach?
+
+Answer:: The answer to both questions is "not really"...Generally overall update
+performance is best if you write between 1k and 100k triples at a time. You may
+need to experiment to find the sweet spot with respect to your data, database
+size, the size of the differential index, and update frequency.
+
+=== Public Endpoint
+
+Question:: I want to use Stardog to serve a public SPARQL endpoint;
+is there some way I can do this without publishing user account
+information?
+
+Answer:: We don't necessarily recommend this, but it's possible.
+Simply pass `--disable-security` to `stardog-admin` when you start the
+Stardog Server.  This *completely* disables security in Stardog which
+will let users access the SPARQL endpoint, and all other functionality,
+without needing authorization.
+
+=== Remote Bulk Loading
+
+Question:: I'm trying to create a database and bulk load files from
+my machine to the server and it's not working, the files don't seem to
+load, what gives?
+
+Answer:: Stardog does not transfer files during database creation to
+the server, sending big files over a network kind of defeats the purpose
+of blazing fast bulk loading. If you want to bulk load files from your
+machine to a remote server, copy them to the server and bulk load them.
+
+=== Canonicalized Literals
+
+Question:: Why doesn't my literal look the same as I when I added it to Stardog?
+
+Answer:: Stardog performs
+http://docs.stardog.com/java/snarl/com/complexible/stardog/index/IndexOptions.html#CANONICAL_LITERALS[literal
+canonicalization] by default. This can be turned off by setting
+`index.literals.canonical` to `false`. See <<Configuration Options>> for the details.
+
+=== Cluster Isn't Working
+
+Question:: I've setup Stardog Cluster, but it isn't working and I have
+`NoRouteToHostException` exceptions all over my Zookeeper log.
+
+Answer:: Typically--but especially on Red Hat Linux and its
+variants--this means that `iptables` is blocking one, some, or all of
+the ports that the Cluster is trying to use. You can disable
+`iptables` or, better yet, configure it to unblock the ports Cluster
+is using.
+
+=== Client Connection Isn't Working
+
+Question:: I'm getting a `ServiceConfigurationError` saying that `SNARLDriver` could not
+be instantiated.
+
+Answer:: Make sure that your classpath includes all Stardog JARs and that the
+user executing your code has access to them.
+
+=== Logging
+
+Question:: Why doesn't Stardog implement our (byzantine and proprietary!)
+corporate logging scheme?
+
+Answer:: Stardog 4 will log to `$STARDOG_HOME/stardog.log` by
+<<Logging,default>>, but you can use a log4j 2 config file in `$STARDOG_HOME` so
+that Stardog will log wherever & however you want.
+
+=== Loading Compressed Data
+
+Question:: How can I load data from a compressed format that Stardog doesn't
+support without decompressing the file?
+
+Answer:: Stardog supports several compression formats by default (zip, gzip,
+bzip2) so files compressed with those formats can be passed as input directly
+without decompression. Files compressed with other formats can also be loaded to
+Stardog by decompressing them on-the-fly using
+http://en.wikipedia.org/wiki/Named_pipe[named pipes] in Unix-like systems. The
+following example shows using a named pipe where the decompressed data is sent
+directly to Stardog without being writing to disk.
+
+[source,bash]
+----
+$ mkfifo some-data.rdf 
+$ xz -dc some-data.rdf.xz > some-data.rdf &
+$ stardog-admin db create -n test some-data.rdf
+----
+
+=== SNARL Protocol
+
+Question:: I'm using Stardog and I'm seeing messages about SNARL deprecation, what's that about?
+
+Answer:: As of Stardog 4.2, the SNARL protocol is no longer the default protocol for Stardog and 
+is deprecated. Support for the SNARL protocol will be removed in the Stardog 5 release. The HTTP
+protocol is now the default protocol and is recommended for all users. If you're seeing the 
+deprecation warnings it's because you're explicitly using the SNARL protocol somewhere in your 
+application.
+
+All you have to do to migrate these usages is change `snarl`/`snarls` to `http`/`https` and 
+you're done. You can no longer disable support for HTTP when starting the server; the `--no-http`
+option does noting, and the SNARL protocol is not enabled by default anymore and has to be
+explicitly enabled by using `--snarl`.
+
+Please note, the SNARL _protocol_ has been deprecated. The SNARL API is still supported and the 
+recommended Java API for Stardog.

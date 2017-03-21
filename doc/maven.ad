@@ -1,0 +1,137 @@
+== Using Maven
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/maven.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
+
+As of Stardog 3.0, we support Maven for both client and server
+JARs. The following table summarizes the type of dependencies that you
+will have to include in your project, depending on whether the project
+is a Stardog client, or server, or both. Additionally, you can also
+include the Jena or Sesame bindings if you would like to use them in
+your project. The Stardog dependency list below follows the
+http://www.gradle.org[Gradle] convention and is of the form:
+`groupId:artifactId:VERSION`. Versions 3.0 and higher are supported.
+
+.Table of client type dependencies
+|===
+|*Type*                       | *Stardog Dependency*                            | *Type*
+|snarl client                 | `com.complexible.stardog:client-snarl:VERSION`  | `pom`
+|http client                  | `com.complexible.stardog:client-http:VERSION`   | `pom`
+|server                       | `com.complexible.stardog:server:VERSION`        | `pom`
+|sesame                       | `com.complexible.stardog.sesame:stardog-sesame-core:VERSION` | `jar`
+|jena                         | `com.complexible.stardog.jena:stardog-jena:VERSION`          | `jar`
+|gremlin                      | `com.complexible.stardog.gremlin:stardog-gremlin:VERSION`    | `jar`
+|===
+
+You can see an example of their usage in our examples
+https://github.com/complexible/stardog-examples/blob/628cf3dab2/examples/api/build.gradle#L3-L14[repository
+on Github].
+
+WARNING: If you're using Maven as your build tool, then `client-snarl`,
+`client-http`, and `server` dependencies require that you specify the packaging
+type **as POM** (`pom`):
+
+[source, xml]
+----
+<dependency>
+  <groupId>com.complexible.stardog</groupId>
+  <artifactId>client-snarl</artifactId>
+  <version>$VERSION</version>
+  <type>pom</type> <1> 
+</dependency>
+----
+<1> **The dependency type must be set to `pom`.**
+
+Note: Though Gradle may still work without doing this, it is still best practice to specify the dependency type there as well:
+----
+compile "com.complexible.stardog:client-snarl:${VERSION}@pom"
+----
+
+=== Public Maven Repo
+
+The public Maven repository for the current Stardog release is
+http://maven.stardog.com. To get started, you need to add the
+following endpoint to your preferred build system, e.g. in your Gradle
+build script:
+
+[source, groovy]
+----
+repositories {
+  maven {
+    url "http://maven.stardog.com"
+  }
+}
+----
+
+Similarly, if you're using Maven you'll need to add the following
+to your Maven `pom.xml`:
+
+[source, xml]
+----
+<repositories>
+   <repository>
+     <id>stardog-public</id>
+     <url>http://maven.stardog.com</url>
+   </repository>
+</repositories>
+----
+
+=== Private Maven Repo
+
+include::customer-feature-only.ad[]
+
+For access to nightly builds, priority bug fixes, priority feature
+access, hot fixes, etc. Enterprise Premium Support customers have
+access to their own private Maven repository that is linked to our
+internal development repository. We provide a private repository which
+you can either proxy from your preferred Maven repository
+manager--e.g. Artifactory or Nexus--or add the private
+endpoint to your build script.
+
+=== Connecting to Your Private Maven Repo
+
+Similar to our public Maven repo, we will provide you with a private
+URL and credentials to your private repo, which you will refer to in
+your Gradle build script like this:
+
+[source, groovy]
+----
+repositories {
+  maven {
+    url $yourPrivateUrl
+       credentials {
+          username $yourUsername
+          password $yourPassword
+        }
+    }
+}
+----
+
+Or if you're using Maven, add the following to your `pom.xml`:
+
+[source,xml]
+----
+<repositories>
+   <repository>
+      <id>stardog-private</id>
+      <url>$yourPrivateUrl</url>
+   </repository>
+</repositories>
+----
+
+Then in your `~./m2/settings.xml` add:
+
+[source,xml]
+----
+<settings>
+  <servers>
+    <server>
+      <id>stardog-private</id>
+      <username>$yourUsername</username>
+      <password>$yourPassword</password>
+    </server>
+  </servers>
+</settings>
+----

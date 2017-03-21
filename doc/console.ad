@@ -1,0 +1,33 @@
+== Browsing
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/console.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
+
+The Stardog Web Console is a responsive web app for the Stardog Server and for
+every Stardog database that makes administration and interaction with data quick
+and easy; you can access it at `http://foo:5820` where `foo` is the name of the
+machine where Stardog is running.
+
+=== A Screenshot Tour...
+
+Seriously, this is a lot more fun if you just http://stardog.com/[download]
+the damn thing and hit it with a browser!
+
+==== Web Console
+
+image::webconsole_main.png[Main,1388,1296]
+
+==== Browsing the Graph
+
+image::webconsole_browse.png[Browsing,1388,1380]
+
+==== Managing a Database
+
+image:webconsole_db.png[Managing,1388,1296]
+
+==== Searching the Graph
+
+image:webconsole_search.png[Searching,1388,1296]
+

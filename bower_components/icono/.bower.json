@@ -1,0 +1,14 @@
+{
+  "name": "icono",
+  "homepage": "https://github.com/saeedalipoor/icono",
+  "_release": "b3c003bcac",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "b3c003bcac27f26048840d11f1993e9097957299"
+  },
+  "_source": "https://github.com/saeedalipoor/icono.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/saeedalipoor/icono.git",
+  "_direct": true
+}

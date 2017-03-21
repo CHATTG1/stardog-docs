@@ -1,0 +1,108 @@
+= Geospatial Query
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/geospatial.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
+
+Stardog supports geospatial queries over data encoded using
+http://www.w3.org/2003/01/geo/[WGS 84] or the
+http://www.opengeospatial.org/standards/geosparql[OGC's GeoSPARQL vocabulary].
+Any RDF data stored in Stardog using one or both of these vocabularies will be
+automatically indexed for geospatial queries.
+
+== Enabling Geospatial Support
+
+To get started using Stardog's geospatial support, you'll need to create a
+database with geospatial support enabled. You can do this by setting the option
+`spatial.enabled` to `true`:
+
+```bash
+stardog-admin db create -o spatial.enabled=true -n mySpatialDb
+```
+
+Similarly, you can set the option using `GeospatialOptions#SPATIAL_ENABLED` when
+creating the database programmatically:
+
+```java
+aAdminConnection.disk("mySpatialDb")
+				.set(GeospatialOptions.SPATIAL_ENABLED, true)
+				.create()
+```
+
+=== Precision & Accuracy 
+
+When creating a database with geospatial support, you can specify the precision
+with which the features are indexed. The database property `spatial.precision`
+or programmatically via `GeospatialOptions#SPATIAL_PRECISION`, which can only be
+specified when the database is created, can control the index precision. The
+default value is `11` which yields sub-meter precision; a value of `8` will give
+a precision +/- 50m. Setting the precision value lower than the default can
+*improve the performance of spatial queries at the cost of accuracy*.
+
+== Geospatial Data
+
+The WGS84 or OGC vocabularies can be used to encode geospatial features within
+your dataset. When data is committed, Stardog will look for these vocabularies
+and automatically extract all features and insert them into the geospatial index.
+Here is an example of using WKT to define the location of the White House:
+
+```ttl
+:whiteHouse a geo:Feature ;
+    rdfs:label "White House";
+    geo:hasGeometry [
+        a geo:Geometry ;
+        geo:asWKT "Point(-77.03653 38.897676 )"^^geo:wktLiteral
+    ] .
+```
+
+Note that for WKT formatted points, the location is `<long, lat>`. The location
+of the White House can also be encoded using the WGS 84 vocabulary:
+
+```ttl
+:whiteHouse a :Location ;
+    rdfs:label "White House" ;
+    wgs:lat "38.897676"^^xsd:float ;
+    wgs:long "-77.03653"^^xsd:float .
+```
+
+== SPARQL Integration
+
+Once your data has been indexed, you can perform several type of geospatial queries 
+on the data. These are seamlessly integrated into SPARQL so you can query for
+non-spatial information about features in your dataset alongside the geospatial
+queries.
+
+The operators supported by Stardog are `geof:relate`, `geof:distance`,
+`geof:within`, `geof:nearby` and `geof:area`. The `geof` namespace is
+`http://www.opengis.net/def/function/geosparql/`.
+
+This query gets all features within 2km of Complexible HQ in DC:
+
+```sparql
+select ?name where {
+  ?loc rdfs:label ?name .
+  ?loc geo:hasGeometry ?feature .
+  ?hq geo:hasGeometry ?hqGeo ; rdfs:label "Complexible Headquarters" .
+  ?feature geof:nearby (?hqGeo 2 <http://qudt.org/vocab/unit#Kilometer>).
+}
+```
+
+=== Geospatial Datatypes
+
+The http://www.qudt.org/[QUDT] ontology, namespace `http://qudt.org/vocab/unit#`, is 
+used to specify units for distances; `Kilometer`, `Meter`, `Centimeter`, `MileUSStatute`, 
+`Yard`, `Foot`, `Inch`. Additionally, the OGC units vocabulary 
+`http://www.opengis.net/def/uom/OGC/1.0/` defines `degree`, `radian` and `metre`.
+
+== Enhanced Polygons
+
+Stardog's geospatial support covers the use of basic WKT formatted shapes;
+specifically points and rectangles. However, WKT can encode more complex spatial
+structures, most notably, polygons.
+
+To enable support for these more complex shapes, download
+http://central.maven.org/maven2/com/vividsolutions/jts-core/1.14.0/jts-core-1.14.0.jar[JTS] and include the JAR in
+Stardog's *server* classpath. Then set `spatial.use.jts=true` in your
+`stardog.properties` file. When you restart Stardog, it will pick up JTS and
+you'll be able to use more complex WKT formatted shapes.

@@ -1,0 +1,103 @@
+= Search
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/search.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
+
+Stardog's builtin full-text search system indexes data stored in Stardog for
+information retrieval queries.
+
+== Indexing Strategy
+
+The indexing strategy creates a "search document" per RDF literal. Each
+document consists of the following fields: literal ID; literal value;
+and contexts. See <<User-defined Lucene Analyzer>> for details on customizing
+Stardog's search programmatically.
+
+== Maintaining Search Indexes
+
+See the Admin chapter section on <<Configuration Options>> for the details.
+
+== Integration with SPARQL
+
+We use the predicate `tag:stardog:api:property:textMatch` (or
+`\http://jena.hpl.hp.com/ARQ/property#textMatch`) to access the search index in
+a SPARQL query.
+
+The `textMatch` function has one required argument, the search query in Lucene
+syntax and it returns, by default top 50, literals matching the query string.
+For example,
+
+[source,SPARQL]
+----
+SELECT DISTINCT ?s ?score
+WHERE {
+?s ?p ?l.
+(?l ?score) <tag:stardog:api:property:textMatch> 'mac'.
+}
+----
+
+This query selects the top 50 literals which match 'mac'. These literals are
+then joined with the generic BGP `?s ?p ?l` to get the resources (`?s`)
+that have those literals. Alternatively, you could use
+`?s rdf:type ex:Book` if you only wanted to select the books which
+reference the search criteria; you can include as many other BGPs as
+you like to enhance your initial search results.
+
+You can change the number of results `textMatch` returns by providing an 
+optional second argument with the limit:
+
+[source,SPARQL]
+----
+SELECT DISTINCT ?s ?score
+WHERE {
+?s ?p ?l.
+(?l ?score) <tag:stardog:api:property:textMatch> ('mac' 100).
+}
+----
+
+Note that, limit in `textMatch` only limits the number of literals returned and
+different than the number of total results the query will return. When a `LIMIT` 
+is specified in the SPARQL query, it does not affect the full-text search, that 
+only restricts the size of the final result set.
+
+Lucene returns a https://lucene.apache.org/core/5_3_0/core/org/apache/lucene/search/package-summary.html#scoring[score]
+with each match. It is possible to return these scores and define filters based on the score:
+
+[source,SPARQL]
+----
+SELECT DISTINCT ?s ?score
+WHERE {
+?s ?p ?l.
+(?l ?score) <tag:stardog:api:property:textMatch> ('mac' 0.5 10).
+}
+----
+
+This query returns 10 matching literals where the score is *greater than*
+0.5. Note that, as explained in the https://lucene.apache.org/core/5_3_0/core/org/apache/lucene/search/package-summary.html#scoring[Lucene documentation] 
+scoring is very much dependent on the way documents are indexed and the 
+range of scores might change significantly between different databases.
+
+=== Escaping Characters in Search
+
+The "/" character must be escaped because Lucene says so. In fact,
+there are several characters that are part of Lucene's query syntax
+that must be
+http://lucene.apache.org/core/5_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters[escaped].
+
+== Search Syntax
+
+Stardog search is based on Lucene 5.3.0: we support all of the
+http://lucene.apache.org/core/5_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description[search modifiers]
+that Lucene supports, with the exception of fields.
+
+- wildcards: `?` and `*`
+- fuzzy: `~` and `~` with similarity weights (e.g. `foo~0.8`)
+- proximities: `"semantic web"~5`
+- term boosting
+- booleans: `OR`, `AND`, `NOT`, +`, and `-`.
+- grouping
+
+For a more detailed discussion, see the http://lucene.apache.org/core/5_3_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description[Lucene docs].
+

@@ -1,0 +1,2393 @@
+= Administering Stardog
+
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/admin.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
+
+In this chapter we describe the administration of Stardog Server and
+Stardog databases, including the various command-line programs,
+configuration options, etc.
+
+Security is an important part of Stardog administration; it's
+discussed separately (<<Security>>).
+
+== Command Line Interface
+
+Stardog's command-line interface (CLI) comes in two parts:
+
+. `stardog-admin`: administrative client
+. `stardog`: a user's client
+
+The admin and user's tools operate on local or remote databases, using
+either HTTP or SNARL protocols. Both of these CLI tools are Unix-only,
+are self-documenting, and the help output of these tools is their
+canonical documentation.footnote:[In other words, if there is a
+conflict between this documentation and the output of the CLI tools'
+`help` command, the CLI output is correct.]
+
+=== Help
+
+To use the Stardog CLI tools, you can start by asking them to display
+help:
+
+[source,bash]
+----
+stardog help
+----
+
+Or:
+
+[source,bash]
+----
+$ stardog-admin help
+----
+
+These work too:
+
+[source,bash]
+----
+$ stardog
+$ stardog-admin
+----
+
+=== Security Considerations
+
+We divide administrative functionality into two CLI programs for
+reasons of security: `stardog-admin` will need, in production
+environments, to have considerably tighter access restrictions than
+`stardog`.
+
+CAUTION: For usability, Stardog provides a default user "admin" and
+password "admin" in `stardog-admin` commands if no user or password
+are given. This is obviously **insecure**; before any serious use of
+Stardog is contemplated, read the <<Security>> section at least twice,
+and then--minimally--change the administrative password to something
+we haven't published on the interwebs!
+
+=== Command Groups
+
+The CLI tools use "command groups" to make CLI subcommands easier to
+find.  To print help for a particular command group, just ask for
+help:
+
+[source,bash]
+----
+$ stardog help [command_group_name]
+----
+
+The command groups and their subcommands:
+
+- **data:     ** add, remove, export;
+- **query:    ** search, execute, explain, status;
+- **reasoning:** explain, consistency;
+- **namespace:** add, list, remove;
+- **server:   ** start, stop;
+- **metadata: ** get, set;
+- **user:     ** add, drop, edit, grant, list, permission, revoke, passwd;
+- **role:     ** add, drop, grant, list, permission, revoke;
+- **db:       ** backup, copy, create, drop, migrate, optimize, list, online, offline, repair, restore, status;
+- **virtual:  ** add, import, list, mappings, options, remove.
+
+NOTE: See the <<Man Pages, man pages>> for the canonical list of commands.
+
+The main help command for either CLI tool will print a listing of the
+command groups:
+
+[source]
+----
+usage: stardog <command> [ <args> ]
+
+The most commonly used stardog commands are:
+    data        Commands which can modify or dump the contents of a database
+    help        Display help information
+    icv         Commands for working with Stardog Integrity Constraint support
+    namespace   Commands which work with the namespaces defined for a database
+    query       Commands which query a Stardog database
+    reasoning   Commands which use the reasoning capabilities of a Stardog database
+    version     Prints information about this version of Stardog
+
+See 'stardog help' for more information on a specific command.
+----
+
+To get more information about a particular command, simply issue the
+help command for it including its command group:
+
+[source,bash]
+----
+$ stardog help query execute
+----
+
+Finally, everything here about command groups, commands, and online help
+works for `stardog-admin`, too:
+
+[source,bash]
+----
+$ stardog reasoning consistency -u myUsername -p myPassword -r myDB
+
+$ stardog-admin db migrate -u myUsername -p myPassword myDb
+----
+
+=== Autocomplete
+
+Stardog also supports CLI autocomplete via `bash`
+autocompletion. To install autocomplete for bash shell, you'll
+first want to make sure bash completion is installed:
+
+==== Homebrew
+
+To install:
+
+[source,bash]
+----
+$ brew install bash-completion
+----
+
+To enable, edit `.bash\_profile`:
+
+[source,bash]
+----
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
+----
+
+==== MacPorts
+
+First, you really should be using Homebrew...ya heard?
+
+If not, then:
+
+[source,bash]
+----
+$ sudo port install bash-completion
+----
+
+Then, edit `.bash\_profile`:
+
+[source,bash]
+----
+if [ -f /opt/local/etc/bash_completion ]; then
+   . /opt/local/etc/bash_completion
+fi
+----
+
+==== Ubuntu
+
+And for our Linux friends:
+
+[source,bash]
+----
+$ sudo apt-get install bash-completion
+----
+
+==== Fedora
+
+[source,bash]
+----
+$ sudo yum install bash-completion
+----
+
+==== All Platforms
+
+Now put the Stardog autocomplete script—`stardog-completion.sh`—into your
+`bash\_completion.d` directory, typically one of
+`/etc/bash_completion.d, /usr/local/etc/bash_completion.d or ~/bash_completion.d.`
+
+Alternately you can put it anywhere you want, but tell `.bash_profile`
+about it:
+
+[source,bash]
+----
+source ~/.stardog-completion.sh
+----
+
+=== How to Make a Connection String
+
+You need to know how to make a connection string to talk to a Stardog
+database. A connection string may consist solely of the **database
+name** in cases where
+
+. Stardog is listening on the standard port(s);
+. SNARL is enabled; and
+. the command is invoked on the same machine where the server is running.
+
+In other cases, a "fully qualified" connection string, as described
+below, is required.
+
+Further, the connection string is now assumed to be the first argument
+of any command that requires a connection string. Some CLI subcommands
+require a Stardog connection string as an argument to identify the
+server and database upon which operations are to be performed.
+
+Connection strings are URLs and may either be local to the machine
+where the CLI is run or they may be on some other remote machine.
+
+There are two URL schemes recognized by Stardog:
+
+. `http://`
+. `snarl://`
+
+The former uses Stardog's (extended) version of SPARQL Protocol; the
+latter uses Stardog's native data access protocol, called SNARL.
+
+NOTE: `stardog-admin` and `stardog` works with HTTP or SNARL Protocol,
+interchangeably. SNARL is faster than HTTP in cases where payloads to
+and from the server are relatively *small*; for payloads that are
+large, raw transfer time dominates and there isn't much or any
+difference in performance between them.
+
+=== Example Connection Strings
+
+To make a connection string, you need to know the URL scheme; the
+machine name and port Stardog Server is running on; any (optional) URL
+path to the database;footnote:[It's very unlikely you'll need this.]
+and the name of the database:
+
+[source,html]
+----
+{scheme}{machineName}:{port}/{databaseName};{connectionOptions}
+----
+
+Here are some example connection strings:
+
+[source,html]
+----
+snarl://server/billion-triples-punk
+http://localhost:5000/myDatabase
+http://169.175.100.5:1111/myOtherDatabase;reasoning=true
+snarl://stardog:8888/the_database
+snarl://localhost:1024/db1;reasoning=true
+----
+
+Using the default ports for SNARL and HTTP protocols simplifies
+connection strings. `connectionOptions` are a series of `;` delimited
+key-value pairs which themselves are `=` delimited. Key names must be
+**lowercase** and their values are case-sensitive. Finally, in the
+case where the scheme is SNARL, the machine is "localhost", and the
+port is the default SNARL port, a connection string may consist of the
+"databaseName" only.
+
+== Server Admin
+
+Stardog Server is multi-protocol, supporting SNARL and HTTP; the
+default port is **5820**.  **All administrative functions work over SNARL or HTTP
+protocols.**
+
+=== Upgrading Stardog Server
+
+The process of installation is pretty simple; see the <<Quick Start Guide>> for
+details.
+
+But how do we easily upgrade between versions? The key is judicious use of
+`STARDOG_HOME`. Best practice is to keep installation directories for different
+versions separate and use a `STARDOG_HOME` in another location for storing
+databases.footnote:[We're big fans of /opt/stardog/{$version} and setting
+`STARDOG_HOME` to /var/stardog` but YMMV.] Once you set your `STARDOG_HOME` environment
+variable to point to this directory, you can simply stop the old version and
+start the new version without copying or moving any files. You can
+also specify the home directory using the `--home` argument when starting the
+server.
+
+=== HTTP & SNARL Server Unification
+
+To use any of these commands against a remote server, pass a global
+`--server` argument with an HTTP or SNARL URL.
+
+NOTE: If you are running `stardog-admin` on the same machine where
+Stardog Server is running, and you're using the default protocol
+ports, then you can omit the `--server` argument and simply pass a
+database name via `-n` option. Most of the following commands assume
+this case for the sake of exposition.
+
+=== Server Security
+
+See the <<Security>> section for information about Stardog's
+security system, secure deployment patterns, and more.
+
+=== Configuring Stardog Server
+
+NOTE: The properties described in this section control the behavior
+of the Stardog Server (whether HTTP or SNARL protocols are in use); to
+set properties or other metadata on individual Stardog *databases*, see
+<<Database Admin>>.
+
+Stardog Server's behavior can be configured via the JVM arg
+`stardog.home`, which sets Stardog Home, overriding the value of
+`STARDOG_HOME` set as an environment variable. Stardog Server's behavior
+can also be configured via a `stardog.properties`—which is a Java
+Properties file—file in `STARDOG_HOME`. To change the behavior of a
+running Stardog Server, it is necessary to restart it.
+
+==== Configuring Temporary ("Scratch") Space
+
+Stardog uses the value of the JVM argument `java.io.tmpdir` to write temporary
+files for many different operations. If you want to configure temp space to use
+a particular disk volume or partition, use the `java.io.tmpdir` JVM argument on
+Stardog startup.
+
+Bad (or at least very weird) things are guaranteed to happen if this part of the
+filesystem runs out of (or even very low on) free disk space. Stardog will
+delete temporary files when they're no longer needed. But Stardog admins should
+configure their monitoring systems to make sure that free disk space is always
+available, both on `java.io.tmpdir` and on the disk volume that hosts
+`STARDOG_HOME`.footnote:[This is equally true, when using Stardog HA Cluster, of
+Zookeeper's access to free disk space. Very bad things happen to the Stardog
+Cluster if Zookeeper cannot write to disk.]
+
+==== Stardog Configuration
+
+The following twiddly knobs for Stardog Server are available in
+`stardog.properties`:footnote:[For more details about configuring these values,
+see
+https://github.com/Complexible/stardog-examples/blob/master/config/stardog.properties.]
+
+. `query.all.graphs`: Controls what data Stardog Server evaluates queries
+    against; if `true`, it will query over the default graph and the union of
+    all named graphs; if `false` (the default), it will query only over the
+    default graph.
+
+. `query.timeout`: Sets the upper bound for query execution time that's
+    inherited by all databases unless explicitly overriden. See <<Managing Queries>> section below for details.
+
+. `logging.[access,audit].[enabled,type,file]`: Controls whether and how Stardog
+    logs server events; described in detail below.
+
+. `logging.slow_query.enabled`, `logging.slow_query.time`,
+    `logging.slow_query.type`: The three slow query logging options are used in
+    the following way. To enable logging of slow queries, set `enabled` to
+    `true`. To define what counts as a "slow" query, set `time` to a time
+    duration value (positive integer plus "h", "m", "s", or "ms" for hours,
+    minutes, seconds, or milliseconds respectively). To determine the type of
+    logging, set `type` to `text` (the default) or `binary`. Note that a
+    `logging.slow_query.time` that exceeds the value of `query.timeout` will
+    result in empty log entries.**
+
+. `http.max.request.parameters`: Default is 1024; any value smaller than
+`Integer.MAX_VALUE` may be provided. Useful if you have lots of named graphs and
+are at risk of blowing out the value of `http.max.request.parameters`.
+
+.  `database.connection.timeout`: The amount of time a connection to the database can
+    be open, but inactive, before being automatically closed to reclaim the resources.
+    The timeout values specified in the property file should be a positive integer
+    followed by either letter `h` (for hours), letter `m` (for minutes),
+    letter `s` (for seconds), or letters `ms` (for milliseconds).
+    Example intervals: `1h` for 1 hour, `5m` for 5 minutes, `90s` for 90 seconds,
+    `500ms` for 500 milliseconds. Default value is `1h`. *NOTE: setting a very short
+    timeout can have adverse results specially if updates are being performed without
+    commit changes to the server, closing the connection prematurely while using it.*
+
+. `password.length.min`: Sets the password policy for the minimum length of user
+    passwords, the value can't be lower than `password.length.min` or greater
+    than `password.length.max`. Default: `4`.
+
+. `password.length.max`: Sets the password policy for the maximum length of user
+    passwords. Default: `1024`.
+
+. `password.regex`: Sets the password policy of accepted chars in user
+    passwords, via a Java regular expression. Default: `[\\w@#$%]+`
+
+. `security.named.graphs`: Sets named graph security on globally. Default:
+`false`.
+
+. `spatial.use.jts`: Enabled support for JTS in the geospatial module. Default: `false`
+
+=== Starting & Stopping the Server
+
+NOTE: Unlike the other `stardog-admin` subcommands, starting the
+server may only be run locally, i.e., on the same machine
+the Stardog Server is will run on.
+
+The simplest way to start the server—running on the default port,
+detaching to run as a daemon, and writing `stardog.log` to the current
+working directory— is
+
+[source,bash]
+----
+$ stardog-admin server start
+----
+
+To specify parameters:
+
+[source,bash]
+-----
+$ stardog-admin server start --require-ssl --port=8080
+-----
+
+The port can be specified using the property `--port`.
+The HTTP interface can be disabled by using the flag
+`--no-http` and the SNARL interface via `--no-snarl`.
+
+To shut the server down:
+
+[source,bash]
+----
+$ stardog-admin server stop
+----
+
+If you started Stardog on a port other than the default, or want to shut
+down a remote server, you can simply use the `--server` option to
+specify the location of the server to shutdown.
+
+By default Stardog will bind it's server to `0.0.0.0`.  You can specify a different
+network interface for Stardog to bind to using the `--bind` property
+of `server start`.
+
+=== Server Monitoring with Watchdog & JMX
+
+Stardog's JMX implementation is called Watchdog. In addition to
+providing some basic JVM information, Watchdog also exports
+information about the Stardog DBMS configuration as well as stats for
+all of the databases within the system, such as the total number of
+open connections, size, and average query time.
+
+==== Accessing Watchdog
+
+To access Watchdog, you can simply use a tool like VisualVM or
+JConsole to attach to the process running the JVM, or connect directly
+to the JMX server. You can also access information from Watchdog in
+the web console for the database, or by performing a `GET` on
+`/watchdog` which will return a simple JSON object containing the
+information available via JMX.
+
+==== Configuring Watchdog
+
+By default, Watchdog will bind an RMI server for remote access on port
+`5833`.  If you want to change which port Watchdog binds the remote
+server to, you can set the property `watchdog.port` via
+`stardog.properties`.  If you wish to disable remote access to JMX,
+you can set `watchdog.remote.access` to `false` in
+`stardog.properties`.  Finally, if you wish to disable Watchdog
+completely, set `watchdog.enabled` to `false` in `stardog.properties`.
+
+=== Locking Stardog Home
+
+Stardog Server will lock `STARDOG_HOME` when it starts to prevent
+synchronization errors and other nasties if you start more than one
+Stardog Server with the same `STARDOG_HOME`. If you need to run more
+than one Stardog Server instance, choose a different `STARDOG_HOME` or
+pass a different value to `--home`.
+
+=== Access & Audit Logging
+
+See the exemplar https://github.com/Complexible/stardog-examples/blob/master/config/stardog.properties[`stardog.properties`] 
+file for a complete discussion of how access and
+audit logging work in Stardog Server. Basically, audit logging is a superset of
+the events in access logging. Access logging covers the most often required
+logging events; you should consider enabling audit logging if you really need to
+log *every* server event. Logging generally doesn't have much impact on
+performance; but the safest way to insure that impact is negligible is to log to
+a separate disk (or to a centralized logging server, etc.).
+
+The important configuration choices are whether logs should be binary
+or plain text (both based on ProtocolBuffer message formats); the type
+of logging (audit or access); the logging location (which may be "off
+disk" or even "off machine") Logging to a centralized logging facility
+requires a Java plugin that implements the Stardog Server logging
+interface; see <<Java Programming>> for more information; and the log
+rotation policy (file size or time).
+
+Slow query logging is also available. See the <<Managing Running Queries>> section below.
+
+== Database Admin
+
+Stardog is a multi-tenancy system and will happily provide access to
+multiple, distinct databases.
+
+=== Configuring a Database
+
+To administer a Stardog database, some config options must be set at
+creation time; others may be changed subsequently and some may never be
+changed. All of the config options have sensible defaults (except,
+obviously, for the database name), so you don't have to twiddle any of the
+knobs till you really need to.
+
+To configure a database, use the `metadata-get` and `metadata-set` CLI commands.
+See <<Man Pages>> for the details.
+
+=== Configuration Options
+
+.Table of Configuration Options
+|===
+|Option |Mutable | Default | API
+
+|`*database.archetypes*`
+|Yes
+|
+|link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ARCHETYPES[DatabaseOptions.ARCHETYPES]
+
+4+|The name of one or more database archetypes.
+|`*database.connection.timeout*`
+| Yes
+| `1h`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#CONNECTION_TIMEOUT[DatabaseOptions.CONNECTION_TIMEOUT]
+
+4+|Same as `database.connection.timeout` described in <<Stardog Configuration>> but applies only to one database.
+
+|`*database.name*`
+|No
+|
+|link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#NAME[DatabaseOptions.NAME]
+4+|A database name, the legal value of which is is given by the regular expression
+`[A-Za-z]{1}[A-Za-z0-9_-]`.
+
+|`*database.namespaces*`
+|Yes
+|`rdf, rdfs, xsd, owl, stardog`
+|link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#NAMESPACES[DatabaseOptions.NAMESPACES]
+
+4+|Sets the default namespaces for new databases.
+
+|`*database.online*`
+| No
+| `true`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ONLINE[DatabaseOptions.ONLINE]
+
+4+|The status of the database: online or offline. It may be set so that the database is created initially in online or offline status; subsequently, it can't be set directly but only by using the relevant admin commands.
+
+|`*docs.default.rdf.extractors*`
+|Yes
+|`tika`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_DEFAULT_RDF_EXTRACTORS[StardocsOptions.DOCS_DEFAULT_RDF_EXTRACTORS]
+
+4+| Comma-separated list of names of RDF extractors to use when processing documents when no RDF extractor names are given.
+
+|`*docs.default.text.extractors*`
+|Yes
+|`tika`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_DEFAULT_TEXT_EXTRACTORS[StardocsOptions.DOCS_DEFAULT_TEXT_EXTRACTORS]
+
+4+| Comma-separated list of names of text extractors to use when processing documents when no text extractor names are given.
+
+|`*docs.filesystem.uri*`
+|Yes
+|`file:///`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_FILESYSTEM_URI[StardocsOptions.DOCS_FILESYSTEM_URI]
+
+4+| A URI indicating which `FileSystem` provider to use for document storage. In addition to local storage (`file:///`), documents can be stored on Amazon S3 (`s3:///`) or document storage can be disabled altogether (`none`).
+
+|`*docs.path*`
+|Yes
+|`docs/`
+| link:/java/snarl/com/complexible/stardog/docs/StardocsOptions.html#DOCS_PATH[StardocsOptions.DOCS_PATH]
+
+4+| The path under which documents will be stored. A relative path is relative to the database directory. S3 storage should specify an absolute path with the bucket name as the first component of the path.
+
+|`*icv.active.graphs*`
+| No
+| `default`
+| link:/java/snarl/com/complexible/stardog/icv/ICVOptions.html#ICV_ACTIVE_GRAPHS[ICVOptions.ICV_ACTIVE_GRAPHS]
+
+4+|Specifies which part of the database, in terms of named graphs, is checked with IC validation. Set to `tag:stardog:api:context:all` to validate all the named graphs in the database; otherwise, the legal value of `icv.active.graphs` is a comma-separated list of named graph
+identifiers.
+
+|`*icv.consistency.automatic*`
+| No
+| `false`
+| link:/java/snarl/com/complexible/stardog/icv/ICVOptions.html#ICV_CONSISTENCY_AUTOMATIC[ICVOptions.ICV_CONSISTENCY_AUTOMATIC]
+
+4+|Enables automatic ICV consistency check as part of transactions.
+
+|`*icv.enabled*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/icv/ICVOptions.html#ICV_ENABLED[ICVOptions.ICV_ENABLED]
+
+4+|Determines whether ICV is active for the database; if true, all database mutations are subject to IC validation (i.e., "guard mode").
+
+|`*icv.reasoning.enabled*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/icv/ICVOptions.html#ICV_REASONING_ENABLED[ICVOptions.ICV_REASONING_ENABLED]
+
+4+|Determines if reasoning is used during IC validation.
+|`*index.differential.enable.limit*`
+| Yes
+| `500,000`
+| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#DIFF_INDEX_MIN_LIMIT[IndexOptions.DIFF_INDEX_MIN_LIMIT]
+
+4+|Sets the minimum size of the Stardog database before differential indexes are used. The legal value is an integer.
+
+|`*index.differential.merge.limit*`
+| Yes
+| `20,000`
+| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#DIFF_INDEX_MAX_LIMIT[IndexOptions.DIFF_INDEX_MAX_LIMIT]
+
+4+|Sets the size in number of RDF triples before the differential indexes are merged to the main indexes. The legal value is an integer.
+
+|`*index.literals.canonical*`
+| No
+| `true`
+| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#CANONICAL_LITERALS[IndexOptions.CANONICAL_LITERALS]
+
+4+|Enables RDF literal canonicalization.
+
+|`*index.named.graphs*`
+| No
+| `true`
+| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#INDEX_NAMED_GRAPHS[IndexOptions.INDEX_NAMED_GRAPHS]
+
+4+|Enables optimized index support for named graphs; speeds SPARQL query evaluation with named graphs at the cost of some overhead for database loading and index maintenance.
+
+|`*index.persist*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#PERSIST[IndexOptions.PERSIST]
+
+4+|Enables persistence for memory index. Without this option memory index data will be lost after a restart. This option has no effect for 
+a disk index as they are always persisted.
+
+|`*index.persist.sync*`
+| Yes
+| `true`
+| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#SYNC[IndexOptions.SYNC]
+
+4+|Determines whether memory indexes are synchronously or asynchronously persisted to disk with respect to a transaction.
+
+|`*index.statistics.update.automatic*`
+| Yes
+| `true`
+| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#AUTO_STATS_UPDATE[IndexOptions.AUTO_STATS_UPDATE]
+
+4+|Determines whether statistics are maintained automatically.
+
+|`*index.type*`
+| No
+| `disk`
+| link:/java/snarl/com/complexible/stardog/index/IndexOptions.html#INDEX_TYPE[IndexOptions.INDEX_TYPE]
+
+4+|The legal value of `index.type` is the string "disk" or "memory" (case-insensitive).
+
+|`*preserve.bnode.ids*`
+| Yes
+| `true`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#PRESERVE_BNODE_IDS[DatabaseOptions.PRESERVE_BNODE_IDS]
+
+4+|Determines how the Stardog parser handles bnode identifiers that may be present in RDF input. If this property is enabled (i.e., `TRUE`), parsing and data loading performance are improved; but the other effect is that if distinct input files use (randomly or intentionally) the same bnode identifier, that bnode will point to one and the same node in the database. If you have input files that use explicit bnode identifiers, and multiple files may use the same bnode identifiers, and you don't want those bnodes to be smushed into a single node in the database, then this configuration option should be disabled (set to `FALSE`).
+
+|`*query.all.graphs*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#QUERY_ALL_GRAPHS[DatabaseOptions.QUERY_ALL_GRAPHS]
+
+4+|Determines what data the database evaluates queries against; if `true`, it will query over the default graph and the union of all named graphs; if `false` (the default), it will query only over the default graph.  This database option overrides any global server settings.
+
+|`*query.plan.reuse*`
+| Yes
+| Always
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#QUERY_PLAN_REUSE[DatabaseOptions.QUERY_PLAN_REUSE]
+
+4+|Option for configuring how Stardog will reuse query plans. Stardog answers queries by first generating an execution plan. Generating an optimal query plan is hard and time-consuming so these plans are cached and reused for structurally equivalent queries; i.e. queries such that one can be transformed into another by replacing constants. This option determines the conditions under which a cached plan will be reused. See link:/java/snarl/com/complexible/stardog/QueryPlanReuse.html[QueryPlanReuse] for the available values.
+
+|`*query.timeout*`
+| Yes
+|
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#QUERY_TIMEOUT[DatabaseOptions.QUERY_TIMEOUT]
+
+4+|Determines max execution time for query evaluation.
+
+|`*reasoning.consistency.automatic*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/reasoning/ReasoningOptions.html#CONSISTENCY_AUTOMATIC[ReasoningOptions.CONSISTENCY_AUTOMATIC]
+
+4+|Enables automatic consistency checking with respect to a transaction.
+
+|`*reasoning.punning.enabled*`
+| No
+| `false`
+| link:/java/snarl/com/complexible/stardog/reasoning/ReasoningOptions.html#PUNNING_ENABLED[ReasoningOptions.PUNNING_ENABLED]
+
+4+|Enables punning.
+
+|`*reasoning.schema.graphs*`
+| Yes
+| `*`
+| link:/java/snarl/com/complexible/stardog/reasoning/ReasoningOptions.html#SCHEMA_GRAPHS[ReasoningOptions.SCHEMA_GRAPHS]
+
+4+| Determines which, if any, named graph or graphs contains the "TBox", i.e., the schema part of the data. The legal value is a comma-separated list of named graph identifiers, including (optionally) the special names,
+`tag:stardog:api:context:default` and `tag:stardog:api:context:all`, which represent the default graph and the union of all named graphs and
+the default graph, respectively. In the context of database configurations only, Stardog will recognize `default` and `*` as short forms of those URIs, respectively.
+
+|`*reasoning.type*`
+| Yes
+| `SL`
+|
+
+4+|Specifies the reasoning type associated with the database; legal values are `SL`, `RL`, `QL`, `EL`, `DL`, `RDFS`, and `NONE`.
+
+|`*reasoning.approximate*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/reasoning/ReasoningOptions.html#SCHEMA_GRAPHS[ReasoningOptions.APPROXIMATE]
+
+4+|Enables approximate reasoning. With this flag enabled Stardog will approximate an axiom that is outside the profile Stardog supports and normally ignored. For example, an equivalent class axiom might be split into two subclass axioms and only one subclass axiom is used.
+
+|`*search.enabled*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/search/SearchOptions.html#SEARCHABLE[SearchOptions.SEARCHABLE]
+
+4+|Enables semantic search for the database.
+
+|`*search.reindex.mode*`
+| Yes
+| `sync`
+|
+
+4+|Determines how search indexes are maintained. The legal value of `search.reindex.mode` is one of the strings `sync`
+or `async` (case insensitive) or a legal http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/crontrigger[Quartz
+cron expression].
+
+|`*search.wildcard.search.enabled*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/search/SearchOptions.html#LEADING_WILDCARD_SEARCH_ENABLED[SearchOptions.LEADING_WILDCARD_SEARCH_ENABLED]
+
+4+|Enable support in Lucene for searches with leading wildcards.
+
+|`*search.default.limit*`
+| Yes
+| `10`
+| link:/java/snarl/com/complexible/stardog/search/SearchOptions.html#SEARCH_DEFAULT_LIMIT[SearchOptions.SEARCH_DEFAULT_LIMIT]
+
+4+|Specify the default limit on the number of results returned from a full-text search
+
+4+|When `transaction.logging` is `true`, it determines whether the rotated log will be deleted or kept in disk.
+|`*spatial.enabled*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/spatial/GeospatialOptions.html#SPATIAL_ENABLED[GeospatialOptions.SPATIAL_ENABLED]
+
+4+|Enables geospatial search for the database.
+
+|`*spatial.precision*`
+| No
+| `11`
+| link:/java/snarl/com/complexible/stardog/spatial/GeospatialOptions.html#SPATIAL_PRECISION[GeospatialOptions.SPATIAL_PRECISION]
+
+4+|Specifies the precision used for the indexing of geospatial data.  The smaller the value, the less precision.
+
+|`*strict.parsing*`
+| No
+| `true`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#STRICT_PARSING[DatabaseOptions.STRICT_PARSING]
+
+4+|Controls whether Stardog parses RDF strictly (`true`, the default) or loosely (`false`)
+
+|`*transaction.isolation*`
+| Yes
+| `SNAPSHOT`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#TRANSACTION_ISOLATION[DatabaseOptions.TRANSACTION_ISOLATION]
+
+4+|Configures isolation level for transactions; legal values are SNAPSHOT and SERIALIZABLE.
+
+|`*transaction.logging*`
+| Yes
+| `false`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#TRANSACTION_LOGGING[DatabaseOptions.TRANSACTION_LOGGING]
+
+4+|Enables logged transactions. Logged transactions are activated by default in Cluster mode.
+
+|`*transaction.logging.rotation.size*`
+| Yes
+| `524288000`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#TRANSACTION_LOGGING[DatabaseOptions.TRANSACTION_LOGGING_ROTATION_SIZE]
+
+4+|When `transaction.logging` is `true`, it determines the size (in bytes) at which the transaction log will be rotated. Default is 500 MB.
+
+|`*transaction.logging.rotation.remove*`
+| Yes
+| `true`
+| link:/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#TRANSACTION_LOGGING[DatabaseOptions.TRANSACTION_LOGGING_ROTATION_REMOVE]
+
+|===
+
+==== A Note About Database Status
+
+A database must be set to `offline` status before most configuration
+parameters may be changed. Hence, the normal routine is to set the database
+offline, change the parameters, and then set the database to online. All
+of these operations may be done programmatically from CLI tools, such
+that they can be scripted in advance to minimize downtime. In a future
+version, we will allow some properties to be set while the database
+remains online.
+
+=== Managing Database Status
+
+Databases are either online or offline; this allows database maintenance
+to be decoupled from server maintenance.
+
+==== Online and Offline
+
+Databases are put online or offline synchronously: these operations
+block until other database activity is completed or terminated. See
+`stardog-admin help db` for details.
+
+==== Examples
+
+To set a database from offline to online:
+
+[source,bash]
+----
+$ stardog-admin db offline myDatabase
+----
+
+To set the database online:
+
+[source,bash]
+----
+$ stardog-admin db online myDatabase
+----
+
+If Stardog Server is shutdown while a database is offline, the database
+will be offline when the server restarts.
+
+=== Creating a Database
+
+Stardog databases may be created locally or remotely; but, of course,
+performance is better if data files don't have to be transferred over a
+network during creation and initial loading. See the section below about
+loading compressed data. All data files, indexes, and server metadata
+for the new database will be stored in Stardog Home. Stardog won't
+create a database with the same name as an existing database. Stardog
+database names must conform to the regular expression,
+`[A-Za-z]{1}[A-Za-z0-9_-]`.
+
+NOTE: There are four reserved words that may not be used for the
+names of Stardog databases: `system`, `admin`, `watchdog`, and `docs`.
+
+Minimally, the only thing you must know to create a Stardog database is
+a database *name*; alternately, you may customize some other database
+parameters and options depending on anticipated workloads, data
+modeling, and other factors.
+
+See `stardog-admin help db create` for all the details including
+examples.
+
+=== Database Archetypes
+
+Stardog database archetypes are a new feature in 2.0. A database archetype is a
+named, vendor-defined or user-defined bundle of data and functionality to be
+applied at database-creation time. Archetypes are primarily for supporting
+various data standards or tool chain configurations in a simple way.
+
+For example, the SKOS standard from W3C defines an OWL vocabulary for building
+taxonomies, thesauruses, etc. SKOS is made up by a vocabulary, some constraints,
+some kinds of reasoning, and (typically) some SPARQL queries. If you are
+developing an app that uses SKOS, without Stardog's SKOS archetype, you
+are responsible for assembling all that SKOS stuff yourself. Which is tedious,
+error-prone, and not very rewarding--even when it's done right the first time.
+
+Rather than putting that burden on Stardog users, we've created database
+archetypes as a mechanism to collect these "bundles of stuff" which, as a
+developer, you can then simply attach to a particular database.
+
+The last point to make is that archetypes are composable: you can mix-and-match
+them at database creation time as needed.
+
+Stardog supports two database archetypes out-of-the-box:
+http://www.w3.org/TR/prov-overview/[PROV] and
+http://www.w3.org/2004/02/skos/[SKOS].
+
+==== SKOS Archetype
+
+The SKOS archetype is for databases that will contain SKOS data, and includes
+the SKOS schema, SKOS constraints using Stardog's Integrity Constraint
+Validation, and some namespace-prefix bindings.
+
+==== PROV Archetype
+
+The PROV archetype is for databases that will contain PROV data, and includes
+the SKOS schema, SKOS constraints using Stardog's Integrity Constraint
+Validation, and some namespace-prefix bindings.
+
+Archetypes are composable, so you can use more of them and they are
+intended to be used alongside *your domain data*, which may include as many
+other schemas, ontologies, etc. as are required.
+
+==== User-defined Archetypes
+
+Please see the https://github.com/Complexible/stardog-examples/blob/master/examples/foaf/readme.md[Stardog Examples repository] on Github for an example that shows how to create your own Stardog archetype.
+
+=== Database Creation Templates
+
+As a boon to the overworked admin or devops peeps, Stardog Server supports
+database creation templates: you can pass a Java Properties file with config
+values set and with the values (typically just the database name) that are
+unique to a specific database passed in CLI parameters.
+
+==== Examples
+
+To create a new database with the default options by simply providing a
+name and a set of initial datasets to load:
+
+[source,bash]
+----
+$ stardog-admin db create -n myDb input.ttl another_file.rdf moredata.rdf.gz
+----
+
+Datasets can be loaded later as well. To create (in this case, an empty)
+database from a template file:
+
+[source,bash]
+----
+$ stardog-admin db create -c database.properties
+----
+
+At a minimum, the configuration file must have a value for
+`database.name` option.
+
+If you only want to change only a few configuration options you
+can directly provide the values for these options in the CLI args as
+follows:
+
+[source,bash]
+----
+$ stardog-admin db create -n db -o icv.enabled=true icv.reasoning.enabled=true -- input.ttl
+----
+
+Note that "`--`" is used in this case when "`-o`" is the last option to
+delimit the value for "`-o`" from the files to be bulk loaded.
+
+Please refer to the CLI help for more details of the `db create`
+command.
+
+=== Database Create Options
+
+.Table of Options for Stardog's `create` command
+|===
+|Name |Description |Arg values |Default
+
+|`--name`, `-n`
+|Required, the name of the database to create
+|
+|
+
+|`--copy-server-side`,
+|Flag to specify whether or not bulk loaded files should be first copied to the server
+|
+|`false`
+
+|`--type`, `-t`
+|Specifies the kind of database indexes: memory or disk
+|`M`, `D`
+|disk
+
+|`--index-triples-only`, `-i`
+|Specifies that the database's indexes should be optimized for RDF triples only
+|
+|`false`
+|===
+
+=== Repairing a Database
+
+If an I/O error or an index exception occurs while querying a DB, the DB might
+be corrupted and repaired with the repair command. If the errors occur during
+executing admin commands, then the system DB might have been corrupted. System
+database corruptions can also cause other problems including authorization
+errors.
+
+This command needs exclusive access to your Stardog home directory and therefore
+requires the Stardog Server not to be running.  This also means that the command
+can only be run on the machine where the Stardog home directory is located,
+and you will not be able to start the Stardog Server while this command is
+running.
+
+NOTE: The repair process can take considerable time for
+large databases.
+
+If the built-in Stardog system database is corrupted, then you
+can use the database name `system` as the repair argument.
+To repair the database myDB:
+
+[source,bash]
+----
+$ stardog-admin db repair myDB
+----
+
+To repair the system database:
+
+[source,bash]
+----
+$ stardog-admin db repair system
+----
+
+=== Backing Up and Restoring
+
+Stardog includes both physical and logical backup utilities; logical backups are
+accomplished using the `export` CLI command. Physical backups and restores are
+accomplished using `stardog-admin db backup` and `stardog-admin db restore` commands,
+respectively.
+
+These tools perform physical backups, including database metadata,
+rather than logical backups via some RDF serialization. They are *native*
+Stardog backups and can only be restored with Stardog tools. Backup may be
+accomplished while a database is online; backup is performed in a read
+transaction: reads and writes may continue, but writes performed during the
+backup are not reflected in the backup.
+
+See the man pages for link:/man/db-backup.html[`backup`] and
+link:/man/db-restore.html[`restore`] for details.
+
+==== Backup
+
+`stardog-admin db backup` assumes a default location for its output, namely,
+`$STARDOG_HOME/.backup`; that default may be overriden by passing
+a `-t` or `--to` argument. Backup sets are stored in the backup directory by
+database name and then in date-versioned subdirectories for each backup volume.
+Of course you can use a variety of OS-specific options to accomplish remote
+backups over some network or data protocol; those options are left as an
+exercise for the admin.
+
+To backup a Stardog database called `foobar`:
+
+[source,bash]
+----
+$ stardog-admin db backup foobar
+----
+
+To perform a remote backup, for example, pass in a specific directory that
+may be mounted in the current OS namespace via some network protocol, thus:
+
+[source,bash]
+----
+$ stardog-admin db backup --to /my/network/share/stardog-backups foobar
+----
+
+NOTE: Stardog's backup/restore approach is optimized for minimizing the amount
+of time it takes to backup a database; the tradeoff is with restore performance.
+
+==== Restore
+
+To restore a Stardog database from a Stardog backup volume, simply pass a
+fully-qualified path to the volume in question. The location of the backup should
+be the full path to the backup, not the location of the backup directory as
+specified in your Stardog configuration. There is no need to specify the name of
+the database to restore.
+
+To restore a database from its backup:
+
+[source,bash]
+----
+$ stardog-admin db restore $STARDOG_HOME/.backups/myDb/2012-06-21
+----
+
+===== One-time Database Migrations for Backup
+
+The backup system cannot directly backup
+databases created in versions before 2.1. These databases must be explicitly
+migrated in order to use the new backup system; this is a one-time operation per
+database and is accomplished by running
+
+[source,bash]
+----
+$ stardog-admin db migrate foobar
+----
+
+in order to migrate a database called `foobar`. Again, this is a one-time
+operation only and all databases created with 2.1 (or later) do not require
+it.
+
+
+=== Namespace Prefix Bindings
+
+SPARQL queries can be verbose; but at least the  `PREFIX` declarations in the
+prologue of each query are easy to screw up!  Stardog allows database
+administrators to persist and manage custom namespace prefix bindings:
+
+.  At database creation time, if data is loaded to the database that
+    contains namespace prefixes, then those are persisted for the life
+    of the database. Any subsequent queries to the database may simply
+    omit the `PREFIX` declarations:
++
+[source,bash]
+----
+$ stardog query myDB "select * {?s rdf:type owl:Class}"
+----
++
+
+. To add new bindings, use the `namespace` subcommand in the CLI:
++
+[source,bash]
+----
+$ stardog namespace add myDb --prefix ex --uri 'http://example.org/test#'
+----
++
+
+.  To modify an existing binding, delete the existing one and then add
+    a new one:
++
+[source,bash]
+----
+$ stardog namespace remove myDb --prefix ex
+----
++
+. Finally, to see all of the existing namespace prefix bindings:
++
+[source,bash]
+----
+$ stardog namespace list myDB
+----
+
+If no files are used during database creation, or if the files do not
+define any prefixes (e.g. NTriples), then the "Big Four" default
+prefixes are stored: `RDF, RDFS, XSD`, and `OWL`.
+
+When executing queries in the CLI, the default table format for SPARQL
+`SELECT` results will use the bindings as qnames. SPARQL `CONSTRUCT`
+query output (including export) will also use the stored prefixes. To reiterate,
+namespace prefix bindings are *per database*, not global.
+
+=== Index Strategies
+
+By default Stardog builds extra indexes for named graphs. These
+additional indexes are used when SPARQL queries specify datasets using
+`FROM` and `FROM NAMED`. With these additional indexes, better
+statistics about named graphs are also computed.
+
+Stardog may also be configured to create and to use fewer indexes, if the
+database is only going to be used to store RDF triples--that is to say, if the
+database will not be used to store named graph information. In this mode,
+Stardog will maintain fewer indexes, which will result in faster database
+creation and faster updates without compromising query answering performance. In
+such databases, quads (that is: triples with named graphs or contexts specified)
+may still be added to these database at any time, but query performance may
+degrade in such cases.
+
+To create a database which indexes only RDF triples, set the option
+`index.named.graphs` to `false` at database creation time. The CLI
+provides a shorthand option, `-i` or `--index-triples-only`, which is
+equivalent.
+
+NOTE: This option can only be set at database creation time
+and cannot be changed later without rebuilding the database; use this
+option with care.
+
+=== Differential Indexes
+
+While Stardog is generally biased in favor of read performance, write
+performance is also important in many applications. In order to increase write
+performance, Stardog may be used, optionally, with a *differential index*.
+
+Stardog's differential index is used to persist additions and removals
+separately from the main indexes, such that updates to the database can
+be performed faster. Query answering takes into consideration all the
+data stored in the main indexes and the differential index; hence, query
+answers are computed as if all the data is stored in the main indexes.
+
+There is a slight overhead for query answering with differential indexes
+if the differential index size gets too large. For this reason, the
+differential index is merged into the main indexes when its size reaches
+`index.differential.merge.limit`. There is also no benefit of differential
+indexes if the main index itself is small. For this reason, the differential
+index is not used until the main index size reaches
+`index.differential.enable.limit`.
+
+In most cases, the default values of the differential index parameters will work
+fine and doesn't need to be changed. The corollary is that you shouldn't change
+this value in a production system till you've tested the effects of a change in
+a non-production system.
+
+NOTE: Increasing `index.differential.merge.limit` will improve the throughput
+for updates, but there will be longer pauses when the differential index is
+being merged. Reducing the value of `index.differential.merge.limit` will make
+sure there are no long pauses but overall throughput will suffer. The optimal
+value depends on the average size of a transaction for the application and the
+frequency of updates.
+
+=== Loading Compressed Data
+
+Stardog supports loading data from compressed files directly: there's no need to
+uncompress files before loading. Loading compressed data is the recommended way
+to load large input files. Stardog supports GZIP, BZIP2 and ZIP compressions
+natively.
+
+==== GZIP and BZIP2
+
+A file passed to `create` will be treated as compressed if the file name ends
+with `.gz` or `.bz2`. The RDF format of the file is determined by the
+penultimate extension. For example, if a file named `test.ttl.gz`
+is used as input, Stardog will perform GZIP decompression during loading and
+parse the file with Turtle parser. All the formats supported by Stardog
+(RDF/XML, Turtle, Trig, etc.) can be used with compression.
+
+==== ZIP
+
+The ZIP support works differently since zipped files can contain
+multiple files. When an input file name ends with `.zip`, Stardog
+performs ZIP decompression and tries to load all the files inside the
+ZIP file. The RDF format of the files inside the zip is determined
+by their file names as usual. If there is an unrecognized file extension
+(e.g. '.txt'), then that file will be skipped.
+
+=== Dropping a Database
+
+This command removes a database and all associated files and metadata.
+This means all files on disk pertaining to the database will be deleted,
+so only use `drop` when you're certain! Databases must be offline in
+order to be dropped.
+
+It takes as its only argument a valid database name. For example,
+
+[source,bash]
+----
+$ stardog-admin db drop my_db
+----
+
+=== Using Integrity Constraint Validation
+
+Stardog supports integrity constraint validation as a data quality
+mechanism via closed world reasoning. Constraints can be specified in
+OWL, SWRL, and SPARQL. Please see the <<Validating Constraints>> section for more about
+using ICV in Stardog.
+
+The CLI `icv` subcommand can be used to add, delete, or drop all
+constraints from an existing database. It may also be used to validate
+an existing database with constraints that are passed into the `icv`
+subcommand; that is, using different constraints than the ones already
+associated with the database.
+
+For details of ICV usage, see `stardog help icv` and `stardog-admin help icv`.
+For ICV in transacted mutations of Stardog databases, see the database creation
+section above.
+
+=== Migrating a Database
+
+The `migrate` subcommand migrates an older Stardog database to the
+latest version of Stardog. Its only argument is the name of the database
+to migrate. `migrate` won't necessarily work between arbitrary Stardog
+version, so before upgrading check the release notes for a new version
+carefully to see whether migration is required or possible.
+
+[source,bash]
+----
+$ stardog-admin db migrate myDatabase
+----
+
+will update `myDatabase` to the latest database format.
+
+=== Getting Database Information
+
+You can get some information about a database by running the following
+command:
+
+[source,bash]
+----
+$ stardog-admin metadata get my_db_name
+----
+
+This will return all the metadata stored about the database, including
+the values of configuration options used for this database instance. If
+you want to get the value for a specific option then you can run the
+following command:
+
+[source,bash]
+----
+$ stardog-admin metadata get -o index.named.graphs my_db_name
+----
+
+=== Managing Stored Queries
+
+Stardog 4.2 added the capability to name and store SPARQL queries for future
+evaluation by referring to the query's name.
+
+Queries of any type can be stored in Stardog and executed directly by using the
+name of the stored query. Stored queries can be shared with other users, which
+gives those users the ability to run those queries provided that they have
+appropriate permissions for a database.
+
+==== Storing Queries
+
+Queries can be stored using the `stored add` command and specifying a unique
+name for the stored query:
+
+[source,bash]
+----
+$ stardog-admin stored add -n types "select distinct ?type {?s a ?type}"
+----
+
+If a file is used to specify the query string without an explicit 
+`-n/--name` option then the name of the query file is used for the stored 
+query:
+
+[source,bash]
+----
+$ stardog-admin stored add listProperties.sparql
+----
+
+By default, stored queries can be executed over any database. But they can be
+scoped by providing a specific database name with the `-d/--database` option.
+Also, by default, only the user who stored the query can access that stored
+query. Using the `--shared` flag will allow other users to execute the stored
+query.
+
+The following example stores a shared query with a custom name that can 
+be executed over only the database `myDb`:
+
+----
+$ stardog-admin stored add --shared -d myDb -n listProperties "select distinct ?p {?s ?p ?o}"
+----
+
+Stored query names must be unique for a Stardog instance. Existing stored
+queries can be replaced using the `--overwrite` option in the command.
+
+==== Running Stored Queries
+
+Stored queries can be executed using the regular query execution command
+by passing the name of the stored query:
+
+[source,bash]
+----
+$ stardog query myDb listProperties
+----
+
+Other commands like `query explain` also accept stored query names.
+
+==== Listing Stored Queries
+
+To see all the stored queries, use the `stored list` subcommand:
+
+[source,bash]
+----
+$ stardog-admin stored list
+----
+
+The results are formatted tabularly:
+
+[source,bash]
+----
++--------+-----------------------------------------+
+|  Name  |            Query String                 |
++--------+-----------------------------------------+
+| graphs | SELECT ?graph (count(*) as ?size)       | 
+|        | FROM NAMED stardog:context:all          |
+|        | WHERE { GRAPH ?graph {?s ?p ?o}}        |
+|        | GROUP BY ?graph                         |
+|        | ORDER BY desc(?size)                    |
+| people | CONSTRUCT WHERE {                       | 
+|        |    ?person a foaf:Person ;              |
+|        |            ?p ?o                        |
+|        | }                                       |
+| types  | SELECT DISTINCT ?type ?label            |
+|        | WHERE {                                 |
+|        |    ?s a ?type .                         |
+|        |    OPTIONAL { ?type rdfs:label ?label } | 
+|        | }                                       |
++--------+-----------------------------------------+
+
+3 stored queries
+----
+
+Users can only see the queries they've stored and the queries stored by other
+users that have been `--shared`. The `--verbose` option will show more details
+about the stored queries.
+
+==== Removing Stored Queries
+
+Stored queries can be removed using the `stored remove` command:
+
+[source,bash]
+----
+$ stardog-admin stored remove storedQueryName
+----
+
+If you would like to clear all the stored queries then use the 
+`-a/--all` option:
+
+[source,bash]
+----
+$ stardog-admin stored remove -a
+----
+
+=== Managing Running Queries
+
+Stardog includes the capability to manage running queries according to
+configurable policies set at run-time; this capability includes support
+for **listing** running queries; **deleting** running queries; **reading** the
+status of a running query; **killing** running queries that exceed a
+time threshold automatically; and **logging** slow queries for analysis.
+
+Stardog is pre-configured with sensible *server-wide* defaults for query
+management parameters; these defaults may be overridden or disabled per
+database, or even per query.
+
+==== Configuring Query Management
+
+For many uses cases the default configuration will be sufficient. But
+you may need to tweak the timeout parameter to be longer or shorter,
+depending on the hardware, data load, queries, throughput, etc. The
+default configuration has a server-wide query timeout value of
+`query.timeout`, which is inherited by all the databases in the server.
+You can customize the server-wide timeout value and then set
+per-database custom values, too. Any database without a custom value
+inherits the server-wide value. To disable query timeout, set
+`query.timeout` to `0`. If individual queries need to set their own timeout,
+this can be done (by passing a `timeout` parameter over HTTP or using
+the `--timeout` flag on the CLI), but only if the `query.timeout.override.enabled`
+property is set to true for the database (true is the default).
+
+==== Listing Queries
+
+To see all running queries, use the `query list` subcommand:
+
+[source,bash]
+----
+$ stardog-admin query list
+----
+
+The results are formatted tabularly:
+
+[source,bash]
+----
++----+----------+-------+--------------+
+| ID | Database | User  | Elapsed time |
++----+----------+-------+--------------+
+| 2  | test     | admin | 00:00:20.165 |
+| 3  | test     | admin | 00:00:16.223 |
+| 4  | test     | admin | 00:00:08.769 |
++----+----------+-------+--------------+
+
+3 queries running
+----
+
+You can see which user owns the query (superuser's can see all running
+queries), as well as the elapsed time and the database against which the
+query is running. The ID column is the key to deleting queries.
+
+==== Deleting Queries
+
+To delete a running query, simply pass its ID to the `query kill`
+subcommand:
+
+[source,bash]
+----
+$ stardog-admin query kill 3
+----
+
+The output confirms the query kill completing successfully:
+
+[source,bash]
+----
+Query 3 killed successfully
+----
+
+==== Automatically Killing Queries
+
+For production use, especially when a Stardog database is exposed to
+arbitrary query input, some of which may not execute in an acceptable
+time period, the automatic query killing feature is useful. It will
+protect a Stardog Server from queries that consume too many resources.
+
+Once the execution time of a query exceeds the value of `query.timeout`,
+the query will be killed automatically.footnote:[However, there may be some
+delay since Stardog only periodically checks the `query.timeout` value against
+internal query evaluation timers.] The client that submitted the
+query will receive an error message. The value of `query.timeout` may be
+overriden by setting a different value (smaller or longer) in database
+options. To disable, set to `query.timeout` to `0`.
+
+The value of `query.timeout` is a positive integer concatenated with a
+letter, interpreted as a time duration: 'h' (for hours),
+'m' (for minutes), 's' (for seconds), or 'ms' (for milliseconds). For
+example, '1h' for 1 hour, '5m' for 5 minutes, '90s' for 90 seconds, and
+'500ms' for 500 milliseconds.
+
+The default value of `query.timeout` is five minutes.
+
+==== Query Status
+
+To see more detail about query in-flight, use the `query status`
+subcommand:
+
+[source,bash]
+----
+$ stardog-admin query status 1
+----
+
+The resulting output includes query metadata, including the query
+itself:
+
+[source,bash]
+----
+Username: admin
+Database: test
+Started : 2013-02-06 09:10:45 AM
+Elapsed : 00:01:19.187
+Query   :
+select ?x ?p ?o1 ?y ?o2
+   where {
+     ?x ?p ?o1.
+     ?y ?p ?o2.
+     filter (?o1 > ?o2).
+    }
+order by ?o1
+limit 5
+----
+
+==== Slow Query Logging
+
+Stardog does not log slow queries in the default configuration because there
+isn't a single value for what counts as a "slow query", which is entirely
+relative to queries, access patterns, dataset sizes, etc. While slow query
+logging has very minimal overhead, what counts as a slow query in some context
+may be quite acceptable in another. See <<Configuring Stardog Server>> above
+for the details.
+
+==== Protocols and Java API
+
+For HTTP protocol support, see http://docs.stardog.apiary.io/[Stardog's Apiary] docs.
+
+For Java, see the http://docs.stardog.com/java/snarl/[Javadocs].
+
+==== Security and Query Management
+
+The security model for query management is very simple: any user can
+kill any running query submitted by that user, and a superuser can kill any
+running query. The same general restriction is applied to query status;
+you cannot see status for a query that you do not own, and a superuser can
+see the status of every query.
+
+=== Managing Query Performance
+
+Stardog answers queries in two major phases: determining the query plan and
+executing that plan to obtain answers from the data. The former is called _query
+planning_ (or _query optimization_) and includes all steps required to select
+the most efficient way to execute the query. How Stardog evaluates a query can
+only be understood by analyzing the query plan. Query plan analysis is also the
+main tool for investigating performance issues as well as addressing them, in
+particular, by re-formulating the query to make it more amenable to
+optimization.
+
+==== Query Plan Syntax
+
+We will use the following running example to explain 
+query plans in Stardog.
+
+[source,sparql]
+----
+ SELECT DISTINCT ?person ?name
+ WHERE {
+   ?article rdf:type bench:Article .
+   ?article dc:creator ?person .
+   ?inproc rdf:type bench:Inproceedings .
+   ?inproc dc:creator ?person .
+   ?person foaf:name ?name
+ }
+---- 
+
+This query returns the names of all people who have authored both a journal
+article and a paper in a conference proceedings. The query plan used by Stardog
+(in this example, 4.2.2) to evaluate this query is:
+
+[source,javascript]
+----
+ Distinct [#812K]
+ `─ Projection(?person, ?name) [#812K]
+    `─ MergeJoin(?person) [#812K]
+       +─ MergeJoin(?person) [#391K]
+       │  +─ Sort(?person) [#391K]
+       │  │  `─ MergeJoin(?article) [#391K]
+       │  │     +─ Scan[POSC](?article, rdf:type, bench:Article) [#208K]
+       │  │     `─ Scan[PSOC](?article, dc:creator, ?person) [#898K]
+       │  `─ Scan[PSOC](?person, foaf:name, ?name) [#433K]
+       `─ Sort(?person) [#503K]
+          `─ MergeJoin(?inproc) [#503K]
+             +─ Scan[POSC](?inproc, rdf:type, bench:Inproceedings) [#255K]
+             `─ Scan[PSOC](?inproc, dc:creator, ?person) [#898K]
+----
+
+The plan is arranged in an hierarchical, tree-like structure. The nodes, called
+_operators_, represent units of data processing during evaluation. They
+correspond to evaluations of graphs patterns or solution modifiers as defined in
+https://www.w3.org/TR/sparql11-query/#sparqlDefinition[SPARQL 1.1
+specification]. All operators can be regarded as functions which may take some
+data as input and produce some data as output. All input and and output data is
+represented as streams of
+https://www.w3.org/TR/sparql11-query/#sparqlSolutions[solutions], that is, sets
+of bindings of the form `x -> value` where `x` is a variable used in the query
+and `value` is some RDF term (IRI, blank node, or literal). Examples of
+operators include scans, joins, filters, unions, etc.
+ 
+Numbers in square brackets after each node refer to the _estimated_ cardinality
+of the node, i.e. how many solutions Stardog expects this operator to produce
+when the query is evaluated. Statistics-based cardinality estimation in Stardog
+merits a separate blog post, but here are the key points for the purpose of
+reading query plans:
+ 
+ 1. all estimations are approximate and their accuracy can
+ vary greatly (generally: more precise for bottom nodes, less precise for upper nodes) 
+ 1. estimations are only used for selecting the best plan but have no bearing on
+ the actual results of the query
+ 1. in most cases a sub-optimal plan can be explained by inaccurate estimations
+
+==== Stardog Evaluation Model
+
+Stardog generally evaluates query plans according to the
+https://www.w3.org/TR/sparql11-query/#sparqlAlgebraEval[bottom-up SPARQL
+semantics]. Leaf nodes are evaluated first and without input, and their results
+are then sent to their parent nodes up the plan. Typical examples of leaf nodes
+include scans, i.e. evaluations of triple patterns, evaluations of full-text
+search predicates, and
+https://www.w3.org/TR/sparql11-query/#inline-data[`VALUES`] operators. They
+contain all information required to produce output, for example, a triple
+pattern can be directly evaluated against Stardog indexes. Parent nodes, such as
+joins, unions, or filters, take solutions as inputs and send their results
+further towards the root of the tree. The root node in the plan, which is
+typically one of the
+https://www.w3.org/TR/sparql11-query/#solutionModifiers[solution modifiers],
+produces the final results of the query which are then encoded and sent to the
+client.
+
+===== Pipelining And Pipeline Breakers
+
+Stardog implements the 
+http://dbms-arch.wikia.com/wiki/Volcano_Model[Volcano model], in which
+evaluation is as _lazy_ as possible. Each operator does just enough work to
+produce the next solution. This is important for performance, especially for
+queries with a `LIMIT` clause (of which `ASK` queries are a special case) and
+also enables Stardog's query engine to send the first result(s) as soon as they
+are available (as opposed to waiting till all results have been computed).
+
+Not all operators can produce output solutions as soon as they get first input
+solutions from their children nodes. Some need to accumulate intermediate
+results before sending output. Such operators are called _pipeline breakers_,
+and they are often the culprits for performance problems, typically resulting
+from memory pressure. It is important to be able to spot them in the plan since
+they can suggest either a way to re-formulate the query to help the planner or a
+way to make the query more precise by specifying extra constants where they
+matter.
+
+Here are some important pipeline breakers in the example plan:
+
+* https://en.wikipedia.org/wiki/Hash_join[`HashJoin`] algorithms
+build a hash table for solutions produced by the right operand. Typically all
+such solutions need to be hashed, either in memory or spilled to disk, before
+the first output solution is produced by the `HashJoin` operator.
+* `Sort`: the sort operator builds an intermediate _sorted_ collection of
+solutions produced by its child node. The main use case for sorting
+solutions is to prepare data for an operator which can benefit from sorted
+inputs, such as `MergeJoin`, `Distinct`, or `GroupBy`. Of course all solutions
+have to be fetched from the child node before the smallest (w.r.t. the sort key)
+solution can be emitted.
+* `GroupBy`: group-by operators are used for aggregation, e.g. counting or
+summing results. When evaluating a query like `select ?x (count(?y) as ?count)
+where { ... } group by ?x` Stardog has to scroll through all solutions to
+compute the count for every `?x` key before returning the first result.
+
+Other operators can produce output as soon as they get input, most notably the
+following:
+
+* `MergeJoin`: merge join algorithms do a single zig-zag pass over sorted
+streams of solutions produced by children nodes and output a solution as soon as
+the join condition is satisfied.
+* `DirectHashJoin`: contrary to the classical hash join algorithm, this operator
+does not build a hash table. It utilizes Stardog indexes for look-ups which
+doesn't require extra data structures. This is only possible when the
+right operand is sorted by the join key, but the left isn't, otherwise Stardog
+would use a merge join.
+* `Filter`: a solution modifier which evaluates the filter condition on each
+  input solution.
+* `Union`: combines streams of children solutions without any extra work, e.g.
+  joining, so there's no need for intermediate results.
+
+Now, returning to the above query, one can see `Sort` pipeline breakers in the
+plan:
+
+[source,javascript]
+----
+Sort(?person) [#391K]
+`─ MergeJoin(?article) [#391K]
+   +─ Scan[POSC](?article, rdf:type, bench:Article) [#208K]
+   `─ Scan[PSOC](?article, dc:creator, ?person) [#898K]
+----
+
+This means that all solutions representing the join of `?article rdf:type
+bench:Article` and `?article dc:creator ?person` will be put in a sequence
+ordered by the values of `?person`. Stardog expects to sort `391K` solutions
+before they can be further merge-joined with the results of the `?person
+foaf:name ?name` pattern. Alternatively the engine could build a hash table
+instead of sorting solutions; such decisions are made by the optimizer based on
+a number of factors.
+
+==== Skipping Intermediate Results
+
+One tricky part of understanding Stardog query plans is that evaluation of each
+operator in the plan is usually context-sensitive, i.e. it depends on what other
+nodes are in the same plan, possibly in a different sub-tree. In particular, the
+cardinality estimations, even if assumed accurate, only specify how many
+solutions the operator is expected to produce when evaluated as the root node of
+a plan.
+
+However, as it is joined with other parts of the plan, the results can be quite
+different. This is because Stardog employs optimizations to reduce the number of
+solutions produced by a node by pruning those which are incompatible with other
+solutions with which they will later be joined.
+ 
+Consider the following basic graph pattern and the corresponding plan:
+
+[source,javascript]
+----
+?erdoes rdf:type foaf:Person .
+?erdoes foaf:name "Paul Erdoes"^^xsd:string .
+?document dc:creator ?erdoes .
+
+MergeJoin(?erdoes) [#10]
++─ MergeJoin(?erdoes) [#1]
+│  +─ Scan[POSC](?erdoes, rdf:type, foaf:Person) [#433K]
+│  `─ Scan[POSC](?erdoes, foaf:name, "Paul Erdoes") [#1]
+`─ Scan[POSC](?document, dc:creator, ?erdoes) [#898K]
+----
+
+The pattern matches all documents created by a person named Paul Erdoes. Here
+the second pattern is very selective (only one entity is expected to have the
+name "Paul Erdoes"). This information is propagated to the other two scans in
+the plan via merge joins, which allows them to skip scanning large parts of data
+indexes.
+
+In other words, the node `Scan[POSC](?erdoes, rdf:type, foaf:Person) [#433K]`
+will not produce all `433K` solutions corresponding to all people in the
+database and, similarly, `Scan[POSC](?document, dc:creator, ?erdoes) [#898K]`
+will not go through all `898K` document creators.
+
+==== Diagnosing Performance Problems
+
+Performance problems may arise because of two reasons:
+
+1. complexity of the query itself, especially the amount of returned data 
+2. failure to select a good plan for the query. 
+
+It is important to distinguish the two. In the former case the best way forward
+is to make the patterns in `WHERE` more selective. In the latter case, i.e. when
+the query returns some modest number of results but takes an unacceptably long
+time to do so, one needs to look at the plan, identify the bottlenecks (usually
+pipeline breakers), and reformulate the query or report it to us for further
+analysis.
+
+Here's an example of a very un-selective query:
+
+[source,javascript]
+----
+SELECT DISTINCT ?name1 ?name2
+WHERE {
+  ?article1 rdf:type bench:Article .
+  ?article2 rdf:type bench:Article .
+  ?article1 dc:creator ?author1 .
+  ?author1 foaf:name ?name1 .
+  ?article2 dc:creator ?author2 .
+  ?author2 foaf:name ?name2 .
+  ?article1 swrc:journal ?journal .
+  ?article2 swrc:journal ?journal
+  FILTER (?name1<?name2)
+  }
+----
+
+The query returns all distinct pairs of authors who published (possibly
+different) articles in the same journal. It returns more than 18M results from a
+database of 5M triples. Here's the plan:
+
+[source,javascript]
+----
+Distinct [#17.7M]
+`─ Projection(?name1, ?name2) [#17.7M]
+   `─ Filter(?name1 < ?name2) [#17.7M]
+      `─ HashJoin(?journal) [#35.4M]
+         +─ MergeJoin(?author2) [#391K]
+         │  +─ Sort(?author2) [#391K]
+         │  │  `─ NaryJoin(?article2) [#391K]
+         │  │     +─ Scan[POSC](?article2, rdf:type, bench:Article) [#208K]
+         │  │     +─ Scan[PSOC](?article2, swrc:journal, ?journal) [#208K]
+         │  │     `─ Scan[PSOC](?article2, dc:creator, ?author2) [#898K]
+         │  `─ Scan[PSOC](?author2, foaf:name, ?name2) [#433K]
+         `─ MergeJoin(?author1) [#391K]
+            +─ Sort(?author1) [#391K]
+            │  `─ NaryJoin(?article1) [#391K]
+            │     +─ Scan[POSC](?article1, rdf:type, bench:Article) [#208K]
+            │     +─ Scan[PSOC](?article1, swrc:journal, ?journal) [#208K]
+            │     `─ Scan[PSOC](?article1, dc:creator, ?author1) [#898K]
+            `─ Scan[PSOC](?author1, foaf:name, ?name1) [#433K]
+----
+
+This query requires an expensive join on `?journal` which is evident from the
+plan (it's a hash join in this case). It produces more than 18M results (Stardog
+expects 17.7M which is fairly accurate in this case) that need to be filtered
+and examined for duplicates. Given all this information from the plan, the only
+reasonable way to address the problem would be to restrict the criteria, e.g. to
+particular journals, people, time periods, etc.
+
+If a query is well-formulated and selective, but performance is unsatisfactory,
+one may look closer at the pipeline breakers, e.g. this part of the query
+plan:
+
+[source,javascript]
+----
+MergeJoin(?person) [#391K]
++─ Sort(?person) [#391K]
+|  `─ MergeJoin(?article) [#391K]
+|     +─ Scan[POSC](?article, rdf:type, bench:Article) [#208K]
+|     `─ Scan[PSOC](?article, dc:creator, ?person) [#898K]
+`─ Scan[PSOC](?person, foaf:name, ?name) [#433K]
+----
+
+A reasonable thing to do would be to evaluate the join of `?article rdf:type
+bench:Article` and `?article dc:creator ?person` separately, i.e. as a separate
+queries, to see if the estimation of `391K` is reasonably accurate and to get an
+idea about memory pressure. This is a valuable piece of information for a
+performance problem report, especially when the data cannot be shared with us.
+Similar analysis can be done for hash joins.
+ 
+In addition to pipeline breakers, there could be other clear indicators of
+performance problems. One of them is the presence of `LoopJoin` nodes in the
+plan. Stardog implements the
+https://en.wikipedia.org/wiki/Nested_loop_join[nested loop join] algorithm which
+evaluates the join by going through the Cartesian product of its inputs. This is
+the slowest join algorithm and it is used only as a last resort. It sometimes,
+but not always, indicates a problem with the query.
+
+Here's an example:
+
+[source,javascript]
+----
+ SELECT DISTINCT ?person ?name
+ WHERE {
+   ?article rdf:type bench:Article .
+   ?article dc:creator ?person .
+   ?inproc rdf:type bench:Inproceedings .
+   ?inproc dc:creator ?person2 .
+   ?person foaf:name ?name .
+   ?person2 foaf:name ?name2
+   FILTER (?name=?name2)
+ }
+----
+
+The query is very similar to an earlier query plan we saw but runs much slower. The plan
+shows why:
+
+[source,javascript]
+----
+Distinct [#98456.0M]
+`─ Projection(?person, ?name) [#98456.0M]
+   `─ Filter(?name = ?name2) [#98456.0M]
+      `─ LoopJoin(_) [#196912.1M]
+         +─ MergeJoin(?person) [#391K]
+         │  +─ Sort(?person) [#391K]
+         │  │  `─ MergeJoin(?article) [#391K]
+         │  │     +─ Scan[POSC](?article, rdf:type, bench:Article) [#208K]
+         │  │     `─ Scan[PSOC](?article, dc:creator, ?person) [#898K]
+         │  `─ Scan[PSOC](?person, foaf:name, ?name) [#433K]
+         `─ MergeJoin(?person2) [#503K]
+            +─ Sort(?person2) [#503K]
+            │  `─ MergeJoin(?inproc) [#503K]
+            │     +─ Scan[POSC](?inproc, rdf:type, bench:Inproceedings) [#255K]
+            │     `─ Scan[PSOC](?inproc, dc:creator, ?person2) [#898K]
+            `─ Scan[PSOC](?person2, foaf:name, ?name2) [#433K]
+----
+
+The loop join near the top of the plan computes the Cartesian product of the
+arguments which produces almost 200B solutions. This is because there is no
+shared variable between the parts of the query which correspond to authors of
+articles and conference proceedings papers, respectively. The filter condition
+`?name = ?name2` cannot be transformed into an equi-join because the semantics
+of https://www.w3.org/TR/sparql11-query/#OperatorMapping[term equality] used in
+filters is different from the
+https://www.w3.org/TR/sparql11-query/#BasicGraphPattern[solution compatibility]
+semantics used for checking join conditions.
+
+The difference manifests itself in the presence of numerical literals, e.g.
+`"1"^^xsd:integer` = `"1.0"^^xsd:float`, where they are different RDF terms.
+However, as long as all names in the data are strings, one can re-formulate this
+query by renaming `?name2` to `?name` which would enable Stardog to use a more
+efficient join algorithm.
+
+==== Query Plan Operators
+
+The following operators are used in Stardog query plans:
+
+* `Scan[Index]`: evaluates a triple/quad pattern against Stardog indexes.
+Indicates the index used, e.g. `CSPO` or `POSC`, where `S,P,O,C` stand for the
+kind of lexicographic ordering of quads that the index provides. `SPOC` means
+that the index is sorted first by *S*ubject, then *P*redicate, *O*bject, and
+*C*ontext (named graph IRI).
+
+* `HashJoin(join key)`: hash join algorithm, hashes the right operand. **Pipeline breaker**.
+
+* `DirectHashJoin(join key)`: a hash join algorithm which directly uses indexes
+  for lookups instead of building a hash table. Not a pipeline breaker.
+
+* `MergeJoin(join key)`: merge join algorithm, the fastest option for joining
+two streams of solutions. Requires both operands be sorted on the join key. Not
+a pipeline breaker.
+
+* `LoopJoin`: the nested loops join algorithm, the slowest join option. Not a pipeline breaker.
+
+* `Sort(sort key)`: sorts the argument solutions by the sort key, typically used
+  as a part of a merge join. **Pipeline breaker**.
+
+* `Filter(condition)`: filters argument solutions according to the condition. Not a pipeline breaker.
+
+* `Union`: combines streams of argument solutions. If both streams are sorted by
+the same variable, the result is also sorted by that variable. Not a pipeline
+breaker.
+
+* `PropertyPath`: evaluates a
+https://www.w3.org/TR/sparql11-query/#propertypaths[property path] pattern
+against Stardog indexes. Not a pipeline breaker.
+
+* `GroupBy`: groups results of the child operator by values of the group-by
+expressions (i.e. keys) and aggregates solutions for each key. **Pipeline
+breaker** (unless the input is sorted by first key).
+
+* `Distinct`: removes duplicate solutions from the input. Not a pipeline breaker
+but accumulates solutions in memory as it runs so the memory pressure increases
+as the number of unique solutions increases.
+
+* `VALUES`: produces the
+https://www.w3.org/TR/sparql11-query/#inline-data[inlined results] specified in
+the query. Not a pipeline breaker.
+
+* `Search`: evaluates a full-text search predicates against the Lucene index
+  within a Stardog database.
+
+* `Projection`: projects variables as results of a query or a sub-query. Not a
+  pipeline breaker.
+
+* `Bind`: evaluates expressions on each argument solution and binds their values
+  to (new) variables. Not a pipeline breaker.
+
+* `Empty` and `Singleton`: correspond to the empty solution set and a single
+  empty solution, respectively.
+
+* `Type`: reasoning operator for evaluating patterns of the form `?x rdf:type
+  ?type` or `:instance rdf:type ?type`. Not a pipeline breaker.
+
+* `Property`: operator for evaluating triple patterns with unbound predicate
+  with reasoning. Not a pipeline breaker.
+ 
+* `Service`: SPARQL federation operator which evaluate a pattern against a
+  remote SPARQL endpoint (or a
+  http://docs.stardog.com/#_structured_data_aka_virtual_graphs[virtual graph]).
+
+=== Managing Search
+
+Stardog's search service is described in <<Using Stardog>> section.
+
+Full-text support for a database is disabled by default but can be
+enabled at any time by setting the configuration option
+`search.enabled` to true. For example, you can create a database with
+full-text support as follows:
+
+[source,bash]
+----
+$ stardog-admin db create -o search.enabled=true -n myDb
+----
+
+There are three modes for rebuilding indexes:
+
+. `sync`: Recompute the search index synchronously with a transacted
+    write.
+. `async`: Recompute the search index asynchronously as soon as
+    possible with respect to a transacted write.
+. Scheduled: Use a http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/crontrigger[cron expression]
+    to specify when the search index should be updated.
+
+This is specified when creating a database by setting the property
+`search.reindex.mode` to `sync`, `async`, or to a valid cron
+expression.  The default is `sync`. This behavior can be configured by
+the `search.reindex.mode` database option.
+
+=== ACID Transactions
+
+What follows is specific guidance with respect to Stardog's
+transactional semantics and guarantees.footnote:[A good general
+purpose discussion of these issues in context of J2EE is
+http://vladmihalcea.com/2014/12/23/a-beginners-guide-to-transaction-isolation-levels-in-enterprise-java/[this
+beginner's guide].]
+
+==== Atomicity
+
+Databases may provide a guarantee of atomicity--groups of database actions
+(i.e., mutations) are irreducible and indivisible: either all of the changes
+happen or none of them happens. Stardog's transacted writes are atomic. Stardog
+does not support nested transactions.footnote:[As discussed in <<SPARQL
+Update>>, since Update queries are implicitly atomic transactional operations,
+which means you shouldn't issue an Update query within an open transaction.]
+
+==== Consistency
+
+Data stored should be valid with respect to the data model (in this case, RDF)
+and to the guarantees offered by the database, as well as to any
+application-specific integrity constraints that may exist. Stardog's transactions
+are guaranteed not to violate integrity constraints during execution. A
+transaction that would leave a database in an inconsistent or invalid state is
+aborted.
+
+See the <<Validating Constraints>> section for a more detailed
+consideration of Stardog's integrity constraint mechanism.
+
+==== Isolation
+
+A Stardog connection will run in
+http://en.wikipedia.org/wiki/Isolation_(database_systems)#Read_committed[`READ
+COMMITTED`] isolation level if it has not started an explicit transaction and
+will run in `READ COMMITTED SNAPSHOT` or `SERIALIZABLE` isolation level
+depending on the value of the `transaction.isolation`. In any of these modes,
+uncommitted changes will only be visible to the connection that made the changes:
+no other connection can see those values before they are committed. Thus,
+"dirty reads" can never occur.
+
+The difference between `READ COMMITTED` and `READ COMMITTED SNAPSHOT` isolation
+levels is that in the former case a connection will see updates committed by
+another connection immediately, whereas in the latter case a connection will see
+a transactionally consistent snapshot of the data as it existed at the start of
+the transaction and will not see any updates.
+
+We illustrate the difference between these two levels with the following example
+where initially the database contains a single triple `:x :val 1`.
+
+.Table of the difference between RCI and RCSI
+|===
+|Time|Connection 1| Connection 2|Connection 3
+|`0`
+|`SELECT ?val {?x :val ?val}` +
+<= `1`
+|`SELECT ?val {?x :val ?val}` +
+<= `1`
+|`SELECT ?val {?x :val ?val}` +
+<= `1`
+
+|`1`
+|`*BEGIN TX*`
+|
+|
+
+|`2`
+|`INSERT {:x :value 2} +
+DELETE {:x :value ?old}`
+|
+|
+
+|`3`
+|`SELECT ?val {?x :val ?val}` +
+<= `2`
+|`SELECT ?val {?x :val ?val}` +
+<= `1`
+| `SELECT ?val {?x :val ?val}` +
+<= `1`
+
+|`4`
+|
+|
+|`*BEGIN TX*`
+
+|`5`
+|`*COMMIT*`
+|
+|
+
+|`6`
+|`SELECT ?val {?x :val ?val}` +
+<= `2`
+|`SELECT ?val {?x :val ?val}`  +
+<= `2`
+|`SELECT ?val {?x :val ?val}` +
+<= `1`
+
+|`8`
+|
+|
+|`INSERT {:x :value 3} +
+DELETE {:x :value ?old}`
+
+|`9`
+|
+|
+|`*COMMIT*`
+
+|`10`
+|`SELECT ?val {?x :val ?val}` +
+<= `3`
+|`SELECT ?val {?x :val ?val}` +
+<= `3`
+|`SELECT ?val {?x :val ?val}` +
+<= `3`
+|===
+
+No locks are taken, or any conflict resolution performed, for concurrent
+transactions in `READ COMMITTED SNAPSHOT` isolation level. If there are
+conflicting changes, the latest commit wins which might yield unexpected results
+in some cases since every transaction reads from a snapshot that was created at
+the time transaction started.
+
+Consider the following query being executed by two concurrent threads in
+`READ COMMITTED SNAPSHOT` isolation level against a database having the triple
+`:counter :val 1` initially:
+
+[source,sparql]
+----
+INSERT { :counter :val ?newValue }
+DELETE { :counter :val ?oldValue }
+WHERE  { :counter :val ?oldValue
+         BIND (?oldValue+1 AS ?newValue) }
+----
+
+Since each transaction will read the current value from its snapshot, it is
+possible that both transactions will read the value `1` and insert the value `2`
+even though we expect the final value to be `3`.
+
+Isolation level `SERIALIZABLE` can be used to avoid these situations. In
+`SERIALIZABLE` mode an exclusive lock needs to be acquired before a transaction
+begins. This ensures concurrent updates cannot interfere with each other, but as a
+result update throughput will decrease since only one transaction can run at a time.
+
+==== Durability
+
+By default Stardog's transacted writes are durable and no additional actions are required.
+
+==== Commit Failure Autorecovery
+
+Stardog's transaction framework is largely maintenance free; but there are some
+rare conditions in
+which manual intervention may be needed.
+
+Stardog's strategy for recovering automatically from (the very unlikely
+event of) commit failure is as follows:
+
+.   Stardog will roll back the transaction upon a commit
+    failure;
+.   Stardog takes the affected database offline for
+    maintenance;footnote:[The probability of recovering from a catastrophic
+    transaction failure is inversely proportional to the number of
+    subsequent write attempts; hence, Stardog offlines the database to
+    prevent subsequent write attempts and to increase the
+    likelihood of recovery.] then
+.   Stardog will begin recovery, bringing the
+    recovered database back online once that task is successful so that
+    operations may resume.
+
+With an appropriate logging configuration for production usage (at least
+error-level logging), log messages for the preceding recovery operations
+will occur. If for whatever reason the database fails to be returned
+automatically to online status, an administrator may use the CLI tools
+(i.e., `stardog-admin db online`) to attempt to online the database.
+
+=== Optimizing Bulk Data Loading
+
+Stardog tries hard to do bulk loading at database creation time in the
+most efficient and scalable way possible. But data loading time can vary
+widely, depending on factors in the data to be loaded, including the
+number of unique resources, etc. Here are some tuning tips that may work
+for you:
+
+.  Load <<Loading Compressed Data,compressed data>> since compression
+    minimizes disk access
+.  Use a multicore machine since bulk loading is highly parallelized
+    and indexes are built concurrently
+.  Load multiple files together at creation time since different files
+    will be parsed and processed concurrently improving the load speed
+.  Turn off strict parsing (see <<Configuring a Database>> for the details).
+.  If you are not using named graphs, use <<Database Create Options, triples only indexing>>.
+
+== Capacity Planning
+
+The primary system resources used by Stardog are CPU, memory, and
+disk.footnote:[Stardog also uses file handles and sockets, but we don't discuss
+those here.] Stardog
+will take advantage of multiple CPUs, cores, and core-based threads in data
+loading and in throughput-heavy or multi-user loads. And obviously Stardog
+performance is influenced by the speed of CPUs and cores. But some workloads are
+bound by main memory or by disk I/O (or both) more than by CPU. In general, use
+the fastest CPUs you can afford with the largest secondary caches and the most
+number of cores and core-based threads of execution, especially in multi-user
+workloads.
+
+The following subsections provides more detailed guidance for the memory
+and disk resource requirements of Stardog.
+
+=== Memory usage
+
+Stardog uses system memory aggressively and the total system memory
+available to Stardog is often the most important factor in
+performance. Stardog uses both JVM memory (heap memory) and
+also the operating system memory outside the JVM (off heap
+memory). Having more system memory available is always good; however,
+increasing JVM memory too close to total system memory is not usually
+prudent as it may tend to increase Garbage Collection (GC) time in the
+JVM.
+
+The following table shows recommended JVM memory and system
+memory requirements for Stardog.footnote:[These are conservative
+values and are somewhat dataset specific. Your data may require less memory..or more!]
+
+.Table of Memory Usage for Capacity Planning
+|===
+|# of Triples|JVM Memory|Off-heap memory
+
+|100 million
+|3GB
+|3GB
+
+|1 billion
+|4GB
+|8GB
+
+|10 billion
+|8GB
+|64GB
+
+|20 billion
+|16GB
+|128GB
+
+|50 billion
+|16GB
+|256GB
+
+|===
+
+Out of the box, Stardog CLI sets the maximum JVM memory to 2GB. This setting
+works fine for most small databases (up to, say, 100 million
+triples). As the database size increases, we recommend increasing JVM
+memory. You can increase the JVM memory for Stardog by setting the
+system property `STARDOG_JAVA_ARGS` using the standard JVM options. For
+example, you can set this property to `"-Xms4g -Xmx4g -XX:MaxDirectMemorySize=8g"`
+to increase the JVM memory to 4GB and off-heap to 8GB. We recommend
+setting the minimum heap size (`-Xms` option) as close to
+the max heap size (`-Xmx` option) as possible.
+
+==== System Memory and JVM Memory
+
+Stardog uses an off-heap, custom memory allocation scheme. Please note
+that the memory provisioning recommendations above are for two kinds of memory
+allocations for the JVM in which Stardog will run. The first is for memory that
+the JVM will manage explicitly (i.e., "JVM memory"); and the second, i.e.,
+"Off-heap memory" is for memory that Stardog will manage explicitly, i.e., off
+the JVM heap, but for which the JVM should be notified via the
+`MaxDirectMemorySize` property. In most cases, this should be somewhat less than
+the total memory available to the underlying operating system as requirements
+dictate.
+
+=== Disk usage
+
+Stardog stores data on disk in a compressed format. The disk space
+needed for a database depends on many factors besides the number of
+triples, including the number of unique resources and literals in the
+data, average length of resource identifiers and literals, and how much
+the data is compressed. The following table shows typical disk space
+used by a Stardog database.
+
+.Table of Typical Disk Space Requirements
+|===
+|# of triples |Disk space
+
+|1 billion
+|70GB to 100GB
+
+|10 billion
+|700GB to 1TB
+|===
+
+These numbers are given for information purposes only; the actual disk
+usage for a database may be significantly different in practice. Also it
+is important to note that the amount of disk space needed at creation
+time for bulk loading data is higher as temporary files will be
+created. The additional disk space needed at bulk loading time can be
+40% to 70% of the final database size.
+
+Disk space used by a database is non-trivially smaller if
+<<Database Create Options, triples-only indexing>> is used. Triples-only indexing
+reduces overall disk space used by 25% on average; however, note
+the tradeoff: SPARQL queries involving named graphs perform
+significantly better with quads indexing.
+
+The disk space used by Stardog is additive for multiple databases and
+there is very little disk space used other than what is required for the
+databases. To calculate the total disk space needed for multiple databases,
+one may sum the disk space needed by each database.
+
+== Using Stardog on Windows
+
+Stardog provides batch (`.bat`) files for use on Windows; they
+provide roughly the same set of functionality provided by the Bash
+scripts which are used on Unix-like systems. There are, however, a few small
+differences between the two. When you start a server with
+`server start` on Windows, this does not detach to the background,
+it will run in the current console.
+
+To shut down the server correctly, you should either issue a
+`server stop` command from another window or press kbd:[Ctrl+C] (and then
+kbd:[Y] when asked to terminate the batch job). Do not under any
+circumstance close the window without shutting down the server. This
+will simply kill the process without shutting down Stardog, which could
+cause your database to be corrupted.
+
+The `.bat` scripts for Windows support our standard `STARDOG_HOME` and
+`STARDOG_JAVA_ARGS` environment variables which can be used to control
+where Stardog's database is stored and, usually, how much memory is given
+to Stardog's JVM when it starts. By default, the script will use the JVM
+that is available in the directory from which Stardog is run via the
+`JAVA_HOME` environment variable. If this is not set, it will simply
+execute `java` from within that directory.
+
+=== Running Stardog as a Windows Service
+
+You can run Stardog as a Windows Service using the following
+configuration. Please, note, that the following assumes commands are
+executed from a Command Prompt with administrative privileges.
+
+==== Installing the Service
+
+Change the directory to the Stardog installation directory:
+
+[source,bat]
+----
+cd c:\stardog-$VERSION
+----
+
+==== Configuring the Service
+
+The default settings with which the service will be installed are
+
+-   2048 MB of RAM
+-   `STARDOG_HOME` is the same as the installation directory
+-   the name of the installed service will be "Stardog Service"
+-   Stardog service will write logs to the "logs" directory within the
+    installation directory
+
+To change these settings, set appropriate environment variables:
+
+-   `STARDOG_MEMORY`: the amount of memory in MB (e.g., set
+    `STARDOG_MEMORY`=4096)
+-   `STARDOG_HOME`: the path to `STARDOG_HOME` (e.g., set
+    `STARDOG_HOME`=c:\\stardog-home)
+-   `STARDOG_SERVICE_DISPLAY_NAME`: a different name to be displayed in
+    the list of services (e.g., set
+    `STARDOG_SERVICE_DISPLAY_NAME`=Stardog Service)
+-   `STARDOG_LOG_PATH`: a path to a directory where the log files should
+    be written (e.g., set `STARDOG_LOG_PATH`=c:\\stardog-logs)
+
+If you have changed the default administrator password, you also
+need to modify `stop-service.bat` and specify the new username and
+password there (by passing `-u` and `-p` parameters in the line that
+invokes `stardog-admin server stop`).
+
+==== Installing Stardog as a Service
+
+Run the `install-service.bat` script.
+
+At this point the service has been installed, but it is not running. To
+run it, see the next section or use any Windows mechanism for
+controlling the services (e.g., type `services.msc` on the command
+line).
+
+==== Starting, Stopping, & Changing Service Configuration
+
+Once the service has been installed, execute `stardog-serverw.exe`,
+which will allow you to configure the service (e.g., set whether the
+service is started automatically or manually), manually start and stop
+the service, as well as to configure most of the service parameters.
+
+==== Uninstalling the Stardog Service
+
+The service can be uninstalled by running `uninstall-service.bat`
+script.

@@ -1,0 +1,640 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY company "http://www.semanticweb.org/company.owl#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.semanticweb.org/company.owl#"
+     xml:base="http://www.semanticweb.org/company.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:company="http://www.semanticweb.org/company.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#handles -->
+
+    <owl:ObjectProperty rdf:about="#handles">
+        <rdfs:domain rdf:resource="#Department"/>
+        <rdfs:range rdf:resource="#Project"/>
+        <owl:propertyDisjointWith rdf:resource="#has_dependent"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#has_dependent -->
+
+    <owl:ObjectProperty rdf:about="#has_dependent">
+        <rdfs:range rdf:resource="#Dependent"/>
+        <rdfs:domain rdf:resource="#Employee"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#is_responsible_for -->
+
+    <owl:ObjectProperty rdf:about="#is_responsible_for">
+        <rdfs:range rdf:resource="#Project"/>
+        <rdfs:domain rdf:resource="#Project_Leader"/>
+        <rdfs:subPropertyOf rdf:resource="#works_on"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#is_superior_of -->
+
+    <owl:ObjectProperty rdf:about="#is_superior_of">
+        <rdfs:domain rdf:resource="#Employee"/>
+        <rdfs:range rdf:resource="#Employee"/>
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="#is_superior_of"/>
+            <rdf:Description rdf:about="#is_superior_of"/>
+        </owl:propertyChainAxiom>
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="#manages"/>
+            <owl:ObjectProperty>
+                <owl:inverseOf rdf:resource="#works_in"/>
+            </owl:ObjectProperty>
+        </owl:propertyChainAxiom>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#manages -->
+
+    <owl:ObjectProperty rdf:about="#manages">
+        <rdfs:range rdf:resource="#Department"/>
+        <rdfs:domain rdf:resource="#Manager"/>
+        <rdfs:subPropertyOf rdf:resource="#works_in"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#receives_funds_from -->
+
+    <owl:ObjectProperty rdf:about="#receives_funds_from">
+        <rdfs:range rdf:resource="#Funding_Body"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#Department"/>
+                    <rdf:Description rdf:about="#Project"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#supervises -->
+
+    <owl:ObjectProperty rdf:about="#supervises">
+        <rdfs:range rdf:resource="#Employee"/>
+        <rdfs:domain rdf:resource="#Supervisor"/>
+        <rdfs:subPropertyOf rdf:resource="#is_superior_of"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#works_in -->
+
+    <owl:ObjectProperty rdf:about="#works_in">
+        <rdfs:range rdf:resource="#Department"/>
+        <rdfs:domain rdf:resource="#Employee"/>
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="#works_on"/>
+            <owl:ObjectProperty>
+                <owl:inverseOf rdf:resource="#handles"/>
+            </owl:ObjectProperty>
+        </owl:propertyChainAxiom>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#works_on -->
+
+    <owl:ObjectProperty rdf:about="#works_on">
+        <rdfs:domain rdf:resource="#Employee"/>
+        <rdfs:range rdf:resource="#Project"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#DOB -->
+
+    <owl:DatatypeProperty rdf:about="#DOB">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:range rdf:resource="&xsd;date"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#Dependent"/>
+                    <rdf:Description rdf:about="#Employee"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#SSN -->
+
+    <owl:DatatypeProperty rdf:about="#SSN">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="#Employee"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#address -->
+
+    <owl:DatatypeProperty rdf:about="#address">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="#Dependent"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#name -->
+
+    <owl:DatatypeProperty rdf:about="#name">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#Department"/>
+                    <rdf:Description rdf:about="#Dependent"/>
+                    <rdf:Description rdf:about="#Employee"/>
+                    <rdf:Description rdf:about="#Project"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#nationality -->
+
+    <owl:DatatypeProperty rdf:about="#nationality">
+        <rdfs:domain rdf:resource="#Employee"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#number -->
+
+    <owl:DatatypeProperty rdf:about="#number">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:range rdf:resource="&xsd;int"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#Department"/>
+                    <rdf:Description rdf:about="#Project"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#relationship -->
+
+    <owl:DatatypeProperty rdf:about="#relationship">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="#Dependent"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#salary -->
+
+    <owl:DatatypeProperty rdf:about="#salary">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="#Employee"/>
+        <rdfs:range rdf:resource="&xsd;decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#sex -->
+
+    <owl:DatatypeProperty rdf:about="#sex">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="#Dependent"/>
+                    <rdf:Description rdf:about="#Employee"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Department -->
+
+    <owl:Class rdf:about="#Department">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#handles"/>
+                <owl:someValuesFrom rdf:resource="#Project"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#manages"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:onClass rdf:resource="#Manager"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#works_in"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:onClass rdf:resource="#Employee"/>
+                <owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">2</owl:minQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#number"/>
+                <owl:someValuesFrom rdf:resource="&xsd;integer"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="#Employee"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Dependent -->
+
+    <owl:Class rdf:about="#Dependent">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#has_dependent"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:onClass rdf:resource="#Employee"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#name"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Employee -->
+
+    <owl:Class rdf:about="#Employee">
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#manages"/>
+                        <owl:someValuesFrom rdf:resource="#Department"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#supervises"/>
+                        <owl:someValuesFrom>
+                            <owl:Class>
+                                <owl:intersectionOf rdf:parseType="Collection">
+                                    <rdf:Description rdf:about="#Employee"/>
+                                    <owl:Restriction>
+                                        <owl:onProperty rdf:resource="#works_on"/>
+                                        <owl:someValuesFrom rdf:resource="#Project"/>
+                                    </owl:Restriction>
+                                </owl:intersectionOf>
+                            </owl:Class>
+                        </owl:someValuesFrom>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="#works_on"/>
+                        <owl:someValuesFrom rdf:resource="#Project"/>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#works_on"/>
+                <owl:onClass rdf:resource="#Project"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">3</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#SSN"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#supervises"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:onClass rdf:resource="#Supervisor"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Funding_Body -->
+
+    <owl:Class rdf:about="#Funding_Body"/>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Government_Agency -->
+
+    <owl:Class rdf:about="#Government_Agency">
+        <rdfs:subClassOf rdf:resource="#Funding_Body"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Manager -->
+
+    <owl:Class rdf:about="#Manager">
+        <rdfs:subClassOf rdf:resource="#Employee"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#salary"/>
+                <owl:someValuesFrom>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdfs;Datatype"/>
+                        <owl:onDatatype rdf:resource="&xsd;decimal"/>
+                        <owl:withRestrictions rdf:parseType="Collection">
+                            <rdf:Description>
+                                <xsd:minExclusive rdf:datatype="&xsd;double">150000.00</xsd:minExclusive>
+                            </rdf:Description>
+                            <rdf:Description>
+                                <xsd:maxExclusive rdf:datatype="&xsd;double">300000.00</xsd:maxExclusive>
+                            </rdf:Description>
+                        </owl:withRestrictions>
+                    </rdf:Description>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#manages"/>
+                <owl:onClass rdf:resource="#Department"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Project -->
+
+    <owl:Class rdf:about="#Project">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#number"/>
+                <owl:someValuesFrom>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdfs;Datatype"/>
+                        <owl:onDatatype rdf:resource="&xsd;integer"/>
+                        <owl:withRestrictions rdf:parseType="Collection">
+                            <rdf:Description>
+                                <xsd:maxExclusive rdf:datatype="&xsd;integer">5000</xsd:maxExclusive>
+                            </rdf:Description>
+                            <rdf:Description>
+                                <xsd:minExclusive rdf:datatype="&xsd;integer">0</xsd:minExclusive>
+                            </rdf:Description>
+                        </owl:withRestrictions>
+                    </rdf:Description>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#receives_funds_from"/>
+                <owl:someValuesFrom rdf:resource="#Funding_Body"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#is_responsible_for"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:onClass rdf:resource="#Project_Leader"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#handles"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:onClass rdf:resource="#Department"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#works_on"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:onClass rdf:resource="#Employee"/>
+                <owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">2</owl:minQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Project_Leader -->
+
+    <owl:Class rdf:about="#Project_Leader">
+        <rdfs:subClassOf rdf:resource="#Employee"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#salary"/>
+                <owl:someValuesFrom>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdfs;Datatype"/>
+                        <owl:onDatatype rdf:resource="&xsd;decimal"/>
+                        <owl:withRestrictions rdf:parseType="Collection">
+                            <rdf:Description>
+                                <xsd:minExclusive rdf:datatype="&xsd;double">50000.00</xsd:minExclusive>
+                            </rdf:Description>
+                        </owl:withRestrictions>
+                    </rdf:Description>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#is_responsible_for"/>
+                <owl:onClass rdf:resource="#Project"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">3</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#is_responsible_for"/>
+                <owl:someValuesFrom rdf:resource="#Project"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/company.owl#Supervisor -->
+
+    <owl:Class rdf:about="#Supervisor">
+        <rdfs:subClassOf rdf:resource="#Employee"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#supervises"/>
+                <owl:someValuesFrom rdf:resource="#Employee"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#salary"/>
+                <owl:someValuesFrom>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdfs;Datatype"/>
+                        <owl:onDatatype rdf:resource="&xsd;decimal"/>
+                        <owl:withRestrictions rdf:parseType="Collection">
+                            <rdf:Description>
+                                <xsd:minExclusive rdf:datatype="&xsd;double">100000.00</xsd:minExclusive>
+                            </rdf:Description>
+                        </owl:withRestrictions>
+                    </rdf:Description>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#supervises"/>
+                <owl:onClass rdf:resource="#Employee"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">10</owl:maxQualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <owl:Class>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#works_on"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="#Employee"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="#nationality"/>
+                                <owl:hasValue>american</owl:hasValue>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:intersectionOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#Project"/>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#receives_funds_from"/>
+                <owl:someValuesFrom rdf:resource="#Government_Agency"/>
+            </owl:Restriction>
+        </owl:intersectionOf>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

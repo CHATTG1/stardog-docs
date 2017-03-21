@@ -1,0 +1,46 @@
+@prefix   sd: <http://stardog.com/docs/data/stardog.ttl#> .
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix  owl: <http://www.w3.org/2002/07/owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix     : <http://stardog.com/docs/data/stardog.ttl#> .
+
+:isDevelopedBy a rdf:Property;
+      owl:inverseOf doap:develops.
+
+:Stardog a sd:RdfDatabase;
+         a doap:Project;
+         doap:name "Stardog";
+         doap:mailing-list "stardog@complexible.com";
+         doap:category "RDF database";
+         doap:download-page <http://stardog.com/testing>;
+         doap:version [
+            a doap:Version;
+            :revision "0.6.2"^^xsd:string ; 
+            sd:release-date "2011-06-11"^^xsd:DateTime ];
+         doap:shortdesc   "Stardog is an insanely fast RDF database.";
+         doap:description "Stardog is a fast, native, lightweight RDF database (a 'quad store') that focuses on SPARQL query performance and OWL reasoning.";
+         doap:homepage <http://stardog.com/>;
+         doap:programming-language <http://jdk6.java.net>;
+         doap:implements :OWL, :SPARQL;
+         doap:platform "J2EE, JDK";
+         doap:blog <http://blog.stardog.com/>;
+         doap:vendor <http://complexible.com/>.
+
+<http://complexible.com/> a foaf:Organization;
+       :hasOfficeIn "Boston, MA"^^xsd:string;
+       :hasOfficeIn "Washington, DC"^^xsd:string;
+       :hasEmployee :Mike;
+       :hasEmployee :Evren.
+
+:Mike   a foaf:Person; 
+        foaf:name "Mike Grove";
+        doap:develops :Stardog.
+
+:Evren  a foaf:Person;
+        foaf:name "Evren Sirin";
+        doap:develops :Stardog.
+
+:OWL    a doap:Specification.
+:SPARQL a doap:Specification.

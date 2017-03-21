@@ -1,0 +1,2287 @@
+= {title}
+:title: Stardog Release Notes
+:revnumber: {version}
+:toc: right 
+:toc-title: 
+:toclevels: 1 
+:experimental:
+:page-layout: base
+:description: Stardog is a fast, lightweight graph database that supports SPARQL, RDF, OWL, and user-defined rules.
+:compat-mode!:
+:last-update-label!:
+:doctype: article 
+:docinfo:
+:idprefix!:
+//:imagesdir: . 
+:linkattrs:
+:base-url: http://docs.stardog.com/
+:cache-uri:
+:sectlinks:
+
+image:a.png[] Added new feature &nbsp; &nbsp; image:m.png[] Modified system
+&nbsp; &nbsp; image:f.png[] Fixed bug &nbsp; &nbsp; image:s.png[] Security vulernability
+
+== 4.2.4 Release
+[none]
+*SEC: Fixed privilege escalation in HA Cluster; *affected version*: Stardog 4.2.3
+ (*SD-SEC-HA1*)
+
+WARNING: As discovered by Martin Hostettler and Fabian Cretton, Stardog cluster
+has a privilege escalation vulnerability fixed in 4.2.4. User and role
+permissions propagate correctly, but whenever any user attempted to run any
+command on the cluster with valid credentials, they were auth'd as a superuser.
+So given any valid credentials, once auth'd you could do anything. Single
+servers are not affected by vulnerability.
+
+
+== 4.2.3 Release
+[none]
+*ADD: Add command to export all namespaces (#2739)
+*MOD: Include secondary indexes in bulk load speed at creation (#3423)
+*MOD: Allow port number is `pack.node.address` (#3421)
+*MOD: `textMatch` should return all results by default (#3411)
+*MOD: Optimize r/w access to the full-text index (#3398)
+*MOD: Optimize merge joins when the left operand produces unique values for the join key (#3360)
+*MOD: Align spatial extraction between bulk load and transaction updates (#3331)
+*MOD: Improve query plan legilibilty (#3327)
+*MOD: Support human readable durations in `query --timeout` option (#3302)
+*MOD: Use generated credentials for ZK and intra-cluster authz (#3267)
+*FIX: Namespace prefixes in SRS rule bodies affect obfuscation (#3468)
+*FIX: Implicit projection is incorrectly expanded where there are subqueries (#3456)
+*FIX: Incorrect handling of combinations of FILTER EXISTS and BIND in the parser (#3436)
+*FIX: Incorrect conditional check in script (#3425)
+*FIX: wktLiterals in queries are being aggressively cached (#3373)
+*FIX: Rules using UUID() prevent schema export (#3371)
+*FIX: NPE in MappingDictionary when calling localname(bnode()) (#3339)
+*FIX: Regex wrongly assumes that the pattern is a constant (#3312)
+*FIX: Plan cache is invalidated too early (#3266)
+*FIX: Zookeeper and stardog password diverge when all nodes drop (#3251)
+
+== 4.2.2 Release
+[none]
+
+*MOD: Upgrade Curator and ZooKeeper versions (#3415)
+*MOD: Improve Stardog client for large updates in memory (#3401)
+*MOD: Suppress connection errors in the log (#3378)
+*MOD: Optimize COUNT with regard to variable usage (#3367)
+*MOD: Geospatial indexing should simply skip malformed shapes (#3362)
+*MOD: For any spatial features which are malformed, print the literal value of the feature to the log (#3343)
+*MOD: Health check calls cause bogus warnings to be logged (#3127)
+*MOD: Do not index non-string literals in Lucene (#2264)
+*FIX: Bug in SPARQL replace function (#3385)
+*FIX: Spatial index is rebuilding completely after adding any data (#3379)
+*FIX: Resolve variable usage issue with using reasoning with virtual graphs (#3349)
+*FIX: MemoryManager fails when heap pool cannot be identified (#3348)
+*FIX: No limit on incoming triples when displaying resource (#3345)
+*FIX: VG query optimized incorrectly with filter pushing (#3342)
+*FIX: Subquery projection declares all its variables as assured (#3338)
+*FIX: geof:within should accept a constant as the first argument (#3329)
+
+== 4.2.1 Release
+[none]
+
+*MOD: Avoid unneccesary validations for updates (#3299)
+*MOD: Need estimations for joins on context variables (#3254)
+*MOD: Health check causes bogus connection warnings/errors (#3252)
+*MOD: Admin commands print log4j warnings (#3247)
+*MOD: Memory settings not logged on startup (#3244)
+*MOD: Improve UX for expired licenses (#3232)
+*MOD: Improve virtual graph import/export performance (#3207)
+*MOD: Get rid of incorrect warnings about unrecognized options (#3191)
+*MOD: Duration multiplication functions are not registered for the SWRLB namespace (#3176)
+*MOD: Return version ID when versioning is committed (#3091)
+*MOD: Query plans with reasoning can be cached (#988)
+*FIX: IN filters don't work within disjunctions (#3318)
+*FIX: Stardog Versioning API connection leak (#3314)
+*FIX: Zero-length property paths return duplicates inside transactions (#3307)
+*FIX: Keep HTTP connections alive when using chunked responses (#3286)
+*FIX: `query.all.graphs` does not work for SPARQL Update queries (#3285)
+*FIX: Property paths with * are incorrect with named graphs (#3274)
+*FIX: Service node reports incorrect variables (#3257)
+*FIX: Webconsole fails to export CONSTRUCT query results (#3255)
+*FIX: Jena bindings pulls old httpclient jars into client jars (#3243)
+*FIX: Inverse negated property path returns same result as non-inverted (#3240)
+*FIX: Incorrect sort order for property paths (#3239)
+*FIX: Differential index keeps growing (#3234)
+*FIX: Query obfuscate output is wrong when stored namespaces are used (#3228)
+*FIX: Obfuscating queries with prefixed datatypes throws ClassCastException (#3227)
+*FIX: Construct queries return incomplete sameAs inferences with joins (#3225)
+*FIX: TMP files aren't being flushed when buffering large queries (#3223)
+*FIX: Reasoning error with property chains not used in assertions (#3219)
+*FIX: Iterators created for insert/where queries are not closed (#3212)
+*FIX: CLI displays java.io.EOFException on query timeout (#3210)
+*FIX: Exporting virtual graphs in the CLI does not work (#3206)
+*FIX: JSON file extension not recognized (#3202)
+*FIX: Fix error in binary result parsing (#3194)
+*FIX: failed VG init cannot be removed (#3172)
+*FIX: Queries with punning may fail (#2645)
+*FIX: Property paths can cross named graph boundaries (#1851)
+*FIX: Cannot explain recursive reasoning results (#926)
+
+== 4.2 Release
+[none]
+
+*ADD: BITES: Blob Indexing and Text Enrichment with Semantics (#335)
+*ADD: SNARL Protocol Deprecation (#3072)
+*ADD: Stored queries (#3030)
+*ADD: Lazy classification option (#3096)
+*ADD: Optimize IN filters for expressions (#3063)
+*ADD: Distinct values filter for aggregated expressions (#3054)
+*ADD: Make cluster session timeout configurable (#2833)
+*ADD: Support UNION in Stardog rules syntax (#2383)
+*MOD: Don't embed the error message in the reason phrase (#3165)
+*MOD: Use a more efficient classTree query for the webconsole (#3159)
+*MOD: Translate geof:within usages in FILTERs to the equivalent property function (#3137)
+*MOD: Improved cancellation interrupts when building intermediate results (#3085)
+*MOD: Improve error messages for metadata operations on CLI (#3081)
+*MOD: stardog-admin.bat feature parity with shell scripts (#3079)
+*MOD: Using retry handler for NoHttpResponseExceptions in HTTP client (#3074)
+*MOD: Improved optimization of FILTER expressions with MINUS operator (#3064)
+*MOD: Support off-heap serialization of objects of unknown size (#2919)
+*MOD: Minus operator can use reset() (#2215)
+*FIX: HTTP Server protocol header is invalid (#3168)
+*FIX: DELETE/INSERT/WHERE queries close intermediate collections before search index can use them (#3162)
+*FIX: Turtle parser report incorrect error line number in the presence of comments (#3160)
+*FIX: SQL Server VG import is broken (#3153)
+*FIX: CLI output show multiline strings jumbled up (#3148)
+*FIX: Exports over http can leave connections open (#3144)
+*FIX: Cluster replication might fail due to credentials issues (#3134)
+*FIX: Literal variables inlined with constant simplification does not return results (#3133)
+*FIX: Update queries executed by non-coordinator nodes trigger UnknownTransactionException (#3128)
+*FIX: Health check calls cause bogus warnings to be logged (#3127)
+*FIX: Log print shows all queries as not started (#3122)
+*FIX: Log print CLI command fails with filters >= and <= (#3121)
+*FIX: TxBegin events are not logged in the audit log of cluster nodes (#3120)
+*FIX: Set query specific timeouts via Sesame interface (#3117)
+*FIX: Possible deadlock between StardogKernel & KernelShutdown in embedded mode (#3115)
+*FIX: --copy-server-side for db create fails when passed a directory (#3113)
+*FIX: Context-last index order used for scanning triples in a named graph (#3111)
+*FIX: Bogus warnings in DL mode (#3095)
+*FIX: Invalid dateTime values cause exceptions during query execution (#3092)
+*FIX: HTTP call to explain consistency returns 500 for consistent graphs (#3090)
+*FIX: Rio TurtleWriter improperly handles doubles between -1 and 0 (#3087)
+*FIX: Special graph ALL is treated incorrectly in GRAPH clauses (#3083)
+*FIX: Multiple prefixes for same namespace causes problems (#3070)
+*FIX: Possible class cast exception in SemiFastCompare (#3069)
+*FIX: Class cast exception when IN filter contains expressions (#3068)
+*FIX: Unbound variable in || filter cause incorrect results (#3067)
+*FIX: Need to check that all costs are known during join order optimizations (#3062)
+*FIX: Clean all temporary dirs created by disk-based solution sequences (#3060)
+*FIX: SPARQL parser does not propagate parameters when parsing expressions (#3059)
+*FIX: SPARQL parser does not allow 0-arity functions in projections with GROUP BY (#3048)
+*FIX: NPE in dictionary during concurrent queries (#3012)
+*FIX: Need to use flowing solution sequence builders for aggregation (#2906)
+*FIX: DB creation hangs when it runs out of direct memory (#2173)
+*FIX: Extrapolation of object counts in characteristic sets is incorrect (#2119)
+
+== 4.1.3 Release
+[none]
+
+*MOD: User permission cli command does not show any example usage cli (#3057)
+*MOD: Minimize memory use when querying uncomitted changes (#3025)
+*MOD: Using the base index for cardinality estimations (#2338)
+*FIX: Parser doesn't propagate context into FILTER NOT EXISTS defect query-parser (#3058)
+*FIX: Class cast exception for aggregation queries with values defect query-eval (#3053)
+*FIX: Adding data to different databases causes running out of memory defect (#3051)
+*FIX: Another case of wrong parsing BINDs in queries (#3047)
+*FIX: Do not reuse plans that require a unary/binary index during transactions (#3039)
+*FIX: Named graph security doesn't work with WITH (#3037)
+*FIX: Incorrect results for queries using count indexes (#3034)
+*FIX: Wrong evaluation of a property path with non-projected variable (#3028)
+*FIX: AbstractQuery incorrectly dispatches boxed primitives (#3027)
+*FIX: PropertyFunctions should be able to use non-scan nodes as args (#3026)
+*FIX: VALUES should not eliminate duplicates (#3022)
+
+== 4.1.2 Release
+[none]
+
+*ADD: Add a SPARQL function for returning IRI namespace (#2992)
+*ADD: Add xsd:date cast function (#2976)
+*MOD: Use pretty formatting for R2RML output (#3006)
+*MOD: Do not import empty values from CSV files (#2994)
+*MOD: Put LocalName function in Stardog namespace (#2991)
+*FIX: Wrong parsing of multiple BINDs after OPTIONALs (#3018)
+*FIX: Non-determinism in cardinality estimations (#3017)
+*FIX: secure processing option for RIO prevents setting of entityExpansionLimit (#3015)
+*FIX: Wrong parsing of filters after an OPTIONAL (#3014)
+*FIX: Wrong join type for scans with context-first index order (#3013)
+*FIX: Combining consecutive FILTERs with && can reduce effectiveness of filter optimizations (#3009)
+*FIX: ClassCastException upon opening a database connection (#3005)
+*FIX: Configuring max URL length in HTTP server is not working (#3004)
+*FIX: IN filter expression doesn't handle type errors correctly (#3003)
+*FIX: Virtual mappings with xsd:negativeInteger fail (#3002)
+*FIX: Strict parsing mode does not validate some datatypes (#3001)
+*FIX: Implicit join detection fails in the presence of property paths (#3000)
+*FIX: EXISTS expression is evaluated incorrectly if not in a FILTER (#2996)
+*FIX: Incorrect skipping in scan with explicit active graph (#2995)
+*FIX: Wrong treatment of LIMIT in CONSTRUCT queries (#2985)
+*FIX: Geospatial queries with no results throws an exception (#2982)
+
+== 4.1.1 Release
+[none]
+*MOD: Show SQL queries while explaining virtual graph query (#2979)
+*MOD: Remove output log redirect on startup (#2970)
+*MOD: Change coalescing in SNARL Connections can cause a deep stack (#2951)
+*FIX: Delete queries do not update search/geospatial index (#2983)
+*FIX: Problem with parsing bind + values (#2981)
+*FIX: DELETE/INSERT queries fail with sameAs reasoning (#2978)
+*FIX: Version diff fails for RDF patch format (#2977)
+*FIX: Service queries where variables are renamed in a projection return incorrect answers (#2975)
+*FIX: Virtual graphs with default mappings lost after a restart (#2973)
+*FIX: Push solution modifiers to SQL (#2972)
+*FIX: Wrong index order used when query defines a dataset (#2971)
+*FIX: Removals might cause diff index to exceed the limit (#2967)
+*FIX: Open conn count is not accurate when there are open transactions (#2965)
+*FIX: NPE while loading security information from the system index (#2963)
+*FIX: Open conn and tx count not shown for previously created database (#2962)
+*FIX: Server properties not defined in StardogConfiguration are invisible to status (#2961)
+*FIX: Concurrent transactions fail when versioning is enabled (#2960)
+*FIX: NPE in nested merge joins (#2959)
+*FIX: NPE parsing describe * queries (#2957)
+*FIX: NPE iterating off end of context scan (#2954)
+*FIX: Incorrect handling of HAVING clause with implicit group (#2948)
+*FIX: Key not present error while processing R2RML referencing object maps (#2946)
+*FIX: SWRLB dateTime functions don't define a namespace (#2945)
+*FIX: SWRLB (dateTime|yearMonth)Duration functions return xsd:duration (#2944)
+*FIX: Versioning API dependency on prov should be non-transitive (#2932)
+*FIX: Strict parsing option in stardog.properties is ignored (#2817)
+*FIX: Clear all/context is inefficient (#2108)
+
+== 4.1 Release
+[none]
+
+*ADD: Optimize IN expressions in FILTERs (#2923)
+*ADD: CLI tool to display access/audit log contents (#2921)
+*ADD: Allow mixing regular queries with versioning queries (#2911)
+*ADD: Cluster status command (#2902)
+*ADD: Use compression for partial database sync (#2901)
+*ADD: Support all result formats in SERVICE calls (#2893)
+*ADD: Add an ext directory in server in the distro (#2877)
+*ADD: Add an option to disable URI escaping in virtual mappings (#2869)
+*ADD: Improve reasoning performance with transitive properties (#2863)
+*ADD: Return server properties in server status (#2862)
+*ADD: Improve performance of hybrid reasoning operators in SPARQL updates (#2858)
+*ADD: Improve performance of merge joins over named graphs (#2845)
+*ADD: Improve performance of reasoning queries that use type operator (#2835)
+*ADD: Update admin web console db table (#2592)
+*ADD: Have separate server stop and cluster stop commands (#2819)
+*ADD: Make cluster multi-coordinator (#2636)
+*ADD: Faster SPARQL parser (#2524)
+*ADD: Showing incoming links in webconsole instance views (#2238)
+*MOD: Do not coalesce all inputs on client side (#2931)
+*MOD: Output for db create command is different in cluster mode (#2930)
+*MOD: Minimize time admin commands are blocked during node join (#2929)
+*MOD: Allow only one node to join the cluster at a time (#2927)
+*MOD: Node failing to join the cluster should shutdown (#2899)
+*MOD: Improve error message for unrecognized file formats in virtual import command (#2883)
+*MOD: Add license info to pom files (#2867)
+*MOD: Exclude unsupported axioms from PROV archetype (#2866)
+*MOD: NamedGraphPermissions is missing from javadocs (#2861)
+*MOD: Do not require username/password in virtual graph settings (#2842)
+*MOD: Regex function cannot be used with XPath or SWRL namespaces (#2838)
+*MOD: Minimize wait time during JVM shutdown (#2834)
+*MOD: Update to Curator 2.10.0 (#2799)
+*MOD: Sort classes in the schema browser alphabetically (#2757)
+*MOD: Relax type constraints for duration functions (#2754)
+*MOD: Retry node sychronization according to policy when sync initially fails (#2746)
+*MOD: Tracking the number of changes on the client and eager pushing to the server (#2342)
+*MOD: Eager change coalescing on client (#2341)
+*MOD: Increase scope of algebraic rewriting (#2089)
+*MOD: Reuse ZK cluster credentials from cluster superuser (#1595)
+*FIX: Double closing off-heap/disk sequences (#2941)
+*FIX: Order By in a subquery may trigger an OOB in the optimizer (#2938)
+*FIX: Projections with aliases and group by yields incorrect parse error (#2937)
+*FIX: Password file matching for specific database does not match (#2935)
+*FIX: Versioning API dependency on PROV API should not be transitive (#2932)
+*FIX: Events in access/audit log do not have database field (#2924)
+*FIX: Nodes fail to rejoin the cluster because not all transactions are cancelled (#2915)
+*FIX: Update queries are not parsed using the database's namespaces (#2912)
+*FIX: Parsing of update queries missing closing brace never terminates (#2910)
+*FIX: Handle empty multipart requests to db create (#2905)
+*FIX: Malformed log format errors (#2903)
+*FIX: Partial database sync fails for concurrent transactions (#2900)
+*FIX: Node joining the cluster gets stuck while syncing a database (#2898)
+*FIX: ArrayIndexOutOfBoundsException during concurrent reads and writes (#2896)
+*FIX: system.lock left after the server refused to start on an obsolete home (#2892)
+*FIX: Transaction fails with inconsistent index size error (#2891)
+*FIX: Update query may create a graph with a literal name (#2881)
+*FIX: Literals containing < and > are displayed incorrectly in the webconsole (#2879)
+*FIX: Editing an individual in web console can lose datatype information (#2875)
+*FIX: xsd:date and other typed literals are displayed in an edit widget making the lang editable (#2874)
+*FIX: xsd:int and other numeric types not recognized as such in webconsole (#2872)
+*FIX: Evaluating star property paths without indexed named graphs yields an error (#2870)
+*FIX: Missing transitive property inferences with sameAs reasoning (#2865)
+*FIX: Last modification time for databases are wrong (#2860)
+*FIX: Update queries with default insert graph might trigger an NPE (#2860)
+*FIX: Data add command fails for directories if a file has an unrecognized extension (#2854)
+*FIX: Adding two files with different formats throws parsing exceptions (#2853)
+*FIX: Loading zip files through the SNARL client causes NPE (#2849)
+*FIX: Joins in queries might return incomplete results with sameAs reasoning (#2847)
+*FIX: MemExternalSorter throws IllegalStateException if inserting duplicated quads (#2846)
+*FIX: Regex function in DL mode tries to match the whole string (#2844)
+*FIX: Webconsole instance view shows properties in random order (#2841)
+*FIX: Webconsole displays string "Empty" for number 0 (#2840)
+*FIX: Date/time arithmetic functions return incorrect results (#2839)
+*FIX: Webconsole fails to display anything when data contains invalid literals (#2837)
+*FIX: Webconsole cannot handle valid xsd:integer values (#2836)
+*FIX: Concurrent reasoning queries may timeout incorrectly (#2831)
+*FIX: Transient ZK failures during writes block node from re-entering cluster (#2829)
+*FIX: Empty group solution has wrong multiplicity (#2837)
+*FIX: Cluster connection times out in the middle of a long transaction (#2834)
+*FIX: NPE thrown querying large amounts of uncommitted data (#2823)
+*FIX: Large transactions trigger NPE when transaction logging is enabled (#2820)
+*FIX: Update queries fail when equality reasoning is enabled (#2802)
+*FIX: Webconsole missing preserve.bnode.ids and strict.parsing options (#2792)
+*FIX: Webconsole fails to export results if the query contains a plus symbol (#2767)
+*FIX: ClassCastException in the SPARQL parser on a query with a complex path (#2652)
+*FIX: Cluster sends all http post requests to the coordinator (#2631)
+*FIX: Gracefully handle failures to fit a characteristic set into a page (#2618)
+*FIX: Rejoin can fail with "no other nodes to sync db" (#2599)
+*FIX: List of dbs in cluster should be based on consensus, not coordinator (#2539)
+*FIX: Complex property paths to find cycles miss results (#2319)
+
+== 4.0.5 Release
+[none]
+*MOD: Allow users to configure max URL length in HTTP server (#2809)
+*MOD: Misleading security exceptions in admin CLI when exception not related to security (#2795)
+*MOD: Introduce heuristic-based join order optimization (#2791)
+*MOD: Query plan caching accounts for selectivity differences (#2784)
+*MOD: Confusing error message using LOAD with a bad location (#2766)
+*MOD: Print a message to the log file when Stardog shuts down (#2763)
+*MOD: Make type and property reasoning operators lazy to reduce memory usage (#2755)
+*MOD: Load JDBC driver explicitly without relying on the service loader (#2753)
+*MOD: Minimize memory overhead in MemoryPoolImpl (#2707)
+*MOD: Display more detailed memory info in server status (#2575)
+*MOD: Reduced memory footprint of intermediate query results (#1884)
+*FIX: CSV imports don't support language literals (#2814)
+*FIX: Inlining constants into Waldo nodes breaks queries (#2813)
+*FIX: ArrayIndexOutOfBoundsException during database creation (#2811)
+*FIX: Faulty nodes in cluster should not cause a transaction to fail (#2810)
+*FIX: HTTP server is not returning a 415 status when URL is too long (#2808)
+*FIX: Using deprecated text/plain content type for N-Triples triggers NPE (#2807)
+*FIX: LOAD queries don't support compressed files (#2805)
+*FIX: Incorrect sort type for complex property paths with unbound ends (#2803)
+*FIX: Invalid geospatial data causing cluster nodes to be disabled (#2798)
+*FIX: IllegalArgumentException thrown from off-heap memory pool for some JDKs (#2797)
+*FIX: Query dataset rendering is incorrect in update sequence plans (#2796)
+*FIX: Checks for Authorization http header is not case-insensitive (#2793)
+*FIX: Classes and properties used only in rules return as null values in query results (#2788)
+*FIX: Temporary files created for INSERT/DELETE/WHERE queries are not deleted (#2795)
+*FIX: Cardinality estimations for full-text nodes (#2791)
+*FIX: Variable rendering for Waldo nodes in the plan incorrect (#2780)
+*FIX: Optimizing queries for rdf:type using reasoning (#2774)
+*FIX: Group and minus clauses trigger exceptions with virtual graphs (#2772)
+*FIX: Files created by Guava's FileBackedOutputStream are not deleted eagerly (#2771)
+*FIX: Aggregates min/max does not work with IRIs (#2770)
+*FIX: New memory indexes can canonicalize literals, existing ones cannot (#2769)
+*FIX: NPE when trying to extract non-existing TBox (#2768)
+*FIX: Loading many files at the same time causes client to run out of memory (#2761)
+*FIX: Query parameters are not assigned IDs and can be cached incorrectly (#2760)
+*FIX: Inconsistent use of DISTINCT in reasoning queries (#2436)
+*FIX: Stop preparing subtransactions after first failure (#2305)
+
+== 4.0.3 Release
+[none]
+*MOD: Include ICV explanations in guard mode (#2749)
+*MOD: Handle URI templates in language tags of literals for virtual mappings (#2747)
+*MOD: Query command option to specify a default graph (#2740)
+*MOD: Support SPARQL dateTime functions for date and time datatypes (#2694)
+*FIX: Sum aggregate uses 0 as the base value (#2756)
+*FIX: Context iterator should not produce results when there are no contexts (#2750)
+*FIX: CLI query command prints datatype for language literals in table output (#2745)
+*FIX: URI templates used for rdf:type in virtual mappings are handled incorrectly (#2743)
+*FIX: Virtual graph queries with filters in optionals return incorrect answers (#2738)
+*FIX: Stardog mapping syntax does not support Turtle escape sequences in column names (#2737)
+*FIX: Virtual mappings retrieved via HTTP cannot be iterated multiple times (#2736)
+*FIX: Multiple quotes in column names of virtual mappings causes infinite recursion (#2735)
+*FIX: Support RDF 1.1 string literals in virtual graphs (#2734)
+*FIX: Stardog mapping syntax should use default datatypes for literals (#2732)
+*FIX: Construct queries against virtual graphs throw exceptions (#2731)
+*FIX: Optionals in virtual graph queries can cause NPE (#2729)
+*FIX: Line numbers in Turtle parse errors are incorrect in the presence of multline literals (#2728)
+*FIX: Deadlock with serializable isolation level under heavy load (#2727)
+*FIX: ICV explain ignores query constraints (#2723)
+*FIX: Constraint validation leaves connections open (#2722)
+*FIX: False negative query results when using `Contexts.ALL` with named-graph sec in DB (#2721)
+*FIX: ValueExprToExpression missing handler for BNODE (#2720)
+*FIX: Plan cache incorrectly handles complex property paths (#2717)
+*FIX: Avoid re-optimization of path expressions in general property path operators (#2716)
+*FIX: Be more defensive in loading functions from the service loader (#2714)
+*FIX: Query parameters only used in filters are not bound in the results (#2695)
+
+== 4.0.2 Release
+[none]
+*MOD: Include virtual graphs in javadocs (#2702)
+*MOD: SPARQL update queries with a WHERE clause throws exceptions in the cluster (#2701)
+*MOD: Missing option to virtual import command to clear destination graph first (#2700) 
+*MOD: Support virtual graphs in ADD and COPY queries (#2699)
+*MOD: Minimize queries sent to virtual graphs (#2692)
+*MOD: Improve handling of client-side logging (#2688)
+*MOD: More robust way to figure out system db is out of sync with the cluster (#2566)
+*MOD: Reasoning not applied to virtual graphs and SERVICE queries (#2690)
+*FIX: Full version IRIs are not supported in vcs tag command (#2709)
+*FIX: Modify queries using only insert or delete do not work when named graph security is enabled (#2708)
+*FIX: Version ranges are misinterpreted in vcs diff CLI command (#2705)
+*FIX: Deprecated TriG mimetype not supported by HTTP server (#2704)
+*FIX: Caching for Authentication with LDAP (#2698)
+*FIX: Pushing filters into unions is incorrect (#2696)
+*FIX: Errors during rejoins might be ignored (#2660)
+*FIX: Corrupted transaction log causes a database to be deleted at startup (#2659)
+*FIX: Variable inlining does not work with service (#2549)
+
+== 4.0.1 Release
+[none]
+*MOD: Improve the undefined prefix error message for update queries (#2687)
+*MOD: Help message for virtual graph CLI commands are incorrect (#2686)
+*MOD: Accept constants as the input location for `geospatial:nearby` (#2682)
+*MOD: Update to TinkerPop 3.0.2-incubating (#2669)
+*MOD: Rewrite `FILTER [NOT] EXISTS` into `OPTIONAL FILTER [!] BOUND` (#2651)
+*MOD: Inform the user when a database cannot be migrated/repaired (#2535)
+*MOD: Improve performance of Gremlin counting traversals (#2534)
+*FIX: DL reasoning with named graphs is broken (#2685)
+*FIX: Query info does not include dataset information (#2684)
+*FIX: Need an implicit scan over all features when the var to a spatial operator is never bound (#2683)
+*FIX: Only extracting spatial features from the default graph (#2681)
+*FIX: Variable replacement does not happen in the children of a `PropertyFunction` (#2680)
+*FIX: Replicated data sources being closed too early (#2676)
+*FIX: Connection resets in proxy during data add (#2675)
+*FIX: Cardinality estimates are not updated after variable inlining (#2673)
+*FIX: Cardinality estimates need to be updated for cached plans (#2672)
+*FIX: Virtual graphs are not supported in the `FROM` clause (#2670)
+*FIX: Open transactions prevent participant nodes from shutting down (#2668)
+*FIX: Not rolling back prepared transactions leave index in invalid state (#2666)
+*FIX: Auto rollbacks cause problems in cluster (#2662)
+*FIX: Handle transaction failures more gracefully (#2654)
+*FIX: Query Panel not showing language tags in results (#2644)
+*FIX: R2RML literal mappings with multiple variables are treated as language tags (#2300)
+
+== 4.0 Release
+[none]
+*ADD: Server option to require client certificate via SSL (#2574)
+*MOD: Reduced offline wait time (#2610)
+*MOD: Update to Sesame 4.0.0 final (#2603)
+*FIX: Exception: The limit cannot be greater than the page size (#2665)
+*FIX: `ClassCastException` in algebraic rewriter with `VALUES` and `UNION` (#2663)
+*FIX: Date/time comparison functions not working in DL mode (#2656)
+*FIX: Avoiding creating writer for rollback in search index when one was not created (#2655)
+*FIX: Make the subquery-based JO optimizer a bit more cautious (#2650)
+*FIX: Bash completion is missing for stardog-admin license is missing (#2649)
+*FIX: Filters sometimes report negative cardinality (#2648)
+*FIX: Property paths with the empty path expression should be optimized away (#2647)
+*FIX: HTTP shutdown call returns status 406 (#2646)
+*FIX: DB restore is not creating a znode for the new db (#2643)
+*FIX: Blank nodes break edge caching (#2641)
+*FIX: OOM in Streamer under heavy read load (#2640)
+*FIX: Updating individuals within a Named Graph in Web Console strips the context information (#2639)
+*FIX: Improved optimization of `WHERE` clause of update queries (#2638)
+*FIX: NPE rendering plan explanation (#2637)
+*FIX: System catalog size grows endlessly (#2635)
+*FIX: TX logs need to be cleaned up periodically (#2627)
+*FIX: AssertionError in tx log (#2626)
+*FIX: TimerPausedException in cluster (#2622)
+*FIX: EncodingException can leak connections (#2609)
+*FIX: Exporting NQuads from webconsole yields NPE (#2608)
+*FIX: Boolean query results ignore content negotiation (#2605)
+*FIX: Gracefully handle the empty query string in the SPARQL parser (#2588)
+*FIX: Stuck transaction prevents shutdown (#2582)
+*FIX: Unavailable nodes in the cluster do not accept server stop command (#2581)
+*FIX: Some valid construct queries cannot be parsed (#2516)
+*FIX: Nodes depend on ZK ensemble to shut down cleanly (#2506)
+*FIX: Connection times out during long SPARQL update queries (#2292)
+*FIX: Negative cardinality estimations (#1834)
+
+== 4.0 RC3 Release
+[none]
+*ADD: Add progress monitor for server-side exports (#2545)
+*MOD: Speed up data export for large databases (#2607)
+*FIX: Too many files exceptions in the cluster (#2632)
+*FIX: NPE if pinged while cluster node is starting up (#2630)
+*FIX: System db in the cluster syncs on startup even if no changes (#2629)
+*FIX: IOException: Unsupported class type Permission in the audit log (#2628)
+*FIX: Event executor terminated in SNARL client (#2623)
+*FIX: Rolling back a transaction that is in progress fails (#2621)
+*FIX: ConcurrentModificationException in the algebraic rewriter (#2617)
+*FIX: Commits without a message reuse previous commit message (#2616)
+*FIX: Add explicit vcs:Updates type in versioning metadata assertions (#2615)
+*FIX: Non-select queries for versioning metadata query the database (#2613)
+*FIX: CLS vcs commit command prints wrong message (#2612)
+*FIX: Differential index causes repair command to think db is invalid (#2602)
+*FIX: Deadlock in RPC client can halt coordinator (#2579)
+
+== 4.0 RC2 Release
+[none]
+*ADD: Per-query timeouts (#2442)
+*ADD: Add spatial.enabled to webconsole (#2583)
+*MOD: Tinkerpop 3.0.1 (#2554)
+*MOD: Improved progress reporting for restoring a database from backup (#2552)
+*MOD: Metadata for index fragmentation (#2530)
+*MOD: Improved accuracy of sub-query timeouts (#2564)
+*MOD: Always log timed out queries in slow query log (#2570)
+*FIX: Typos in reasoning undo CLI command (#2561)
+*FIX: Server losing ZK connectivity causes client to freeze (#2567)
+*FIX: Restoring 3.x backups in 4.0 assigns bogus datatype to plain literals (#2571)
+*FIX: Auto-complete scripts missing virtual graph completions (#2572)
+*FIX: Disk index should clean statistics after closing connections (#2573)
+*FIX: Opening concurrent search index connections throws exceptions (#2578)
+*FIX: Coordinator losing ZK connection does not cancel transactions (#2580)
+*FIX: Spatial query re-writer can eat binds that aren't using spatial functions (#2584)
+*FIX: HTTP client sends too many options exceeding URL length restrictions (#2585)
+*FIX: System database disk usage grows endlessly (#2586)
+*FIX: Gracefully handle the empty query string in the SPARQL parser (#2588)
+*FIX: Race condition in free page handling (#2591)
+*FIX: Inlining singleton VALUES can lose bindings (#2600)
+
+== 4.0 RC1 Release
+[none]
+*ADD: Property Graphs
+*ADD: Virtual Graphs
+*ADD: RDF 1.1
+*ADD: Java 8
+*ADD: Geospatial
+*ADD: Support --bind option in query explain command (#2495)
+*ADD: Handle adding RDF in compressed format in web console (#2453)
+*ADD: Cluster-wide shutdown. (#2402)
+*ADD: Add setting to `stardog-admin` to allow starting the server in the foreground (#2326)
+*ADD: Add a CacheManager for LDAP (#2510)
+*ADD: Merge proxy functionality into nodes (#2115)
+*ADD: Introduce configurable isolation level option and serializable transactions (#1222)
+*MOD: Remove explicit migration from the API (#2433)
+*MOD: Remove `pack.cluster.address` which is deprecated in 3.1 (#2327)
+*MOD: Update to Netty 4.0.30
+*MOD: Update to Lucene 5.3.0
+*MOD: Update to Jena 3.0.0
+*MOD: Update to Sesame 4.0
+*MOD: Change from JUL to Log4j 2
+*MOD: Cost model reflects estimation accuracy (#2541)
+*MOD: Change default values for differential index parameters (#2540)
+*MOD: Compute and store page fragmentation info (#2530)
+*MOD: Improved performance of node synch for new nodes (#2517)
+*MOD: Progress monitor for migration (#2481)
+*MOD: Improve performance of client side exports (#2479)
+*MOD: Improve variable inlining to cover more cases (#2465)
+*MOD: Rename `transactions.durable` option to `transaction.logged` for clarity (#2464)
+*MOD: Allow query.timeout to be modified while db is online (#2441)
+*MOD: Default base URI used for RDF parsing changed from `tag:stardog:api:` to `http://api.stardog.com/` (#2395)
+*MOD: Define a default namespace for databases (#2390)
+*MOD: Do not automatically upgrade an index, force user to do it explicitly (#2339)
+*MOD: Improve optimization of plans re-written by the reasoner (#2102)
+*MOD: Inline equality filters for some literals (#1925)
+*MOD: Progress meter for startup (#1684)
+*MOD: Use DB namespaces while parsing RDF files (#1230)
+*MOD: Change key binding for Execute in web console query panel (#2543)
+*FIX: Named graph export includes default graph too (#2546)
+*FIX: Enabling compression for server side exports raises NPE (#2544)
+*FIX: `db status` and `server status` are showing negative values for open transactions (#2532)
+*FIX: Large number of small transactions use too much disk space (#2529)
+*FIX: Some valid ASK queries cannot be parsed (#2508)
+*FIX: Multiple occurrences of a variable in a triple pattern produces incorrect results (#2502)
+*FIX: Assured vars for projections are wrong (#2500)
+*FIX: Implicit join detection does not respect variable scopes (#2499)
+*FIX: Setting an optional variable as a query parameter produces incorrect results (#2498)
+*FIX: "Home locked" message not printed to the standard output (#2491)
+*FIX: Incorrect parsing of update query with USING (#2489)
+*FIX: PlanCache incorrectly handles plans with VALUES (#2488)
+*FIX: DB repair can leak direct memory (#2487)
+*FIX: Server start command cannot be killed with CTRL-C (#2486)
+*FIX: Server start command creates home directory if it does not exist (#2482)
+*FIX: Client export does not close the StatementSource after export (#2480)
+*FIX: Join order optimizers can NPE (#2467)
+*FIX: Inlining variables used in VALUES clause can lose filters (#2466)
+*FIX: langMatches implementation is incomplete (#2463)
+*FIX: Mouse events in webconsole's tree browser are broken (#2462)
+*FIX: Queries using DL reasoning compute incorrect results for annotation properties (#2460)
+*FIX: Unhandled exception `java.util.NoSuchElementException` on query execution (#2459)
+*FIX: Canonicalize operator loses bindings computed by child operator (#2458)
+*FIX: Top operator does not filter solutions produced by child operator (#2457)
+*FIX: Show message in UI to alert user when no NG were selected when exporting data (#2454)
+*FIX: Restored dictionaries might be corrupt (#2452)
+*FIX: java.nio.BufferUnderflowException during backup (#2451)
+*FIX: Stats are computed twice after db is restored (#2450)
+*FIX: Add data in DB web console is not catching parsing errors from stardog (#2449)
+*FIX: Adding invalid RDF data makes db unusable in the cluster (#2447)
+*FIX: Bnode URIs in VALUES are not recognized (#2445)
+*FIX: Can't start stardog server when `STARDOG_HOME` is a symlink (#2444)
+*FIX: Parameterized queries fail in CLI when parameter value contains equal character (#2443)
+*FIX: Large databases cannot be migrated (#2440)
+*FIX: Function registry missing regex and langMatches functions (#2439)
+*FIX: Non-numeric datatype facets cause UnsupportedOperationException (#2438)
+*FIX: NullPointerException in datatype reasoning (#2437)
+*FIX: Joins can be incorrect if the key is bound to a runtime index value (#2431)
+*FIX: SearchIndex auto-creates an index, but not the metadata (#2428)
+*FIX: Search uses wrong wrapper when reading metadata (#2427)
+*FIX: Stored namespaces override namespaces explicitly declared in SPARQL queries (#2426)
+*FIX: Retrieving role assignments from system index is incorrect (#2414)
+*FIX: Rolling back unprepared transaction makes database unusable (#2359)
+*FIX: Reasoning with string literals are broken (#2340)
+*FIX: Do not allow triples with literal subjects in rules (#2219)
+*FIX: Log messages are not always flushed to stardog.log (#2172)
+
+== 3.1.4 (Oh my it's π) Release
+[none]
+*MOD: Improved join key selection for multi-key joins (#2399)
+*MOD: DB Connection timeout default too small in Web Console (#2394)
+*FIX: Data obfuscation w/ named graphs collapses data into default graph (#2411)
+*FIX: Named graph security checks do not use effective permissions, only explicit (#2410)
+*FIX: Stack overflow in the TBox operator (#2406)
+*FIX: Incorrect cache lookup for queries with equality and datatype casting (#2405)
+*FIX: Bind operator can evaluate bindings in a wrong order (#2404)
+*FIX: SameAs Operator returns prematurely (#2403)
+*FIX: Empty query results when data contains `Contexts.ALL` and `query.all.graphs` is enabled (#2400)
+*FIX: Tracking deletions in the search index does not correctly respect the arity of the literal value (#2396)
+*FIX: Query fails with IllegalStateException: This scan does not provide an ordered output and cannot skip through solutions (#2388)
+*FIX: Schema browser queries don't terminate when using named graphs (#2387)
+*FIX: Incorrect join results in case of non-existent keys (#2412)
+
+== 3.1.3 Release
+[none]
+*MOD: Improved logging for invalid rules (#2377)
+*FIX: Use Stardog default port of 5820 when none specified for AdminConnection over HTTP (#2391)
+*FIX: Character encoding defaults to US-ASCII rather than UTF-8 (#2382)
+*FIX: Service incorrectly reports bound variables (#2381)
+*FIX: Cluster should not replicate file references from data add/remove, contents should be replicated instead (#2380)
+*FIX: Copying a database does not create a new entry in ZK (#2376)
+*FIX: Hard offline is not propagated to particpants (#2375)
+*FIX: Graph store protocol does not respect parsing options (#2257)
+*FIX: data add/remove does not correctly handle directory arguments (#2093)
+*FIX: QueryStringDecoder imposes a hard-coded maximum number of parameters yielding incorrect results for large HTTP requests (#2392)
+
+== 3.1.2 Release
+[none]
+*MOD: Optimize sorting and de-duplication of uncommitted changes during querying (#2347)
+*FIX: Last committed transaction ID inconsistent across nodes for brand-new databases (#2374)
+*FIX: Use xerces implementation of DatatypeFactory over the native sun implementation (#2373)
+*FIX: Databases which could not be created at startup cannot be synched to restore them (#2371)
+*FIX: List of available databases does not account for databases that were deleted externally (#2370)
+*FIX: Incorrect index order chosen when vars in equality filters are inlined (#2361)
+*FIX: Admin console does not work with SSL (#2360)
+*FIX: Persistent memory index leaks open file handles (#2356)
+*FIX: LDAP user records are assumed to have uid attribute (#2354)
+*FIX: ClassCastException during updates (#2277)
+
+== 3.1.1 Release
+[none]
+
+*MOD: Reduced optimization overhead for simple queries
+*MOD: StardogRepositoryConnection buffers updates unnecessarily
+*FIX: Queries which require punning do not work (#2331)
+*FIX: Queries with unused variables in filters are incorrectly optimized (#2320)
+*FIX: Security options are not available from the command line (#2344)
+*FIX: Server default in stardog.properties of security.named.graphs is ignored (#2345)
+*FIX: Adding a permission which uses an implicit resource avoid adding the resource to the catalog (#2346)
+*FIX: Problems with enabling reasoning through Sesame interface (#2348)
+*FIX: Incorrect results with skipping in equality reasoning (#2351)
+*FIX: Serialization error for permissions in web console
+
+== 3.1 Release
+[none]
+*ADD: Named Graph Security
+*ADD: Cluster Management Tools
+*ADD: Improved log shipping between nodes in cluster
+*ADD: Show class/property definitions in the web console
+*ADD: Export named graphs from the web console
+*MOD: ConnectionPool will throw an exception (StardogException) when exhausted instead of returning null
+*MOD: Shiro permission strings are not returned from PermissionManager, returning Permission objects instead
+*MOD: Improved performance of wildcard removals via Remover#statements()
+*MOD: Update to Sesame 2.7.15
+*MOD: Update to Guice 4
+*MOD: Use namespaces when showing query results in the webconsole
+*MOD: Improve performance of mixed updates
+*MOD: Selecting index orders can wrongly prefer context-last orders
+*MOD: Reduced overhead of security checks
+*MOD: Deprecated cluster configuration property `pack.cluster.address`; preferred property is `pack.zookeeper.address`
+*FIX: User can view permissions of a role they do not hold (#2265)
+*FIX: TSV mimetype is mis-spelled (#2294)
+*FIX: Weighted MIME types are not being properly handled (#2295)
+*FIX: Javadocs for StardogRepositoryConnection are out-of-date (#2296)
+*FIX: Unary variable scans do not bind variables which are constants in the query (#2302)
+*FIX: Database archetypes not closing iterations (#2303)
+*FIX: NPE during data add with versioning enabled (#2304)
+*FIX: Empty VALUES clause not supported (#2306)
+*FIX: Count query with non-existent named graph in dataset returns an 'empty' result (#2307)
+*FIX: Using data oneOf throws an exception during commit (#2312)
+*FIX: Export call via HTTP fails with error 500 when no `graph-uri` parameter is used (#2314)
+*FIX: Incorrect join type selection for unbound scan when a sort order is present (#2315)
+*FIX: Parsing error in web console when STRLEN is used (#2318)
+*FIX: SPARQL update graph operators should not pull source graph into memory (#2310)
+
+== 3.0.2 Release
+[none]
+*MOD: Do not force an slf4j implementation in the Maven dependencies
+*MOD: Improve SPARQL Service Description creation for named graphs
+*MOD: Improve writing index metadata to disk
+*MOD: Expose configuration for specifying join/write timeouts in the cluster
+*MOD: Faster inlining of `xsd:double`-typed literals
+*MOD: Better cardinality estimations for property paths
+*MOD: Improve plan caching
+*MOD: Reduce lock contention in search indexing to improve its performance 
+*MOD: Reduced memory overhead of grouping operators `distinct`, `minus`, `group` and some joins.
+*MOD: Faster update of reasoner state when schema does not change
+*MOD: Supply the missing switch to enable/disable `query.all.graphs` in web console
+*MOD: Improve performance of the processing of user-defined datatypes
+*MOD: Better use of concurrency when computing the reasoner state
+*FIX: Detect untyped classes and properties outside schema graphs
+*FIX: Exception from reasoner when `rdfs:range` is a `rdfs:Literal`
+*FIX: Missing results when `owl:sameAs` is explicitly used in queries
+*FIX: Missing results for some types of queries when using equality reasoning
+*FIX: Ground reasoning queries with unknown properties should not update schema
+*FIX: CLI data add command should send absolute paths
+*FIX: Query status command prints incorrect timeout value
+*FIX: Named graph info in SPARL Service Description does not match the spec
+*FIX: SPARQL Service Description should not include dataset by default
+*FIX: Avoid caching update plans for `insert/remove data` queries
+*FIX: `xsd:double` inlining isn't functional
+*FIX: 'Reasoning' is misspelled in the form for creating a new database in the webconsole
+*FIX: Missing query results with property paths and equality reasoning
+*FIX: Setting `reasoning.type=NONE` should disable schema reasoning
+*FIX: Error while parsing query that uses `exists`
+*FIX: NullPointerException with GROUP_CONCAT
+*FIX: Plans with property paths are not cached properly
+*FIX: Avoid use of default `false` value for `query.all.graphs`
+*FIX: Optimizer can select sub-optimal scans over the index
+*FIX: Duration 0 is shown as Oms
+*FIX: Computing reasoner state for a large number of named graphs is slow
+*FIX: Comments with leading spaces seem to cause parse errors
+*FIX: Order operator is never simple sorted
+
+== 3.0.1 Release
+[none]
+*MOD: Improve handling of very large schemas
+*MOD: Reduced memory usage of reasoner
+*MOD: Better error messages for SPARQL update parsing errors
+*FIX: Incorrect query results within a transaction
+*FIX: Super properties of topObjectProperty are list
+*FIX: Property hierarchy contains duplicates
+*FIX: Parameters assigned to update queries are not set in the where clause
+*FIX: Explanations for schema inferences inadvertantly extracts instance data into memory 
+*FIX: Long queries in webconsole produce exceptions
+*FIX: Optimization of property paths could yield incorrect results
+*FIX: User defined classes that produce bnodes are hidden in schema browser
+*FIX: Avg of an empty group returns the wrong result
+*FIX: Variables bound by VALUES clause not treated as join vars
+*FIX: IllegalStateException: This scan isn't supposed to skip 
+*FIX: SL filter does not support data some values as superclass 
+*FIX: Inline optimization fails with sameAs reasoning
+*FIX: Webconsole does not support reasoning.approximate option 
+*FIX: Overriding query.all.graphs in database configuration does not work
+*FIX: Literal comparator is broken
+*FIX: SPARQL Update request with no query returns a 200 via http
+*FIX: DB creation message contains incorrect info 
+*FIX: Annex dependency causes maven resolution problems
+*FIX: Accept `&#42;/&#42;` not recognized
+*FIX: Long literals not wrapped in the webconsole
+
+== 3.0 Release
+[none]
+*ADD: Equality Reasoning
+*ADD: High Availability Cluster
+*ADD: LDAP Authentication
+*ADD: DL instance reasoning (in-memory only)
+*ADD: Removed reasoning types; reasoning is either enabled or disabled.  Database auto-detects profile
+*ADD: ICV Repair Plans
+*ADD: SPARQL SERVICE keyword support
+*ADD: Maven support
+*ADD: Custom SPARQL aggregates
+*ADD: Extension point for customizing the lucene analyzer used during waldo indexing
+*ADD: User-defined datatype support
+*ADD: Utility to print information about current license
+*ADD: Add `--remove-all` option to data add
+*ADD: New CLI command to undo arbitrary inferences
+*ADD: New CLI command to fix ICV violations
+*ADD: New command to import namespaces from an RDF file
+*ADD: Command to export reasoning schema
+*ADD: SPARQL built-in support for IF-THEN rules
+*ADD: Open-sourced Empire bindings (see https://github.com/mhgrove/Empire)
+*ADD: Deprecated Starman
+*ADD: Option to abort the bulk load if there is an issue with bulk loading one or more files
+*ADD: Progress monitor for additions and removals
+*ADD: Cache strategy for static resources in web console
+*MOD: Significantly improved write performance
+*MOD: Significant improvements to query planning
+*MOD: Better handling of large plans during query planning
+*MOD: Allow SPARQL update queries with VCS commit command
+*MOD: Search API and CLI support named graphs
+*MOD: Make query.all.graphs a db option
+*MOD: Change default CLI construct output format to turtle
+*MOD: Include rdf:type in reasoning results for variable properties
+*MOD: Update queries can join existing transactions
+*MOD: Change the default value of `reasoning.schema.graphs` to all graphs
+*MOD: Update statistics synchronously for large transactions
+*MOD: Automatically assume `--server-side` in CLI for localhost
+*MOD: Option `reasoning.schema.graphs` no longer writable while online
+*MOD: Improved procedure for finding license in $STARDOG_HOME
+*MOD: Make connection timeout a database option
+*MOD: Change schema tree to load schema info from all graphs
+*MOD: Use the same name for named graphs argument in CLI commands
+*MOD: Improved error messages when adding files with unrecognized extension
+*MOD: Less aggressive plan cache invalidation
+*MOD: Support Sesame's infer flag
+*MOD: Show more info for db status command
+*MOD: Accept 'bz2' as an alias for bzip compression
+*MOD: Improved regex performance
+*MOD: Reduce lock contention in database when opening connections
+*MOD: Updated to Shiro 1.2.1
+*MOD: Updated to data-exporter 1.0.4
+*MOD: Updated to Netty 4.0.25
+*MOD: Removed JLine dependency
+*FIX: Editing db metadata with webconsole fails
+*FIX: Need non-zero exit status in the CLI for invalid queries
+*FIX: Inconsistency queries with datatypes
+*FIX: Describe queries with reasoning don't bring type info
+*FIX: Pellet should ignore ill-formed OWL axioms
+*FIX: Datatype restrictions with xsd:pattern should be parsed
+*FIX: Database dumps in Turtle don't include prefixes
+*FIX: Uncaught exception storing large schemas for autocomplete
+*FIX: ICV convert produces the wrong query for range constraints
+*FIX: Timed out connections do not specify an error message
+*FIX: Long transactions should not be automatically closed
+*FIX: Restored backups maintain path from previous copy
+*FIX: Commits on differential index can fail on windows
+*FIX: Corrupt free page info should not prevent repair
+*FIX: Namespaces interleaved with RDF yields a `ConcurrentModificationException` when iterated over
+*FIX: Web Console freeze when jumping from Admin Console to DB Console
+*FIX: Exporting a db leaves connections open
+*FIX: Recursive axioms with literals are not properly unfolded
+*FIX: Exact text search producing unexpected results in web console
+*FIX: Flipping databases offline/online immediately in the webconsole fails
+*FIX: Online attribute in the webconsole is out of sync
+*FIX: Datasets do not work with update queries
+*FIX: Repair on an in-mem database should refuse to run
+*FIX: Failing DELETE/INSERT with WHERE update query with search index enabled
+*FIX: Clear all against an empty database returns an error
+*FIX: Error parsing object lists of boolean values in turtle
+*FIX: Graph constants in SPARQL update not handled correctly
+*FIX: SPARQL update parser does not use database configuration options
+*FIX: INSERT DATA fails when same triple is added to multiple graphs
+*FIX: Incorrect handling of graph keyword in the presence of a dataset
+*FIX: `StardogDatasetGraph.getNamedModel` returns wrong result
+*FIX: `StardogDatasetGraph.size` should return the number of named graphs
+*FIX: Calling `StardogDatasetGraph.end` after commit/rollback raises an exception
+*FIX: Some configuration options use default serialization making backward compatibility difficult
+*FIX: SPARQL update query should check write permissions
+*FIX: Queries with MINUS and sp:directType return wrong answers
+*FIX: Adding empty files hang
+*FIX: Database with durable transactions fail when adding/removing files which do not exist
+*FIX: Describe queries throw an exception when from graph does not exist
+*FIX: Editing entity in webconsole strips explicit datatype for xsd:string
+*FIX: Punning returns incorrect results
+*FIX: Option reasoning.punning.enabled should be mutable
+*FIX: Guice injector creation deadlocks during init of SNARL client
+*FIX: ASCII delete char (127) in literals breaks UTF encoding
+*FIX: Reading from dictionary value file should not go past file length
+*FIX: avg and gmean aggregates can yield a divide by zero error for empty groups
+*FIX: `server start` dies silently with a non-existent $STARDOG_HOME folder
+*FIX: Restore breaks on databases with more than 1M quads
+*FIX: Server side option causes data remove to fail
+*FIX: Several built-in vocabulary terms are being reported as datatype/object property
+*FIX: Repair a database missing index.metadata
+*FIX: Database config options that use stardog.properties for the default value are not visible to `metadata get`
+*FIX: HTTPConnection.admin uses the wrong server URL
+
+== 2.2.4 Release
+[none]
+*FIX: File descriptor leak in cluster proxy
+*FIX: Reasoning write events are not correctly handled by data replication
+*FIX: ZK and proxy use same java args as Stardog server
+*FIX: Corrected rolling timeout handling in data replication to better allow for expensive/large replications
+
+== 2.2.3 Release
+[none]
+*MOD: Querying an uncommitted state with reasoning updates reasoner state eagerly
+*MOD: More optimized implementation for MINUS when using sorted operands
+*MOD: Improve SPARQL query pre-processing in Query Panel
+*MOD: Added timeout to classification which will revert to RDFS when passed
+*MOD: Finer grained cancel checks in reasoning operators
+*MOD: Updated to Sesame 2.7.14
+*MOD: Improved performance of count aggregate
+*MOD: Added a default setting for the direct memory in the stardog-admin script
+*FIX: Transitive symmetric properties in Stardog are also considered to be reflexive
+*FIX: Validation checks in oracle mode incorrect in tx containing local changes
+*FIX: Size in transaction reported incorrectly
+*FIX: Redundant atom optimization can incorrectly get rid of atoms containing literals
+*FIX: Cannot clausify some queries using bnodes
+*FIX: Exporting results ignore reasoning parameter
+*FIX: Queries with reasoning might blow up if typing is ambiguous
+*FIX: Query Panel doesn't recognize db namespaces
+*FIX: Property chain pre-processing can cause reasoning not to terminate
+*FIX: Using a graph variable in a query as a join variable will lead to incorrect results
+*FIX: SWRL rules with nonatomic heads might lead to incomplete results
+*FIX: Property paths not using wildcard active graph
+*FIX: The 'CPU Load' and 'Heap Used' charts might be displayed incorrectly depending on the window size
+*FIX: Rule extraction does not take int account the schema graphs
+*FIX: count(distinct *) does not count the distincts correctly
+*FIX: "@" and "." are not considered to be legal user name characters
+*FIX: Failed transaction prevents future transactions when versioning is enabled
+*FIX: Reasoning with transitive reflexive properties with SL causes class cast exception
+
+== 2.2.2 Release
+[none]
+*ADD: Support xpath:subtract-dateTimes
+*MOD: Improved performance of BIND operator
+*MOD: Improved performance of count aggregate
+*MOD: Better join cost model
+*MOD: Configuration option for auto stats updates should be writable while online
+*MOD: Pre-compile all HTML templates for Web Console
+*MOD: Remove function in Jena interface is not optimal
+*MOD: Improved performance of scans joined by a context variable
+*MOD: Reduced join operator initialization time
+*MOD: Improved selection of scan order
+*MOD: Updated to Netty 4.0.23
+*MOD: Improved performance of property path evaluation
+*FIX: Cycles in free pages list
+*FIX: BNodes can't be browsed in Query Panel
+*FIX: Database list in web console displays all databases regardless of user permissions
+*FIX: Query Panel results browsing does not include non-default graphs
+*FIX: Server side export creates empty file
+*FIX: Running `server status` with only one database results in parse error sending status to client
+*FIX: Returning duplicate values from a join
+*FIX: Corrected help content for VCS functions
+*FIX: Display of `index.named.graphs` in web console is backwards
+*FIX: Order of updates in VCS commit command backwards
+*FIX: Handling of duration constants with undefined fields
+*FIX: OOB that manifests itself as a protocol error
+*FIX: Cannot override limit of search results in Waldo
+*FIX: Jena graph returns incorrect size
+*FIX: Empty node optimization can cause aggregates to be incorrect
+*FIX: Named models in Jena to do comply with Jena spec
+*FIX: Version diff causes NPE
+*FIX: Incorrect projection vars returned in result set for queries with sub queries
+*FIX: Enable logging for plans causes incorrect results for queries with filters
+*FIX: Join optimization can create invalid joins
+*FIX: Data cycles can lead to duplicate results in property path evaluation
+*FIX: Filter selectivity estimation incorrect for comparisons of literals
+*FIX: Incorrect results with property paths containing multiple inverses
+*FIX: Infinite loop rewriting of transitive properties
+*FIX: Release packaging missing correct vcs HTTP bindings
+
+== 2.2.1 Release
+[none]
+*ADD: Query panel in Web Console supports SPARQL Update queries
+*ADD: `server status` command to admin CLI
+*ADD: Bulk load from local files
+*ADD: Save query button in Web Console query panel
+*ADD: Method to ExpressionFactory to programmatically create a Stardog Rule from a String
+*ADD: Optimizations for property path evaluation
+*MOD: Moved system monitoring into separate page in the web console
+*MOD: Check $STARDOG_HOME for file system permissions issues before startup
+*MOD: Improved help for `role grant`
+*MOD: Return proper status code for invalid export query format
+*MOD: Improved round-trip performance of data-time objects in value canonicalization
+*MOD: Better cardinality of estimation of chains of joins
+*MOD: Extended coverage of database repair utility
+*MOD: Better cardinality estimations for scans over union named graphs
+*MOD: Improved error logging on server side
+*MOD: Throw an error when modifying the reasoning level of a query within a transaction
+*MOD: Removed concurrency bottleneck in disk lookups of cardinality statistics
+*MOD: Improved error messages on startup when required jar files are missing
+*FIX: Homepage content depending on Watchdog is incorrect for community builds
+*FIX: Queries using "count(distinct *) as ?c" always return a count of 1
+*FIX: Explanations of update queries
+*FIX: Missing semicolon in .bat files causes classpath errors
+*FIX: Lost aggregate function when no explicit group provided in query
+*FIX: Incorrect canonicalization of IN filter expressions
+*FIX: `StardogRepositoryConnection.setAutoCommit` starts a transaction
+*FIX: Reference to obsolete JSON-LD library
+*FIX: Query results export throws a parse error
+*FIX: Literal values in web console should be escaped when inserted into a page
+*FIX: Inconsistent `getDBOptions` in HTTP Admin falsely reporting `db doesn't exist` message
+*FIX: Failed update queries print wrong message
+*FIX: Handling of very large literals (> 8MB) causes problems during bulk loads
+*FIX: Database can be left in locked state under high numbers of concurrent commits
+*FIX: Direct memory size used for off-heap allocations is incorrect
+*FIX: JSON Serialization errors for Metadata payloads
+*FIX: Invalid connection string yields an NPE
+*FIX: Differential index metadata not flushed to disk
+*FIX: Explaining IC violations can produce NoSuchElementExceptions
+*FIX: Describe queries are slow with union named graphs
+*FIX: False positive detecting 'ask' queries in Query Panel
+*FIX: Language tags are not rendering correctly in Web Console
+*FIX: Invalid rules are included in the rule base
+*FIX: Reasoner can remain locked if there are errors computing new state during commit
+*FIX: Query Panel route double decodes input parameters
+*FIX: Overflow error when querying uncommitted state when changes contain duplicates
+*FIX: In the Web Console, formats in the 'Export as...' drop-down menu on the query panel should be filtered
+according to the query that was executed
+
+== 2.2 Release
+[none]
+*ADD: Support for RDF versioning
+*ADD: Admin support for webconsole
+*ADD: Password file similar to postgres for the CLI
+*ADD: Support compressed database exports
+*MOD: Support acceptable hostnames via CORS
+*MOD: Improved recognition of data properties during schema extraction
+*MOD: Updated to Sesame 2.7.12
+*MOD: Increase default password max length to 1024 characters
+*MOD: Dropped support for SD-Connection-String header
+*MOD: Dropped support for SD-Query-Bindings header
+*MOD: Improved performance of distinct operator for unsorted results
+*MOD: Updated to Lucene 4.8.1
+*MOD: Updated to Guava 17.0
+*MOD: Improved filter selectivity estimations
+*MOD: Improved error message when searching over non-searchable database
+*MOD: Improved error message when reasoning consistency check CLI command is incorrectly formatted
+*MOD: Disabled non-strict parsing when using durable transactions
+*MOD: Strict parsing now a database option
+*MOD: Check literals on insert is folded into strict parsing
+*MOD: Significant reduction in memory usage and increased performance for transferring RDF over the wire
+*MOD: StardogDatasetGraph implements the Jena Transactional interface
+*MOD: Deprecate usage of Jena BulkUpdateHandler
+*MOD: Do not wrap StardogDatasetGraph in DatasetGraphMap, use internal cache instead
+*MOD: Reduce default Lucene write buffer size from 1G to 256M
+*FIX: 'value already present' error when querying using reasoning
+*FIX: Expressions in a projection which are used in an order by are incorrectly parsed
+*FIX: Direct type does not return results when there are equivalent classes
+*FIX: "No authenticated user" error when iterating over IC violations
+*FIX: Constraints using max cardinality does not produce expected violations
+*FIX: Exception thrown due to invalid restrictions during schema extraction
+*FIX: Web console is not working for IE 8/9
+*FIX: Interactions between join optimizers can produce suboptimal joins for patterns with unbound predicates
+*FIX: INSERT DATA with language-tagged literal results in exception
+*FIX: Inserting a triple/quad with a BNode ID that consists of a single character (e.g., :b)
+duplicates this character (:bb)
+*FIX: Database exports don't use stored namespaces
+*FIX: "NQUADS" is not recognized as a valid RDF format
+*FIX: Transitive properties in PROV are not recognized
+*FIX: Schema queries do not return distinct results
+*FIX: "NTriples" is not recognized as a valid RDF format
+*FIX: Counter of allocated off-heap memory does not take into account allocations via ByteBuffer.allocateDirect
+*FIX: Filter exists expressions in an optional join cannot be translated into a plan
+*FIX: Rules containing NOT IN expressions in FILTERs might produce incomplete results
+*FIX: NPE in schema operator
+*FIX: ICV guard mode used incorrect reasoning type
+*FIX: Describe queries return no results when query.all.graphs is enabled
+*FIX: Query plan explanations when obtained via SNARL protocol do not reflect reasoning level
+*FIX: CSV and TSV are not recognized as valid HTTP result formats
+*FIX: Aggregate functions are incorrectly canonicalized
+*FIX: Temp files created during data uploads for stream storage are not deleted when transaction is complete
+*FIX: Getting namespaces for db over HTTP returns duplicated mappings
+*FIX: Batch file to run Stardog fails on Windows when path has spaces in it
+*FIX: Running search queries without a search index yields an NPE
+*FIX: Failure of termination condition in an outer join which resulted in an infinite join
+*FIX: Cannot migrate large databases
+*FIX: Large files cannot be added via HTTP protocol
+*FIX: Service loader does not ignore comments
+*FIX: Parse error for xsd:gyear typed literals with the value `1`
+*FIX: Persistant databases show "Index Persist: No" in webconsole
+*FIX: Incorrect status code for query not found in HTTP API
+*FIX: NPE during data obfuscation over SNARL protocol
+*FIX: Cannot export large databases to client
+*FIX: Losing results with order by & limit from incorrect solution modifier optimization
+*FIX: Starting server without web console only half works
+*FIX: Can return incorrect results from index scan when an active graph is explicitly specified
+*FIX: `ArrayIndexOutOfBoundsException` can occur when multiple projections appear in a plan
+*FIX: Find method of StardogDatasetGraph is incorrect
+*FIX: Implement all update functions in StardogDatasetGraph
+*FIX: A implies {o} is a valid EL axiom, but not accepted by SL profile
+*FIX: Keys are not recognized as valid EL axioms
+
+== 2.1.3 Release
+[none]
+*ADD: Support for configuration of password requirements
+*FIX: Override of default URL server does not work
+*FIX: Incorrect error message when failing to connect over HTTP to server w/ HTTP disabled
+*FIX: When custom bind address is used, server start output does not correctly reflect address server is listening on
+*FIX: BNodes declared in head of insert/delete queries are static
+*FIX: Need more graceful handling of query bindings header when it's the empty string
+*FIX: Doubled-typed literal values which are .equals, could canonicalize to different identifiers
+*FIX: Incomplete reasoning with property chains
+*FIX: Non-deterministic connection failures over SNARL protocol in a server under high load
+*FIX: SPARQL count optimization can rewrite count expressions to things which are not semantically equivalent
+*FIX: Commits which contain the removal of an empty named graph yield an NPE during commit to search index
+*FIX: Update queries via Sesame bindings throw exceptions
+*FIX: Setting query properties on a Sesame query, such as includedInferred, does not work as expected
+*FIX: `Repository.getContextIDs` returns a non-unique list of contexts
+*FIX: Getting the size of a specific named graph via `StardogRepositoryConnection` yields an `UnsupportedOperationException`
+*FIX: Shells scripts do not quote paths which fails in the presence of paths with spaces and the like
+*FIX: Memory mapped tx log files on Windows can get mangled when mem-mapped contents are flushed to disk
+*FIX: Computation of very large query result sets slows down due to cache thrashing
+*MOD: Starting server with `--no-web-console` should print a message
+*MOD: CLI export help needs some clarification
+
+== 2.1.2 Release
+[none]
+*ADD: Auto-complete feature in Web console's query panel
+*ADD: Load query from file in Web console's query panel
+*ADD: SNARL API support for performing an export
+*ADD: Server side export support
+*ADD: Arithmetic operations for date/time values
+*FIX: Incorrectly handling filter inlining when variable in OPTIONAL side of join
+*FIX: Most recent version of chrome breaks the webconsole layout
+*FIX: CORS method `OPTION` is missing
+*FIX: DISTINCT operator could return only a REDUCED result set in some cases with reasoning
+*FIX: Correctly verify property paths during optimization when both start & end point are unbound
+*FIX: Rewritten plans might incorrectly share variables which can lead to empty results
+*FIX: In the Web console, prefixes included in the query panel seem to be irrelevant
+*FIX: Corrected rendering of accented characters in welcome screen
+*FIX: Export cli function does not use RDF format aliases
+*FIX: Unexpected result for HAVING (bound(...)) expression
+*FIX: Incorrect handling of function expressions within a bind
+*FIX: Do not create superfluous temp files which are not used or deleted
+*FIX: Be less aggressive about moving intermediate results off heap
+*FIX: Failure of termination condition in an outer join which resulted in an infinite join
+*MOD: Improved error message using using non-existent file to query command on CLI
+*MOD: Updated to Sesame 2.7.10
+*MOD: Updated to Protobuf 2.5.0
+*MOD: Updated to Netty 4.0.17
+*MOD: Updated to Lucene 4.7.0
+
+== 2.1.1 Release
+[none]
+*ADD: Several new SPARQL filter functions from the .NetRDF library
+*ADD: Allow RDF strings to be passed as input to explain command
+*ADD: CLI explain option to return multiple explanations
+*FIX: Explanation merging to handle more cases 
+*FIX: Obfuscation CLI commands to work with config files
+*FIX: Obfuscation CLI commands to handle SPARQL rules properly
+*FIX: Regex filter persisted over multiple queries
+*FIX: Cast exception during describe query evaluation over named graphs
+*FIX: Properties which are both symmetric and transitive are not handled correctly
+*FIX: Incorrect mime-types sent to server for file references
+*FIX: Some optionals, when mixed with distinct, still do not return distinct results
+*FIX: Large numbers of unique BNodes in nq, trig, and trix formats cause RIO to use too much memory
+*FIX: Buffers used during bulk loading can take up too much memory when large literals are used
+*MOD: Fallback handling of access to sun.misc.Unsafe for JDK's which do not support it
+*MOD: Improved filter pushing optimization
+*MOD: Warning printed from 'role grant' command when multiple actions are provided
+
+== 2.1 Release
+[none]
+*ADD: Support for bzip2 compressed input files (with extension .bz2)
+*ADD: Auto-repair mechanism for common types of index errors
+*ADD: Generation of multiple proofs for inferences & inconsistencies
+*ADD: Database repair, backup & restore utilities
+*ADD: FROM/FROM NAMED 'default' can be used as an alias to query default graph
+*ADD: 'dbms-admin:shutdown' permission to allow non-superusers which hold that permission, to shutdown the server
+*ADD: Improved query scalability by flowing intermediate results off-heap or onto disk.  Note: flowing off-heap requires an Oracle JDK due to its use of sun.misc.Unsafe
+*ADD: Significant improvement in performance of bulk loading and total scalability of a database
+*ADD: Named Graph information in proofs
+*ADD: Proofs for integrity constraint violations
+*FIX: NaN displayed in waldo search results
+*FIX: Web console hangs when using with SSL
+*FIX: Log redirection at startup messes up the logger output
+*FIX: Over-eager update plan caching resulting in different update queries executing the same update
+*FIX: Search index is not needlessly rebuilt on stardog
+*FIX: HTTP server on OpenJDK does not always close connections
+*FIX: Web console not loading on Win7 when Stardog is run as a service
+*FIX: Stardog Rules do not use the pre-defined database namespaces
+*FIX: Encoding of special characters in web console
+*FIX: Issue in query optimizer where a more optimal plan could accidentally get discarded
+*FIX: Built-in values (such as owl:Thing) used inside filters are not correctly recognized
+*FIX: Queries using reasoning and FILTER NOT EXISTS could return incomplete results
+*FIX: Cannot shutdown server over HTTP if security is disabled
+*FIX: Functions with zero args, such as BNODE(), can produce incorrect results
+*FIX: now() returns the time the server started, not the actual current time
+*FIX: Asking for the types of a class yields an exception
+*FIX: Axioms using HasValue expressions can case type queries to produce incorrect results
+*FIX: Value for subject in THEN clause is not returned
+*FIX: BIND optimizer can incorrectly order the BIND expressions
+*FIX: IF-THEN rules might fail to recognize term types
+*FIX: Windows service does not always shut down cleanly
+*MOD: Reduced memory footprint of queries while being executed
+*MOD: Optimizing a database will also rebuild its search index
+*MOD: Make database namespaces meta property creatable
+*MOD: Database meta properties cannot be re-initialized to prevent malicious users from changing their behavior
+*MOD: Updated to Netty 4.0.14
+*MOD: Updated to Sesame 2.7.7
+
+== 2.0.3 Release
+[none]
+*ADD: manpages
+*ADD: Support for punning when using reasoning & rdf:type
+*FIX: Browse tab was missing classes in IE9
+*FIX: Bug in Watchdog API JSON serialization
+*FIX: Watchdog information in web console not visible on Windows
+*FIX: Bug in rendering of columns in web console homepage in IE & FF
+*FIX: Missing elements in web console in IE
+*FIX: Correctly handle line breaks in proof tree serialization
+*FIX: Missing final byte when formatting query results using 'Accept-Encoding: gzip,deflate'
+*FIX: Parsing of queries which use the Stardog directType built-in
+*MOD: Improved performance of web console in IE
+*MOD: Improved group help, including full synopsis, in CLI
+
+== 2.0.2 Release
+[none]
+*ADD: Support for the "Accept-Encoding: gzip" header over HTTP; enables sending of gzipped responses.
+*ADD: Graph store protocol to support gzipped content
+*MOD: Improved load progress monitor based on the number of bytes read
+*MOD: Deprecated the SD-Connection-String header, now specified as a parameter to the request
+*MOD: Updated to Guava 15
+*FIX: Correctly handling specifying the dataset over SPARQL protocol
+*FIX: Bug in literal canonicalization
+*FIX: Bogus warnings about absorption from Pellet
+*FIX: Re-indexing of searchable databases regardless of whether or not the search index needs to be updated
+*FIX: Pressing key shortcut multiple times for the help in the web console displayed the help multiple times
+*FIX: Construct queries do not produce results
+*FIX: Not able to add properties to individuals in web console
+*FIX: Query over partitioned graphs in Jena does not work
+*FIX: Using :textMatch in a query against a non-searchable database causes the web console to spin forever
+*FIX: Typing a number in query panel results paper gives an error
+*FIX: Blank lines pre-pended to SPARQL queries in web console
+*FIX: Negative execution times for queries when retrieved over SNARL protocol
+*FIX: HTTP server accepting gzip files for data add/remove commands
+*FIX: Strict parsing turns off RDF/XML parser checks some of which are very memory intensive
+*FIX: Disabled BNode caching in N-Triples parser which are very memory intensive
+*FIX: 400 errors when db name is included in connection string header
+*FIX: Loading of database options in CLI so they can correctly be set
+*FIX: Evaluation of queries using distinct with a complex, expression-based sort in the order by clause
+*FIX: Correctly send challenge response in all cases to avoid a browser caching bad credentials
+*FIX: Bug in proof rendering over HTTP
+*FIX: SWRL rules containing non-atomic body atoms could cause incorrect results
+*FIX: 'db status' admin CLI command returned an incorrect size for the database
+*FIX: HTTP server OOM when a large Content-Length for an incoming POST is used
+*FIX: Transactions state on the client was not correctly cleared in some error cases
+*FIX: Handling of large gzipped files in the HTTP protocol
+*FIX: Translation of rules with star-shaped body atoms
+
+== 2.0.1 Release
+[none]
+*ADD: Support for GZip encoded files in the HTTP protocol
+*ADD: More extensive reasoning functionality exposed via ReasoningConnection
+*FIX: System DB corruption due to starting two Stardog servers using same home directory
+*FIX: Exporting data in web console occasionally hangs
+*FIX: 5822 is no longer the default port for HTTP protocol
+*FIX: Context indexes sometimes out of date after a named graph update
+*FIX: `--disable-security` flag actually disables security complete, works for both HTTP & SNARL protocols
+*FIX: Error when using user supplied prefixes in a query via the web console
+*FIX: Multiple key shortcut dialogs can be displayed at once
+*FIX: IO error with large responses over HTTP
+*FIX: Web console loading issues in Windows 7
+*FIX: DB corruption when multiple Stardog servers are started at once
+*FIX: Improved handling of completely unbound patterns during reasoning avoiding incomplete results
+*FIX: Better error response from server when authentication fails
+*FIX: Resolved concurrency issue in ICV guard mode validation when competing threads are attempting to validate & commit
+*FIX: `.bat` files can be run from outside of the bin directory and better respect setting STARDOG_HOME environment variable
+*MOD: Unified SPARQL & SWRL UUID functions
+*MOD: Better handling of duplicate results in construct queries including when projection uses fully-qualified results
+*MOD: Improved feedback for adding/removing data via the web console
+*MOD: External links opened in new tab in web console
+*MOD: Reduced memory overhead of streaming modifications
+*MOD: Improved bulk load performance for files without named graphs (RDF/XML, Turtle, etc.) 
+
+== 2.0 Release
+[none]
+*ADD: SPARQL Update
+*ADD: Web Console
+*ADD: Proofs for reasoning explanations
+*ADD: JMX monitoring
+*ADD: PROV support
+*ADD: SL reasoning profile
+*ADD: Client & Server dependencies are cleanly separated
+*ADD: Evaluation of non-recursive datalog queries to improve reasoning performance
+*ADD: SPARQL-based IF/THEN rules syntax
+*ADD: New, significantly faster, SPARQL parser
+*ADD: Native SSL support for SNARL & HTTP protocols
+*ADD: Single Stardog server, both protocols run on the same port within the same server.
+*ADD: CLI commands to obfuscate RDF data and SPARQL queries for sharing sensitive data
+*ADD: Type detection of variables in queries with reasoning
+*ADD: Ability to load server-side files via the SNARL API
+*ADD: Support for Sesame directSubClassOf, directSubPropertyOf
+*FIX: Filter expression inlining when used with a group-by expression
+*FIX: Lock upgrading in search connections which resulted in deadlock in some circumstances
+*FIX: ICV export added to shell completion scripts
+*FIX: Error in reasoning where some rules could prevented rewriting
+*FIX: Handling of '=' in namespaces
+*FIX: Exception thrown by describe queries via CLI
+*FIX: EOF exception over HTTP for large datasets
+*FIX: Rewriting error when punning is used
+*FIX: Leading comment characters break query type sniffing
+*FIX: Auto closing of result sets when using embedded connections
+*FIX: Error in named graph lookups in Jena bindings
+*FIX: Bug in reasoning where equivalent classes/properties were not correctly accounted for
+*FIX: Querying for properties/individuals via OWL's built-in classes produced empty results with reasoning
+*FIX: Bug in reasoning leading to incomplete answers when punning is used
+*FIX: Corner case in sameterm inlining where the expression was incorrectly bound
+*FIX: Bug in query answering where the variable used in a group by was not bound
+*FIX: The command 'server start' now supports --logfile option on Windows too
+*FIX: Handling of limit & offset in searches on the CLI
+*FIX: Parse error for small threshold values in search queries
+*FIX: NPE during the evaluation of some FILTER EXISTS queries where the predicate is not bound
+*FIX: Filter comparison for literals of unequal datatypes when the literals are inlined into the query
+*MOD: Printing search results in a formatted table
+*MOD: Using a single namespace for Stardog extensions & default URIs
+*MOD: Better error messages for malformed literals which create value errors during query evaluation
+*MOD: Removed unused -u,-p,-P flags from server start
+*MOD: Search results on CLI sorted by score
+*MOD: Minimized roundtrips to security module to reduce overhead
+*MOD: Improved literal comparisons in filters
+*MOD: Improved query planner performance
+*MOD: Significant improvement to write performance
+*MOD: Updated Netty to 4.0.9
+*MOD: Updated Sesame to 2.7.3
+*MOD: SNARL API, Jena & Sesame bindings
+
+== 1.2.3 Release
+[none]
+*ADD: ICV export feature to CLI
+*ADD: fish shell autocomplete scripts
+*ADD: SPARQL constraints can be added directly via CLI
+*FIX: Missing completions from bash autocomplete scripts
+*FIX: Improved error messages when using the CLI
+*FIX: Using variables in the predicate position with reasoning lead to
+incomplete results
+*FIX: Deserialization errors when commas are used in namespace declarations,
+for example in tag URIs.
+*FIX: Add/Remove data over HTTP with strict-parsing enabled
+*FIX: Handling of strict-parsing when creating a database, option was
+ignored
+*MOD: Improved help content for default options in CLI
+*MOD: ICV CLI commands to use admin credentials by default
+
+== 1.2.2 Release
+[none]
+*ADD: ln, log, atan, asin, acos, sinh, cosh, tang, toDegrees & toRadians to
+Stardog built-in function library.  These are in the tag:stardog:api:functions: 
+namespace.
+*FIX: NPE when using SNARL protocol with a select query that has no variables.
+*FIX: Removed a source of non-determinism during query rewriting leading to less
+variance in performance of queries with reasoning
+*FIX: Corrected namespace rendering in explanations
+*FIX: Exception handling in begin/commit/rollback in Empire bindings
+*FIX: Improved performance of rewriting in queries where atoms are repeated
+*FIX: Bug in iteration cursor propagation during a join
+*FIX: Corrected execution order planning of chains of dependent SWRL builtins.
+
+== 1.2.1 Release
+[none]
+*FIX: Order of parameters for CLI commands data add and data remove
+*FIX: Autocomplete for 'stardog query' is fixed
+*FIX: Added hooks for SWRL trigonometric functions (sin, cos, tan) in
+the query engine.  These functions are available in the SWRLB namespace:
+http://www.w3.org/2003/11/swrlb#
+*FIX: Modified the service loader to resolve issues that arise in
+multiple classloader environments, such as in a servlet container.
+*FIX: Resolved issue where SWRL rules with bound arguments in the head
+of the rule produced incorrect results.
+*FIX: Corrected the execution planning for SWRL rules where multiple
+built-ins are chained together.
+
+== 1.2 Release
+[none]
+*ADD: Query management functionality to list and kill running queries
+(API, SNARL, HTTP, CLI extensions).
+*ADD: New configuration option to automatically kill queries when
+execution time exceeds a timeout (default 5 min).
+*ADD: A new logger to log information about slow queries.
+*ADD: Extend Connection interface to easily login to StardogDBMS to
+perform administrative action.
+*ADD: New CLI with improved online help, command groups, and consistent
+response codes.
+*ADD: SNARL and HTTP protocols support queries that use stored namespaces
+similar to CLI.
+*ADD: New transaction layer which uses async writes & mem mapped logs to
+improve durable logging performance.
+*ADD: Support for the ARQ builtins pi, e, sqrt, min & max.
+*ADD: HTTP server now supports the SPARQL Service Description spec.
+*ADD: New, more performant security layer.
+*ADD: Explain data inconsistencies via the reasoning connection.
+*ADD: Better caching of rewrites of query plans to improve reasoning
+throughput
+*ADD: Improved performance of write caching as requests to add/remove
+data are appended to a transaction
+*FIX: CLI error messages are not consistent regardless of which protocol
+is used to connect to the database.
+*FIX: Handling of several SWRL builtins, including comparison operators
+such as greaterThan or lessThanOrEqual, such that their use yields correct
+query results.
+*FIX: Resolved an issue where lookup queries from Stardog's
+SesameRepository implementation where incorrectly handled by the plan cache.
+*FIX: Applied better ordering to conjuncts in a rewritten plan to improve
+determinism in reasoning query performance.
+*FIX: Jena named Datasets now work correctly
+*FIX: Calling ConstraintViolation.getViolations a second time in HTTP
+connections returns empty results.
+*FIX: Printing very long literals without whitespace in query results.
+*FIX: Bug in plan caching where unknown constants introduced in reasoning
+could result in incorrect query results.
+*FIX: Closed vulnerability to billion laughs attack.
+*FIX: Query parsing bug where the name of variable could affect the
+resulting algebra.
+*FIX: ICV security permissions...now correctly set permissions for
+specific access to ICV constraints independent of DB access.
+*FIX: Using an unsupported output format while displaying the user/role
+permission table no longer fails silently.
+*FIX: Property paths to detect cycles now correctly return results.
+*FIX: Lock issue with concurrent writes to the Waldo index
+*MOD: Moved search related configuration options from DatabaseOptions to SearchOptions.
+*MOD: Output of query CLI function is less verbose, but supports
+`--verbose` to get additional information.
+*MOD: Whitespace is no longer allowed in passwords, and passwords must
+be at least four characters long.
+*MOD: Database, user, and role names now have a maximum size of 64
+characters.
+*MOD: Password must be specified when creating a new user
+*MOD: Additional step of describing a literal during search
+indexing is now optional, and disabled by default which increases search
+indexing performance in most cases.  Can be enabled by setting the
+'waldo.describe.during.indexing' option in your stardog.properties file.
+*MOD: Updated to Sesame 2.7.0, Jena 2.10.0, Lucene 4.2.0, Shiro 1.2.1.
+*MOD: Online & Offline no longer take a wait/no wait option, they
+are synchronous actions. The current methods are left in the DBMS API,
+but deprecated, to be removed in the next major version. If you are using
+these methods from the CLI and need them to be asynchronous, background the
+task. If you're using them programmatically, use a Thread.
+*MOD: 400 code is returned from the server if an invalid name is
+provided for a database.
+*MOD: More comprehensive Stardog-specific error codes returned from
+the server in the HTTP protocol in the response header.
+*MOD: Removed the Stardog Shell from the distribution.
+*MOD: Removed `http.max.connections.per.route` configuration option
+*MOD: `autoCommit` and `remove(Query)` are deprecated from the Connection API, to be removed in the next release.
+
+== 1.1.5 Release
+[none]
+
+*FIX: Bug in query optimizer where the sort order was not correctly taken
+into account resulting in poor plan selection.
+*FIX: Handling of BGPs where a Literal value is used as the subject.
+Avoiding inadvertently assuming it's a URI and returning results when
+performing reasoning, or throwing a cast error.
+*FIX: Resolved issue with memory usage of the admin client
+*ADD: New option 'leading.wildcard.search.enabled' which can be
+configured in stardog.properties, for enabling the leading wildcard search
+support in the Lucene QueryParser.
+
+== 1.1.4 Release
+[none]
+*FIX: CLI commands that output tabular data might trim results (depending
+on word wrap boundaries).  This resolves namespace metadata updates not
+being visible.
+*FIX: Server stop now correctly prompts for password when -P is used.
+*FIX: Fixed the error in query rewriting that lead to the cryptic
+"Invalid term in query" error on a client.
+
+== 1.1.3 Release
+[none]
+*ADD: A new configuration option to control preserving bnode ID behavior
+in parsing.
+*MOD: More efficient copy of http multi-part attachments when creating
+a database via the http admin interface.
+*MOD: Using ThreadSafeClientConnManager in Admin HTTP client.
+*MOD: ICV translation from OWL to SPARQL now uses SPARQL 1.1 (FILTER
+NOT EXISTS)
+*FIX: Using same internal ID for bnodes coming from different files.
+*FIX: Unsupported exception throw for symmetric properties in reasoning
+queries.
+*FIX: Bug with reasoning queries containing OPTIONALs.
+*FIX: Reasoning is not used for the expressions inside FILTER [NOT]
+EXISTS.
+
+== 1.1.2 Release
+[none]
+*ADD: New optimizer for sub queries.
+*MOD: Optimization of EXISTS queries to better account for runtime
+usage.
+*FIX: Bug in cached query solution handling in joins.
+*FIX: Resolved two issues with the evaluation of nested property paths.
+*FIX: Missing query results while updates on other threads are continuing
+*FIX: Empty passwords no longer allowed.
+*FIX: Properly displaying user's permissions when same set of actions was
+granted by different roles.
+*FIX: Displaying all roles that granted user a permission.
+*FIX: Displaying user's permissions in the case when the executing user
+has read permission to the user resource but not some of its roles.
+
+== 1.1.1 Release
+[none]
+*FIX: Deadlock in Connection.remove().query() when in embedded mode
+*FIX: Duplicates in search results caused by repeated addition of a
+triple to the database
+*FIX: Non-termination in evaluation of largely nested filters
+*FIX: Non-termination in evaluation of nested optionals within graph
+patterns
+*FIX: Corrected issue in method which finds transactions in logs
+requiring recovery
+*FIX: Error in HTTP client where last byte of payload could be truncated
+*FIX: Issue in error code translation in the HTTP client
+*FIX: Connections to HTTP server were not getting closed when
+invalid/supported mime-types were requested for query responses.
+*FIX: Resolved issue where filter exists was not using the active graph
+as specified in the from/from where clause of the query.
+
+== 1.1 Release
+[none]
+*ADD: Support for transitivity reasoning.
+*ADD: SWRL support.
+*ADD: SPARQL 1.1 Query support.
+*ADD: directType, strictSubclassOf & strictSubPropertyOf support.
+*ADD: Limited support for creating new individuals in your rules.
+*ADD: Grouping quads by their named graphs in the export output for
+prettier results.
+*FIX: Top & Bottom properties are not incorrectly included in results of
+queries with reasoning.
+*FIX: NullPointerException when using sameTerm filter with a variable
+that was unbound due to an optional or union.
+*FIX: NullPointerException in SNARL client connection when client is used
+in concurrent environment.
+*FIX: Incorrect results when reasoning with reflexive properties in some
+corner cases.
+*FIX: Clear & Remove context where not getting correctly propagated to
+transaction logs.
+*FIX: Clear all was not clearing search index.
+*FIX: sameTerm inlining optimization was violating scope of a graph
+clause.
+*FIX: Waldo full text searches over contexts (using from/from named or
+graph) were not always correctly setting the context of the results.
+*FIX: Assertion of contexts in the search index is correct when bulk
+loading.
+*FIX: Could not assign r/w permissions directly to database metadata.
+*FIX: Resolved bug in security where only write access was required for
+reads once a transaction was active on a connection.
+*FIX: Bug in query planning that could cause it to not terminate for
+queries with deeply nested optionals.
+*FIX: Old versions of statistics (on disk) are correctly cleaned up on
+Windows systems.
+*FIX: Can now revoke all permissions a role/user has for a resource.
+*MOD: Faster triple pattern evaluation with reasoning for patterns
+using rdf:type when other patterns bind the subject or object.
+*MOD: New search indexing algorithm which computes search indexes in a
+single pass over the RDF index for a significant speed improvement
+*MOD: New format for search indexes
+*MOD: Sesame API bindings.  StardogSail has been deprecated & removed.
+Users should stick with StardogRepository.
+*MOD: Updated Jena to 2.7.4
+*MOD: Updated Sesame to 2.6.9
+*MOD: Updated Lucene to 4.0.0
+*MOD: Updated OpenRdf Utils to 0.8 & CP Utils to 2.3
+
+== 1.0.8 Release
+[none]
+*ADD: Accept Contexts.ALL as a synonym for "clear all" in the HTTP
+endpoint.
+*FIX: Issue with queries involving reasoning that used Thing or Nothing
+in filters, which in some cases, could return incorrect answers.
+*FIX: Granting a permission to a role no longer causes the Role to show
+up in the Users list.
+*FIX: Dropping a Role which is still in use now throws the correct type
+of exception
+*FIX: NPE during evaluation of a query which uses a variable in a filter
+that is not used in a BGP.
+*MOD: Clarified documentation in admin create (database) regarding
+whether or not name is required
+*MOD: Updated javadocs for Connection to discuss some thread safety
+issues and a note in Query regarding injection attacks and correct use of
+the parameter method.
+
+== 1.0.7 Release
+[none]
+*ADD: Filter pushing optimization which will move filters deeper into
+plans when it appears to be advantageous to do so
+*MOD: Literal comparison improved to increase filter performance
+*MOD: Improved inlining of constants from filter expressions
+*MOD: Improvements to bulk loading at database creation time resulting
+in up to 20% increase in load speed.
+*MOD: Improved add/remove performance to existing databases
+*MOD: More aggressive flushing of database contents to disk to
+minimize risk of data corruption when Stardog server is not properly shut
+down
+
+== 1.0.6 Release
+[none]
+*FIX: File streams from HTTP add/remove payloads are closed and cleaned
+up in all cases, reducing the number of open temp files.  Improves shutdown
+performance
+*FIX: text/turtle & application/ld+json now work for the HTTP protocol as
+return format mime types
+*FIX: Error in query evaluation of deeply nested outer joins
+*FIX: Issue with a rewriting optimization corner case that could result
+in non-termination
+
+== 1.0.5 Release
+[none]
+*FIX: Evaluation error in Union skipping & error handling in both SNARL &
+HTTP protocols
+*FIX: Incorrect results when unions are used in queries which are
+rewritten
+*MOD: New query planner introduced
+
+== 1.0.4 Release
+[none]
+*ADD: Ability to convert Integrity Constraints to SPARQL queries using
+the API or the CLI
+*ADD: Support for running Stardog as a Windows service
+*ADD: Support for parameteric queries in CLI query command with (-b,
+--bind) option so variables in a given query can be bound to constant values
+before execution
+*FIX: CLI command "explain plan" works with queries that use namespaces
+stored in the database
+*FIX: Reasoning queries returning incomplete results while retrieving
+inverse property inferences
+*MOD: CONSTRUCT query results in HTTP protocol use namespace prefixes
+from the query to return more concise output
+*MOD: Error checking in audit/access log configuration to report more
+informative error messages
+
+== 1.0.3 Release
+[none]
+*FIX: Issues with batch files in Windows when JAVA_HOME was set to a path
+containing a space
+*FIX: Bug in propagation of errors midstream in the SNARL protocol
+*FIX: Bug where sort order information on unions in a plan was lost
+resulting in slower queries
+*ADD: Ability to load files from a directory recursively
+*ADD: ReasoningConnection.getBaseConnection to provide access to
+underlying (nonreasoning) connection
+*MOD: New log file header record added with log metadata
+*MOD: Included the log file descriptor, log.proto, in distribution
+
+== 1.0.2 Release
+[none]
+*ADD: Stardog Community version and COMMUNITY_LICENSE.txt
+*ADD: IC validation support in SNARL and HTTP protocols
+*ADD: HTTP Admin protocol calls to add databases, users, roles
+*ADD: Support for SPARQL 1.1 Graph Store Protocol (with the exception of
+PATCH method)
+*FIX: Issues with concurrent reads and writes
+*FIX: Bug with duplicate results with queries containing UNIONs.
+*MOD: Improved performance for concurrent connections updating the
+database
+*MOD: Server start message to clarify Stardog listens on all network
+interfaces
+*MOD: Classpath manifests in Stardog jars so only CLI jar defines a
+classpath
+*MOD: Netty jars to version 3.5.2
+*MOD: Moved LICENSE.txt to EVALUATION_LICENSE.txt
+
+== 1.0.1 Release
+[none]
+*ADD: Stardog documentation is now served by the Stardog HTTP server at
+the URL http://host:port/docs
+*ADD: Store prefix mappings inside Stardog database metadata and prefix
+declarations are automatically added to queries executed through CLI and
+used in query results
+*ADD: HTTP protocol for Stardog admin commands that lets any Stardog
+admin command (creating a database, adding users, changing permissions,
+etc.) can be run through HTTP in addition to the default SNARL protocol
+Note: if you contemplate implementing a client of the HTTP API, it is
+not yet stable and a few parts of it will change in the next (1.0.2)
+release.
+*ADD: Access and audit logging in Stardog server to log events such as
+authentication events, queries and transactional change
+*FIX: Make login functions in StardogDBMS publicly accessible
+*FIX: Validation problems in CLI for very long query strings
+*FIX: Commits hanging when durable transactions option is enabled
+*FIX: Stardog sometimes failing to generate an error for syntax errors
+during add even though no data is added
+
+== 1.0 Release
+[none]
+*MOD: New login functions in StardogDBMS to clarify which server
+(embedded or remote) we are connecting to
+*FIX: Handling DESCRIBE queries where triples about the resource to
+describe occur in named graphs
+*FIX: Handling DESCRIBE queries with multiple resources to describe
+*ADD: Handling DESCRIBE queries with multiple resources to
+
+== 1.0 RC1 Release
+[none]
+*ADD: Batch files for executing the Stardog command line in Windows
+*ADD: directSubClassOf & directSubPropertyOf (same sparqldl namespace
+that is used by Pellet 'http://pellet.owldl.com/ns/sdle#') which can be used
+to get the explicit sub class/properties in a query that is using reasoning.
+*ADD: New command line function to check whether or not the database is
+consistent.
+*ADD: New command line function 'explain inference' to explain reasoning
+results (existing 'explain' command has been renamed to 'explain plan' to
+avoid confusion).
+*FIX: Resolved issue where an unbound type operator, "?s a ?o" produced
+incorrect inferences for some ontologies where there is interaction b/w
+domain/range & hasValue axioms.
+*FIX: Bug in the checking of user & role resource names when they're
+using the All permission, eg "user:*"
+*FIX: Consistency checks will not fail (say the db is inconsistent) when
+the consistency check requires reasoning services not provided by Stardog,
+such as datatype reasoning.
+*FIX: Deadlock in bulk loading which can occur when the bulk load exceeds
+5B triples.
+*FIX: Consistency checks for functional data properties which require
+literal value validations
+*FIX: Bug in axiom filtering for the EL profile that let non-EL axioms
+into an EL knowledge base
+*FIX: Bug in reasoning in the type operator where nominal are used within
+an equivalence or subclass axiom
+*FIX: Race condition in index commits in highly multi-threaded
+environments
+*MOD: Clarified error message when using search but the database does
+not have search enabled
+*MOD: Consistency checking performance improved
+*MOD: Bulk loading performance improved at larger scales
+*MOD: Small reduction in memory overhead of query response streams
+
+== 0.9.6 Release
+[none]
+*FIX: Checking consistency of a database over HTTP.
+*FIX: Resolved regex issue used to validate input to security where some
+valid inputs could be rejected.
+*FIX: Multiline queries passed to CLI explain are now correctly parsed.
+*FIX: Inconsistent usage of base URI used for parsing when one is not
+specified by the user.
+*FIX: Fixed an issue with automated TBox extraction where some parts
+of the ABox were incorrectly put into the TBox resulting in slower than
+expected performance for queries involving reasoning.
+*FIX: Bug in reasoning query evaluation where the property variable is
+unbound which resulted in incorrect inferences to be returned.
+*FIX: Password decoding in SNARL was incorrectly padding when converting
+to/from UTF-8 resulting in passwords sent over HTTP failing to match the
+password in the user database which only occurred with passwords over a
+certain length.
+*FIX: Queries with reasoning where the predicate in a BGP is unbound does
+not correctly return explicit statements when the schema is not present.
+*FIX: Context variables, such as "graph ?g { ... }" are correctly used in
+joins and used for join ordering.
+*FIX: Issue with decimal inlining where negative scale values were
+handled incorrectly resulting in decimal values being mangled on load.
+*MOD: Avoiding reclassification of TBox after commit when the TBox
+contents did not change.  Significant improvement in commit performance for
+databases with expressive TBoxes.
+*MOD: Handling of add/remove operations on the server resulting in
+decreased memory overhead and up to a 50% increase in the time it takes to
+process the change.
+*MOD: DL queries that involve ABox operators now cause errors at query
+time.
+*MOD: Inferences involving Top/Bottom Object/Data property are
+ignored.
+*MOD: Offlining a database will drop the database completely out of
+memory reducing server overhead of having large, offline databases.
+*MOD: Increased packet size in SNARL protocol changing maximum size
+from 64k to 16.7M bytes.  This raises the maximum size of a triple or query
+that can be exchanged to the protocol to nearly 17MB and should avoid any
+issues with loading datasets with large literals.  Earlier versions of
+the SNARL protocol from 0.9.5 and earlier are not compatible with the new
+format.
+*MOD: Storage format of RDF concepts loaded into Stardog has been
+changed.  This is a backwards incompatible change in format and no migration
+is possible.
+*MOD: Significant performance increase in loading throughput through
+better utilization of system resources to perform concurrent loading and in
+a more compact on disk format for some parts of the database contents.
+*MOD: Handling of typed literal values in query evaluation resulting
+in performance improvements in queries which perform math & comparison
+operations on datatyped literals.
+*MOD: Reduced overhead of query plan generation resulting in
+performance increases for smaller queries where execution time does not
+dominate planning time.
+
+== 0.9.5 Release
+[none]
+*FIX: Name of index copy target is validated so you cannot copy a
+database and give it an invalid name.
+*FIX: Printing result of ASK queries in the CLI.
+*FIX: Format parsing for construct queries on the CLI where unrecognized
+format types were resulting in NullPointerExceptions.
+*FIX: Databases which fail to initialize are no longer added to the
+server.
+*FIX: Better cleanup of databases which failed to be created.
+*FIX: Query explain over HTTP POST works and no longer returns a
+NOT_ACCEPTABLE response.
+*MOD: Increased performance of database copy.
+*MOD: Clearer error message when the server subcommand is mistyped.
+*MOD: Improved access to disk indexes resulting in significant query
+performance improvements in many workloads.
+*MOD: Clearer output messages from the 'drop' CLI command.
+
+== 0.9.4 Release
+[none]
+*FIX: Order by will correctly use secondary, tertiary, etc. orderings.
+*FIX: Null values in sorting are correctly sorted as the lowest value.
+*FIX: Resolved issue related to reusing a variable multiple times in the
+same BGP, correct results are now produced.
+*FIX: Changed handling of Channel close events in database server to
+avoid endless propagation back to the client, particularly on Windows.
+*FIX: Database cleanup on close events to avoid corrupting metadata.
+*FIX: Handling of type errors in regex filter.
+*MOD: New algorithm for handling ?x rdf:type ?o and :inst rdf:type
+?o BGP's in queries with reasoning resulting in significant performance
+improvements.
+*MOD: ChannelFactory is shared amongst all clients in the same JVM to
+avoid OOM errors due to an issue with Netty (NETTY-424).
+*MOD: Login process to obtain a connection to a database changed to
+reduce connection overhead.
+*MOD: Shiro session timeout handling to avoid erroneous timeouts
+during long processes, such as bulk loads.
+
+== 0.9.3 Release
+[none]
+*MOD: Server start script gracefully handles the situation when
+STARDOG_HOME does not exist, is not a directory, or is not writable
+*MOD: Connection string parameters are now validated, errors are
+thrown when unknown parameters are provided.
+*MOD: Return result of empty query results in SPARQL JSON format when
+accessing the HTTP query endpoint directly.  Returning an empty binding set
+instead of empty JSON.
+*MOD: Checking of Accept headers for the query HTTP endpoint to better
+handle the case when multiple Accept headers are sent to the endpoint, but
+only one is relevant for the type of results to be returned.
+*MOD: Reporting of query execution time of select queries in CLI to
+better reflect total execution time.
+*FIX: Resolved issue in query generation arising from a variable being
+used in a BGP, context statement, and within an optional causing no results
+to be returned.
+*FIX: Bug in query planner where a join variable was also used in a
+filter with an equality test.
+*FIX: Bug in ICV when datatype restrictions are used in conjunction with
+a datatype property
+*FIX: Dropping database on Windows now works; Windows was holding files
+open and we could not delete them.
+*FIX: NPE when retrieving an unknown option for a database
+*FIX: Inferences were missed because hasValue restrictions were
+incorrectly filtered in RL & EL profiles
+
+== 0.9.2.1 Release
+[none]
+*FIX: NPE when retrieving user permissions
+
+== 0.9.2 Release
+[none]
+*MOD: Security layer implementation changed to provide better
+performance when manipulating user, role, and permission information
+*MOD: Reasoning & ICV interfaces to be more consistent along
+consistency checking & validation
+*MOD: Major improvements to query rewriting performance.  Rewrites are
+up to 3x faster, resulting in a noticeable improvement in executing queries
+with reasoning
+*MOD: Improved CLI help
+*MOD: Friendlier error messages when invalid SPARQL queries are
+provided in the command line
+*MOD: More verbose startup & shutdown logging information
+*MOD: Better output for ICV validation when the database is trivially
+valid
+*MOD: A solution to quickly find nearly optimal query plans in case
+plan optimization takes too long
+*MOD: Improved hash join algorithm for faster processing in case there
+are multiple alternative join keys
+*FIX: Bug in query plan caching that could result in incorrect plans
+being used for similar queries
+*FIX: Fixed cardinality estimations for some named graph scans
+*FIX: Significantly better cardinality estimations for large plans,
+particularly involving multiple unions.  Can result in improvements of up to
+50% when bad joins can be avoided.
+*FIX: Bug in ICV when getting constraints for a new database that does
+not yet have any constraints
+*FIX: NPE that can arise during query evaluation after loading a large
+dataset
+*FIX: Searchable configuration property can now be changed after creation
+*FIX: Database load errors no longer prevent kernel from starting
+*FIX: Autocompletion for local files in Stardog Shell works regardless of
+other parameters used in the command
+
+== 0.9.1 Release
+[none]
+*ADD: Stardog Shell
+*MOD: Auto-update of statistics now lockless
+*MOD: Made visible extension point for custom SPARQL functions.
+*FIX: Cardinality estimation for queries across named graphs
+
+== 0.9 Release
+[none]
+*ADD: new native protocol, SNARL, based on Netty and Google's Protocol
+Buffers
+*ADD: new system catalog for all system info, metadata, etc.
+*ADD: new search system over RDF literals, integrated with SPARQL query
+eval
+*ADD: new server management: online, offline databases; better server
+startup, shutdown, and locking
+*ADD: CLI now supports remote db administration, many new subcommands
+*ADD: new Quartz-based job scheduler with cron expression scheduling
+*ADD: new, optimized index support for named graphs and triples-only
+databases
+*ADD: new, differential write indexes with customizable merge thresholds
+*ADD: new customizable TBOX (i.e., reasoning schema or ontology)
+extraction & management
+*ADD: new Stardog configuration system, including database creation
+templates
+*ADD: new reasoning services (explanation, satisfiability, consistency
+checking) available programmatically
+*ADD: reasoning extended to named graphs
+*ADD: ICV validation extended to named graphs
+*ADD: new or improved support for NQUADS, Trig, TSV, and CSV
+*ADD: improved concurrency in data loading
+*ADD: consistent use of <tt>mmap()</tt> for better performance
+*ADD: load GZIP-compressed files directly, including ZIP files with
+multiple RDF
+*MOD: new security system, including user management, granular roles
+and permissions model
+*MOD: new statistics computation & recomputation algorithms
+*MOD: updated documentation
+*FIX: many (many!) known bugs
+
+== 0.7.3 Release
+[none]
+*ADD: New SNARL Connection view, ReasoningConnection which exposes the
+functions provided by the Stardog reasoner.
+*ADD: Support in ReasoningConnection for obtaining the explanation for an
+inference.
+*ADD: Explanations of IC violations as the expected and/or missing
+statements that make up the violation
+*ADD: New example for using explanation facilities, updating ICV example.
+*MOD: Improved error messages when CLI fails to connect to a database.
+*FIX: Bug in the handling of reflexive properties when they involve TOP
+*FIX: Bug in initialization of TOP operator with bound objects, resolves
+NPE in execution
+*FIX: Bug in bnode handling in TBox extraction
+
+== 0.7.2 Release
+[none]
+*ADD: RDFS & DL reasoning types.  DL reasoning type supports schema-only
+queries.
+*ADD: Execution optimizations for when TOP appears in a query due to
+reasoning
+*MOD: Sesame Repository/Sail implementation to use a SNARL Connection
+per Sail/RepositoryConnection rather than per Repository.
+*MOD: Better formatting of query results in CLI query command
+including new formatting options.
+*FIX: Retrieving ranges of data properties in reasoner.
+*FIX: Read transaction isolation bug for mulitple connections against the
+same database.
+*FIX: Bug related to incorrect reassociation of Shiro auth credentials
+with pooled connections.
+
+== 0.7.1 Release
+[none]
+*ADD: Canonicalization of literal values on input, either bulk loading or
+normal add operations.  Canonlicalization can be disabled when creating the
+database if it is not desired, but is on by default.
+*MOD: CLI connection strings no longer assume you are connecting to
+an embedded store when no protocol is supplied.  You must now specify a
+protocol.
+*FIX: ExpressionFactory is no longer stripped from the core jar file
+*FIX: Multiline queries work with CLI now
+*FIX: Bug in loading IC's from file, occasionally constraints could be
+malformed
+
+== 0.7 Release
+[none]
+*ADD: Bulk insert/removal performance on existing databases greatly
+improved via concurrent application of changes to the index and the
+introduction of a differential index.
+*ADD: Stardog reasoner now supports OWL2 EL and RL reasoning types.
+These can be specified at connection time and EL & RL reasoning is performed
+at query time the same as QL.
+*ADD: Support for 'hybrid' and TBox queries for all reasoning types.
+*ADD: Support for Integrity Constraints.
+*MOD: Propogation of reasoner state amongst open connection to the
+reasoner, state is better shared across connections requiring less overhead
+to maintain the up to date state.
+*MOD: 'delete' was renamed to 'drop' in the command line.
+*FIX: Bug in two-phase commits for changes to a reasoner
+
+== 0.6.10 Release
+[none]
+*FIX: Fixed an issue with not always consuming the HTTP response which
+could lead to not releasing HTTP connections to the pool and it its eventual
+exhaustion.
+*MOD: Improved algebraic rewriting of query plans which avoid multiple
+evaluation of the same part of the query, e.g., the operator in both parts
+of a UNION.
+*MOD: A better handling of the UNION operator by sorting its output
+which facilitates joins with other operators in the query plan.
+*MOD: A better handling of deep chains of nested joins by maintaining
+a certain order of intermediate results produced by hash joins and avoiding
+page loads.
+*MOD: An improved, threadsafe implementation of the query plan cache,
+which is now concurrently accessible from all connections. This allows
+the server to reuse a previously optimized query plan for a structurally
+equivalent query executed by another client.
+*ADD: an init startup script for a Stardog server so that it can
+automatically start with other system services at the boot time.
+
+== 0.6.9 Release
+[none]
+*FIX: Fixed an issue pertaining to QL rewrites with optionals that use a
+filter which was causing incorrect results for some QL queries (ticket #44).
+*FIX: Fixed query evaluation where the presence of a particular
+combintation of union, optional, and distinct can lead to nondistinct result
+sets (ticket #48).
+*FIX: Fixed the passing of the disableSecurity flag into the HTTP server
+*FIX: Fixed a bug in the rendering of SPARQL queries using isBlank with
+remote endpoints
+*FIX: Fixed a bug in query evaluation arising from a certain combination
+of order by, limit, and optional where the sort key is on a variable bound
+by an optional pattern.
+*FIX: User specified query bindings specified via Query.parameter are
+correctly serialized and sent to the remote server.
+*MOD: Query rewriting now fails when a query has BGP's that are not
+supported by the reasoner; this is strict mode.  Strict mode can be disabled
+and the reasoner will rewrite only the BGP's it supports.  This introduces a
+JVM flag 'strictReasoning' for controlling this behavior.
+*MOD: HTTP connection will now switch over to HTTP POST if the SPARQL
+query is very long to avoid any potential URL overflow issues.
+*ADD: CLI now includes an 'export' function to dump the contents of part
+or all of a Stardog database to RDF.
+
+== 0.6.8 Release
+[none]
+*ADD: Updated POM to include Avro
+*ADD: Avro schema included in distribution.
+*FIX: Fixed a bug in the caching of the current list of databases, could
+still access deleted databases in some circumstances. (ticket #42)
+*FIX: Fixed an bug in the handling of unions in the QL reasoner.  Nested
+unions were occasionally getting duplicated leading to incorrect results
+without the distinct modifier. (ticket #43, #46)
+*MOD: Better handling of constant values in construct queries
+decreasing the time it takes to create and return the Statements constructed
+by the query.
+*MOD: Increased the speed of some index scans by avoiding some page
+reads
+*MOD: Better execution plan reuse & caching, similar to Prepared
+Statements, in structurally equivalent plans.
+*MOD: Significantly improved join-join cardinality estimations.
+*MOD: Query optimizer does a better job with join selection and can
+often pick a better join for the execution.
+*MOD: Avro & HTTP connections are eagerly validated by the driver so
+invalid connections will fail on connect rather than on first action.
+*MOD: Transaction ID generation changed to reduce chance of ID
+collision
+*MOD: Internal connection management, both with raw database
+connections and HTTP based connections to address deadlock issues in highly
+concurrent environments
+
+== 0.6.7 Release
+[none]
+
+*FIX: HTTP error in construct queries via the Jena bindings
+*ADD: New CLI command 'server' which can start any of the installed
+Stardog servers
+*ADD: New Avro-based RPC protocol for Stardog Connections
+*ADD: Maven POM file included in distribution
+
+== 0.6.6 Release
+[none]
+
+*FIX: incorrect query evaluation results in some corner cases involving
+OPTIONAL
+*MOD: Improved query evaluation performance with a new query planner
+*MOD: command-line interface to accept global args: `--home, --change-buffer-size, --disable-security`
+*MOD: command-line add, remove, create commands to include
+`--strict-parsing` option
+
+== 0.6.5 Release
+[none]
+
+*FIX: Bug in query evaluation where we were missing results when the
+first entry in an iterator in a disk index occurs on a page boundry
+*ADD: Support for fulltext search via our semantic search engine Waldo.
+
+== 0.6.2 Release
+[none]
+
+*FIX: Typo in HTTP protocol, Trig & Trix mimetypes were switched.
+*FIX: Bug in left outer joins when the right hand operator was initially
+empty causing the first solution set to be missed. (ticket #39)
+*FIX: Resolved IllegalArgumentException which was incorrectly thrown from
+the Jena integration when a query w/ optionals was executed against a remote
+Stardog database returning null values in the response.
+*FIX: Bug in detection of special BNode syntax in queries for ensuring
+BNode stability in queries.
+
+== 0.6.1 Release
+[none]
+
+*FIX: Debugging exception thrown when using log4j bindings for SLF4j with
+the logging level set to debug. (ticket #36)
+*FIX: Issue with calcuation of optionals in joins when the optional
+binding is at the beginning or end of an iteration. (ticket #34)
+*FIX: Resolved synchronization issue for connections to an index that are
+fetched from the internal connection pool.  Resolves getting already closed
+connections from the pool. (ticket #37)
+*FIX: Datatyped literals used in filters were getting munged during QL
+rewrites resulting in an exception. (ticket #35)
+*MOD: Iteration over disk indices modified to more efficiently
+calcuate which pages are actually required to answer the query and avoid
+loading intermediate pages.
+
+== 0.6 Release
+[none]
+
+*FIX: Bug pertaining to loading datasets which use literals larger than
+8k.
+*FIX: Bug in the writer locks that could allow multiple writers access to
+an index in a multithreaded environment, which usually lead to corruptted
+indexes (ticket #29).
+*FIX: Issue with the CLI's database create command, multiple calls in
+rapid succession to create databases caused some of the new databases to be
+lost (ticket #32).
+*FIX: QL query rewriter was mangling the variables used within the query
+in certain situations causing query results to be incorrect (ticket #30).
+*FIX: QL query rewriter was not correctly respecting variable
+substitutions with datatyped literals and was subsequently losing the
+variable binding specified by the user (ticket #31).
+*FIX: FROM/FROM Named clauses were incorrectly set to the HTTP server
+*MOD: Improved index page load speed.
+*MOD: Reduced memory requirements in the indexes wrt to cache overhead
+*MOD: Persistence of memory indexes to disk is now done in parallel to
+the greatest extent possible yield a significant increase in save (and load)
+performance.  This required changing the on disk format of memory indexes.
+Old versions of memory indexes are unfortunately, backwards incompatible
+with these updates.  We apologize for the inconvenience.
+*MOD: On format of disk-based indexes.  This helps us resolve some
+issues we had with the previous format, and increases load speed, but the
+index format is backwards incompatible with the previous indexes.  However,
+we provide a migration utility in the command line program for changing
+old disk indexes to the new format.  See the CLI for more information on
+migrating old indexes (or ping the mailing list).
+*MOD: Decreased memory usage in the query engine
+*MOD: Added a change buffer in the layer between the SNARL API and
+the underlying index it is connected to.  This allows most changes within a
+transaction to be pushed into the index at once increasing the performance
+of commits as the changes can mostly be applied in bulk.
+
+== 0.5.3 Release
+[none]
+
+*ADD: Internal buffer for changes via the Sesame API, triples are no
+longer added to the Stardog database one at a time via the SAIL API.  They
+are buffered until the buffer is full, a read operation occurs, or the
+transaction is committed.
+*FIX: Internal bookkeeping for the state of the system information,
+timestamp for last update time is correctly updated and you should not get
+the out of sync warnings printed to the console.
+*FIX: Incorrect return code for parse errors in HTTP protocol.
+*FIX: NPE thrown by TBox extractor when encountering non object/data
+properties.
+*FIX: Correct behavior for SPARQL queries w/ QL reasoning that uses the
+'GRAPH' keyword.  BGP's in graph contexts are not rewritten as inferences
+are put into the default, no context, graph.  Hybrid queries that include
+some patterns against the default graph and others against patterns in graph
+contexts are correctly partially rewritten. (ticket #27)
+
+== 0.5.2 Release
+[none]
+
+*MOD: Add, Remove and Clear Contexts now take an optional query
+parameter, "graph-uri" which specfies the named graph the operation should
+be executed against.  This deprecates the use of this parameter *in* the
+actual URL.  See HTTP_PROTOCOL.txt for additional details.
+*MOD: Temp files used to track changes during transactions and to
+buffer results coming into HTTP server are more aggresively removed.
+*FIX: Specifying 'null' as the context to remove via the Connection API
+now actually deletes the default context rather than the entire contents of
+the database.
+*FIX: Cast exception caused during QL query execution when the usage of
+the property in the query does not match the type (object v data) of the
+property in the kb. (ticket #24)
+*FIX: NPE during evaluation of a query with QL reasoning enabled when the
+query has a optionals nested inside of a graph statement. (ticket #26)
+*FIX: Could get NPE's during filter evaluation (compare expressions only)
+if one of the variables in the expression was not bound to any value in a
+BGP.
+*FIX: Malformed literals in inserts could come back and cause errors when
+being removed.  Errors are now thrown when a malformed literal (invalid
+language tag or inconsistent xsd datatype) is inserted into the database.
+(ticket #22 & #25)
+*FIX: Resolving BGP's across contexts using wildcards (e.g. graph ?g {
+... }) was losing information between the contexts leading to incorrect
+results and/or null values in the results. (ticket #20 & #21)
+*ADD: Gremlin integration via our Sesame Sail implementation and the
+Blueprints API.  See the README for more details on the integration.
+*ADD: statements(subject, predicate, object, context) to the Remover API
+and deprecated statement(...); the latter only accepted non-null values,
+while the former does accept nulls as wildcards, so it is safe to replace
+all usages of one with the other. statement(...) is marked as deprecated and
+schedule for removal from the API no earler than 0.6.
+
+== 0.5.1 Release
+[none]
+
+*FIX: Deleting statements with wildcards via a StardogRepository.
+*ADD: Support for the Sesame RepositoryFactory & Config APIs so Stardog
+can be used via the OpenRDF shell and Workbench.
+*ADD: Native connection pools for Stardog connections.  See the examples
+for code demonstrating how to configure and use them.
+
+== 0.5 Release
+[none]
+
+*FIX: Query objects reference to database was not refeshed after commit
+or rollback of transaction. (ticket #15)
+*FIX: Bug in queries with graph contexts using unbound variables via an
+HTTP connection; the variable was getting mangled.
+*MOD: Introduced new Flex Indexes into the Database structure.
+*ADD: Shiro based security layer
+
+== 0.4.10 Release
+[none]
+
+*FIX: Bug in the concurrent calcuation of statistics where a latch could
+get stuck when certain types of exceptions occured during processing
+*FIX: Issue in Remove CLI where description did not match behavior;
+Specifying only a context now deletes the context as stated in the
+documentation. (ticket #17)
+*FIX: Bug in removing a context within a durable transaction that caused
+the transaction record to get corrupted. (ticket #16)
+*MOD: Changed Add CLI to print an error message if no files are
+specified to add to the database.
+*MOD: Removed default parse format of RDF/XML from add & remove
+operations.  If a specific format is specified, that is used, otherwise the
+format based on the file extension will be used.  This brings the behavior
+of add & remove inline with create.  RDF/XML is still used as the fallback
+when no format is specified and there is a nonstandard extension on the
+file.
+*MOD: Modified how some filters are evaluated greatly increasing the
+speed in which basic (and/or/not & compares) filters are executed.
+
+== 0.4.9 Release
+[none]
+
+*ADD: Handling of the TOP concept in the OWL 2 QL reasoner
+*ADD: New query operator which provides more efficient evaluation of
+queries where order by and limit are used.
+*ADD: System information regarding which databases are present will be
+reloaded from disk when it is changed by an external source.
+*ADD: JVM flag to disable strict mode of parsing.
+*FIX: Encoding of graph URIs in remove context calls to HTTP server.
+*FIX: Typo in route which effectively hid the remove context endpoint in
+the HTTP server.
+*FIX: Mangling of ASK queries when sending them to the HTTP server.
+(ticket #13)
+*FIX: Typo in help information in the add/remove data commands in the
+CLI.
+*FIX: BOM markers at the start of files will be gracefully handled
+instead of failing to parse.
+*FIX: If copy of system info on disk is more recent than cached copy in
+memory, it will not be overwritten on shutdown. (ticket #11)
+*FIX: UnsupportedOperationException thrown when clearing a context within
+a transaction. (ticket #12)
+*FIX: IllegalArgumentException thrown when literals are used in query
+atoms going through rewriting. (ticket #9)
+*FIX: ClassCastException when non-QL axioms are used. (ticket #8)
+*FIX: Issue with deleting directories when STARDOG_HOME contains relative
+paths. (ticket #6)
+*FIX: NullPointerException when top level scope contains an empty set of
+query atoms. (ticket #7)
+*FIX: Closing temporary files in the data directory used for some file
+operations.
+*FIX: Concurrent modification exception from an iterator when persisting
+memory indexes to disk asynchronously.
+*FIX: HTTP protocol was dropping context information from queries.
+*MOD: Queueing of jobs during concurrent loading to avoid running out
+of memory when processing large datasets. This also reduces the amount of
+memory used during loading.
+*MOD: Altered algorithm to get better estimates of join cardinalities.
+*MOD: Memory databases to use new statistics algorithm.
+
+== 0.4.8 Release
+[none]
+
+*ADD: Creation of db indices is done in parallel. It is an experimental
+feature which can be disabled via the JVM flag (disableConcurrent); note,
+that concurrent loading requires more RAM than serial loading. Either give
+Stardog more RAM (i.e., as much as you cann spare) on startup or pass the
+disableConcurrent flag.
+*FIX: Query atoms of the form { ?a ?a ?b } now return correct results
+*FIX: Bug in multi-key joins
+*FIX: Bug in QL reasoning optimizer for detecting empty joins
+*FIX: File exhaustion bug.  When Sesame integration was used with the
+HTTP server, the server did not always close the temporary files used to
+track the incoming edits causing some systems to report too many files were
+open.
+*FIX: Bug in query evaluation where the named graph bound in a pattern
+could cause an exception during execution.
+*FIX: Cardinality estimates in index statistics
+*FIX: bug in stardog.sh script so that it can run anywhere (thanks Alin Dreghiciu for this fix)
+*MOD: The name of the file being added/removed from a database in the command line is now printed.
+
+== 0.4.7 Release
+[none]
+
+*FIX: Fixed an NPE in the HTTP server (reported by Brian Sletten)
+*MOD: make the QL axioms parser more strictly respect the OWL spec, especially w/r/t to the set of datatypes that QL supports

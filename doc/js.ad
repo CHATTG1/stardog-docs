@@ -1,0 +1,26 @@
+= Javascript Programming
+[.etp]
+https://github.com/stardog-union/stardog-docs/edit/develop/src/doc/js.ad[Edit This Section]&nbsp;image:e1.png[Edit,16,16]
+++++
+<div style="clear: both;"></div>
+++++
+
+The http://stardog-union.github.io/stardog.js/docs/stardog.html[documentation] for
+stardog.js is available at the
+http://stardog-union.github.io/stardog.js/[stardog.js] site; source code is
+available on https://github.com/stardog-union/stardog.js[Github] and
+https://npmjs.org/package/stardog[npm].
+
+== stardog.js
+
+This framework wraps all the functionality of a client for the Stardog DBMS and
+provides access to a full set of functions such as executing SPARQL Queries,
+administration tasks on Stardog, and the use of the Reasoning API.
+
+The implementation uses the HTTP protocol, since most of Stardog
+functionality is available using this protocol. For more information, see
+<<Network Programming>>.
+
+The framework is currently supported for node.js and the browser, including test
+cases for both environments. You'll also need npm and bower to run the test
+cases and install the dependencies in node.js & the browser respectively.
