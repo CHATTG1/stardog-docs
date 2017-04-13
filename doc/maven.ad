@@ -29,7 +29,7 @@ You can see an example of their usage in our examples
 https://github.com/complexible/stardog-examples/blob/628cf3dab2/examples/api/build.gradle#L3-L14[repository
 on Github].
 
-WARNING: If you're using Maven as your build tool, then `client-snarl`,
+WARNING: If you're using Maven or Leiningen as your build tool, then `client-snarl`,
 `client-http`, and `server` dependencies require that you specify the packaging
 type **as POM** (`pom`):
 
@@ -37,16 +37,16 @@ type **as POM** (`pom`):
 ----
 <dependency>
   <groupId>com.complexible.stardog</groupId>
-  <artifactId>client-snarl</artifactId>
+  <artifactId>client-http</artifactId>
   <version>$VERSION</version>
   <type>pom</type> <1> 
 </dependency>
 ----
 <1> **The dependency type must be set to `pom`.**
 
-Note: Though Gradle may still work without doing this, it is still best practice to specify the dependency type there as well:
+[source, clojure]
 ----
-compile "com.complexible.stardog:client-snarl:${VERSION}@pom"
+:dependencies [[com.complexible.stardog/client-http "4.2.4" :extension "pom"]]
 ----
 
 === Public Maven Repo
